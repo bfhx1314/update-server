@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,6 +149,45 @@ public class UpdataController {
 		}
 		return fs;
 	}
+	
+	@RequestMapping("rename")
+	@ResponseBody
+	public Object renameFile(String modfiyName, String sourcePath , HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String, String> data = new HashMap<String, String>();
+		
+		String filePath = request.getSession().getServletContext().getRealPath("/");
+
+		String path = filePath + "/apk/" + sourcePath;
+		
+		File file = new File(path);
+		if(file.exists() && file.isFile()){
+			File newFile = new File(file.getParent() + "/" + modfiyName);
+			if(!newFile.exists()){
+				file.renameTo(newFile);
+				data.put("status", "1");
+				data.put("detail", "文件修改成功");
+			}else{
+				data.put("status", "0");
+				data.put("detail", "已经存在此文件");
+			}
+		}else{
+			data.put("status", "0");
+			data.put("detail", "未找到改文件");
+		}
+		
+		
+		return data;
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 
 	@RequestMapping("upload")
 	@ResponseBody
