@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -176,72 +178,114 @@ public class UpdataController {
 			data.put("detail", "未找到改文件");
 		}
 		
+		return data;
+	}
+	
+	
+	@RequestMapping("deleteFile")
+	@ResponseBody
+	public Object deleteFile(String sourcePath , HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String, String> data = new HashMap<String, String>();
+		
+		String filePath = request.getSession().getServletContext().getRealPath("/");
+
+		String path = filePath + "/apk/" + sourcePath;
+		
+		File file = new File(path);
+		if(file.exists() && file.isFile()){
+			file.delete();
+			data.put("status", "1");
+			data.put("detail", "文件已删除");
+		}else{
+			data.put("status", "0");
+			data.put("detail", "未找到改文件");
+		}
 		
 		return data;
-		
-		
-		
 	}
 	
 	
 	
-	
-	
+	@RequestMapping("createFile")
+	@ResponseBody
+	public Object createFile(String sourcePath , HttpServletRequest request, HttpServletResponse response){
+		
+		Map<String, String> data = new HashMap<String, String>();
+		
+		String filePath = request.getSession().getServletContext().getRealPath("/");
+
+		String path = filePath + "/apk/" + sourcePath;
+		
+		File file = new File(path);
+		if(file.exists()){
+			data.put("status", "0");
+			data.put("detail", "文件已存在");
+		}else{
+			file.mkdirs();
+			data.put("status", "1");
+			data.put("detail", "文件创建成功");
+		}
+		
+		return data;
+	}
 	
 
 	@RequestMapping("upload")
 	@ResponseBody
-	public Object upload(String path, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Object upload(MultipartFile file, String path,HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		Map<String, Object> data = new HashMap<String, Object>();
 		
-//		if(null == file){
-//			
-//			data.put("status", "0");
-//			data.put("detail", "文件不能为空");
-//			return data;
-//		}
-//		
+		if(null == file){
+			
+			data.put("status", "0");
+			data.put("detail", "文件不能为空");
+			return data;
+		}
+		InputStream input = file.getInputStream();
 		
-		
-		  // 转型为MultipartHttpRequest：   
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;   
-        // 获得文件：   
-        MultipartFile file = multipartRequest.getFile(" file ");   
-        // 获得文件名：   
-        String filename = file.getOriginalFilename();   
-        // 获得输入流：   
-        InputStream input = file.getInputStream();   
-        // 写入文件   
-  
 		String filePath = request.getSession().getServletContext().getRealPath("/");
+		
+		
+		
+		path = filePath + "/apk/" + path + "/";
+		
+		if(!new File(path).exists()){
+			new File(path).mkdirs();
+		}
 
-		path = "/apk/" + path;
+		filePath = path + file.getOriginalFilename();
 
-		filePath = filePath + path;
-
-//		FileInputStream is = input;
-
+		if(new File(filePath).exists()){
+			data.put("status", "0");
+			data.put("detail", "文件已存在");
+			return data;
+		}
+		
 		FileOutputStream fos = new FileOutputStream(filePath);
 
-//		// 把数据存入路径+文件名
-//		byte buf[] = new byte[1024];
-//		do {
-//			// 循环读取
-//			int numread = is.read(buf);
-//			if (numread == -1) {
-//				break;
-//			}
-//			fos.write(buf, 0, numread);
-//		} while (true);
-//		try {
-//			fos.flush();
-//			fos.close();
-//			is.close();
-//		} catch (Exception ex) {
-//
-//		}
+		// 把数据存入路径+文件名
+		byte buf[] = new byte[1024];
+		do {
+			// 循环读取
+			int numread = input.read(buf);
+			if (numread == -1) {
+				break;
+			}
+			fos.write(buf, 0, numread);
+		} while (true);
+		try {
+			fos.flush();
+			fos.close();
+			input.close();
+		} catch (Exception ex) {
 
+		}
+
+		data.put("status", "1");
+		data.put("detail", "文件上传成功");
+		
 		return data;
 
 	}

@@ -11,6 +11,25 @@ function decode_utf8( s )
   return decodeURIComponent( escape( s ) );
 }
 
+
+//post('pages/statisticsJsp/excel.action', {html :prnhtml,cm1:'sdsddsd',cm2:'haha'}); 
+function post(URL, PARAMS) {        
+    var temp = document.createElement("form");        
+    temp.action = URL;        
+    temp.method = "post";        
+    temp.style.display = "none";        
+    for (var x in PARAMS) {        
+        var opt = document.createElement("textarea");        
+        opt.name = x;        
+        opt.value = PARAMS[x];        
+        temp.appendChild(opt);        
+    }        
+    document.body.appendChild(temp);        
+    temp.submit();        
+    return temp;        
+}   
+
+
 function modalPopup(filename, option, filePath) {
 	deleteNode("modal-title");
 	deleteNode("modal-text");
@@ -18,6 +37,8 @@ function modalPopup(filename, option, filePath) {
 //	filename = unescape(filename);
 	filename = decodeURIComponent(filename);
 	if (option==0) {	// rename
+		
+		post('rename.do', {'modfiyName':filename,'sourcePath':filePath}); 
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Rename";
 		titleObj.textContent = "Rename";
@@ -47,6 +68,7 @@ function modalPopup(filename, option, filePath) {
 		document.getElementsByName('ID')[0].value = filename;
 	}
 	else if (option==1) { // create folder
+		post('createFile.do', {'modfiyName':filename,'sourcePath':filePath}); 
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Create Folder";
 		titleObj.textContent = "Create Folder";
@@ -69,6 +91,9 @@ function modalPopup(filename, option, filePath) {
 		document.getElementsByName('ID')[0].value = filePath;
 	}
 	else if (option==2) { // delete file
+		
+		post('deleteFile.do', {'sourcePath':filePath}); 
+		
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Delete File";
 		titleObj.textContent = "Delete File";

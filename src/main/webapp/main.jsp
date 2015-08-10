@@ -22,7 +22,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html">
-<title>无标题文档</title>
+<title>文件管理	</title>
 <link rel="stylesheet" type="text/css" href="./css/pagecontent.css">
 <script type="text/javascript" src="./css/jquery.js"></script>
 <script type="text/javascript" src="./css/jquery.modal.js"></script>
@@ -103,6 +103,7 @@
 									File d = new File(path);
 									//取得代表目录中所有文件
 
+									
 									File list[] = d.listFiles();
 									for (int i = 0; i < list.length; i++) {
 
@@ -114,7 +115,7 @@
 										href=""><img
 											src="./css/unknown.png" width="20" height="20"></a></td>
 									<td class="n"><a
-										href=""><%=list[i].getName()%></a>
+										href="<%="apk/" + strid + "/" + list[i].getName()%>"><%=list[i].getName()%></a>
 									</td>
 									<td class="m"><%=FileMD5.dataFormat(list[i].lastModified())%></td>
 									<td class="s"><%=FileMD5.getFileSizes(list[i])%></td>
@@ -168,6 +169,7 @@
 				</td>
 				<!-- right table contents -->
 				<td class="right_content">
+				<form method="post" action="upload.do" enctype="multipart/form-data">
 					<div id="file-uploader">
 						<div class="qq-uploader">
 							<div class="qq-upload-drop-area" style="display: inline-block;">
@@ -176,13 +178,17 @@
 							<div class="qq-upload-button"
 								style="position: relative; overflow: hidden; direction: ltr;">
 								<img src="./css/webupload.png" width="16" height="16">
+								
 								Upload File<input multiple="multiple" type="file" name="file"
 									style="position: absolute; right: 0px; top: 0px; font-family: Arial; font-size: 118px; margin: 0px; padding: 0px; cursor: pointer; opacity: 0;">
 							</div>
+							
 							<ul class="qq-upload-list">
 							</ul>
 						</div>
 					</div>
+					
+					</form>
 				</td>
 			</tr>
 		</tbody>
@@ -195,6 +201,11 @@
 	<div id="modal-text">
 	</div>
 	<form name="input" action="rename.do" method="post">
+		<div id="modal-field">
+		</div>
+		<input type="hidden" name="ID" id="ID"><input type="submit" name="submitButton" id="submitButton">
+	</form>
+		<form name="input" action="deleteFile" method="post">
 		<div id="modal-field">
 		</div>
 		<input type="hidden" name="ID" id="ID"><input type="submit" name="submitButton" id="submitButton">
