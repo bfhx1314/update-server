@@ -38,7 +38,6 @@ function modalPopup(filename, option, filePath) {
 	filename = decodeURIComponent(filename);
 	if (option==0) {	// rename
 		
-		post('rename.do', {'modfiyName':filename,'sourcePath':filePath}); 
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Rename";
 		titleObj.textContent = "Rename";
@@ -51,9 +50,8 @@ function modalPopup(filename, option, filePath) {
 		
 		var fieldObj = document.createElement("input");
 		fieldObj.setAttribute("type","input");
-		fieldObj.setAttribute("name","modfiyName");
+		fieldObj.setAttribute("id","modfiyName");
 		fieldObj.setAttribute("value",filename);
-		fieldObj.setAttribute("id","modal-field");
 		document.getElementById("modal-field").appendChild(fieldObj);
 		
 		var fieldObj = document.createElement("input");
@@ -64,11 +62,11 @@ function modalPopup(filename, option, filePath) {
 		document.getElementById("modal-field").appendChild(fieldObj);
 		
 		// assign text field value
-		document.getElementsByName('submitButton')[0].value = "Rename";
+		document.getElementById('submitButton').setAttribute("onClick","renameFileForPath(modfiyName.value,'"+filePath+"')");
 		document.getElementsByName('ID')[0].value = filename;
 	}
 	else if (option==1) { // create folder
-		post('createFile.do', {'modfiyName':filename,'sourcePath':filePath}); 
+//		post('createFile.do', {'modfiyName':filename,'sourcePath':filePath}); 
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Create Folder";
 		titleObj.textContent = "Create Folder";
@@ -81,19 +79,18 @@ function modalPopup(filename, option, filePath) {
 		
 		var fieldObj = document.createElement("input");
 		fieldObj.setAttribute("type","input");
-		fieldObj.setAttribute("name","createFolder");
+		fieldObj.setAttribute("id","createFolder");
 		fieldObj.setAttribute("value","New Folder");
-		fieldObj.setAttribute("id","modal-field");
 		document.getElementById("modal-field").appendChild(fieldObj);
 
 		// assign text field value
-		document.getElementsByName('submitButton')[0].value = "Create";	
+		document.getElementById('submitButton').setAttribute("onClick","createFile("+filePath+'/'+"createFolder.value)");
 		document.getElementsByName('ID')[0].value = filePath;
 	}
 	else if (option==2) { // delete file
 		
-		post('deleteFile.do', {'sourcePath':filePath}); 
-		
+//		post('deleteFile.do', {'sourcePath':filePath}); 
+
 		var titleObj = document.createElement("h3");
 		titleObj.innerText = "Delete File";
 		titleObj.textContent = "Delete File";
@@ -111,17 +108,56 @@ function modalPopup(filename, option, filePath) {
 		document.getElementById("modal-field").appendChild(fieldObj);
 
 		// assign text field value
-		document.getElementsByName('submitButton')[0].value = "Delete";	
+		document.getElementById('submitButton').setAttribute("onClick","deleteFileForPath('"+filePath+"')");	
 		document.getElementsByName('ID')[0].value = filename;
+
 	}
 	// pop modal
 	$('#modal-content').modal({closeHTML: "<input type=button name='cancelButton' id='cancelButton' value='Cancel'>"});
+}
+
+
+function deleteFileForPath(filePath){
+	$.post("deleteFile.do", { sourcePath: filePath },
+
+			function (data, textStatus){
+
+//			alert(data.detail);
+
+			}, "json");
+	window.location.href=window.location.href;
 }
 
 function downloadFile(filename)
 {	
 	window.location.replace(filename + '?dl=yes');
 } 
+
+
+function createFile(filename){
+	$.post("createFile.do", { sourcePath: filename },
+
+			function (data, textStatus){
+
+//			alert(data.detail);
+
+			}, "json");
+	window.location.href=window.location.href;
+}
+
+
+function renameFileForPath(modifyName1,filePath1){
+	$.post("rename.do", { modifyName: modifyName1, sourcePath : filePath1 },
+
+			function (data, textStatus){
+
+//			alert(data.detail);
+
+			}, "json");
+	window.location.href=window.location.href;
+}
+
+
 
 function deleteFile(url, params) {
 	var answer = confirm("Are you sure you want to delete this file?\n" + params['deleteFile'])
@@ -620,7 +656,7 @@ qq.FileUploader = function(o){
                 
         template: '<div class="qq-uploader">' + 
                 '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
-                '<div class="qq-upload-button"><img src="/webupload.png" width="16" height="16"/>  Upload File</div>' +
+                '<div class="qq-upload-button"><img src="./css/webupload.png" width="16" height="16"/>  Upload File</div>' +
                 '<ul class="qq-upload-list"></ul>' + 
              '</div>',
 
@@ -1370,15 +1406,17 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         };
 
         // build query string
-        params = params || {};
-        params['qqfile'] = name;
-        var queryString = qq.obj2url(params, this._options.action);
-
-        xhr.open("POST", queryString, true);
-        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xhr.setRequestHeader("X-File-Name", encodeURIComponent(name));
-        xhr.setRequestHeader("Content-Type", "application/octet-stream");
-        xhr.send(file);
+        var navigationPath = document.getElementById('navigation').value;
+        if(navigationPath==undefined){
+        	navigationPath="";
+        }
+		var formData = new FormData();
+		formData.append('file', file);
+		formData.append('path', navigationPath);
+        
+        xhr.open("POST", "upload.do", true);
+        xhr.send(formData);
+        
     },
     _onComplete: function(id, xhr){
         // the request was aborted/cancelled

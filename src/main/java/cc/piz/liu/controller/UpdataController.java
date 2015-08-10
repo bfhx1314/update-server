@@ -154,7 +154,7 @@ public class UpdataController {
 	
 	@RequestMapping("rename")
 	@ResponseBody
-	public Object renameFile(String modfiyName, String sourcePath , HttpServletRequest request, HttpServletResponse response){
+	public Object renameFile(String modifyName, String sourcePath , HttpServletRequest request, HttpServletResponse response){
 		
 		Map<String, String> data = new HashMap<String, String>();
 		
@@ -164,7 +164,7 @@ public class UpdataController {
 		
 		File file = new File(path);
 		if(file.exists() && file.isFile()){
-			File newFile = new File(file.getParent() + "/" + modfiyName);
+			File newFile = new File(file.getParent() + "/" + modifyName);
 			if(!newFile.exists()){
 				file.renameTo(newFile);
 				data.put("status", "1");
@@ -233,8 +233,7 @@ public class UpdataController {
 
 	@RequestMapping("upload")
 	@ResponseBody
-	public Object upload(MultipartFile file, String path,HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
+	public Object upload( String path,MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		if(null == file){
@@ -283,8 +282,8 @@ public class UpdataController {
 
 		}
 
-		data.put("status", "1");
-		data.put("detail", "文件上传成功");
+		data.put("success", "1");
+//		data.put("detail", "文件上传成功");
 		
 		return data;
 

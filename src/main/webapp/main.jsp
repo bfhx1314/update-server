@@ -22,7 +22,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html">
-<title>文件管理	</title>
+<title>文件管理</title>
 <link rel="stylesheet" type="text/css" href="./css/pagecontent.css">
 <script type="text/javascript" src="./css/jquery.js"></script>
 <script type="text/javascript" src="./css/jquery.modal.js"></script>
@@ -39,6 +39,7 @@
 
 
 	<div class="filepath">
+		<input type="hidden"  id="navigation" value="<%=strid%>"/>
 		<p>
 			<%=strid%>
 		</p>
@@ -65,9 +66,8 @@
 									src="./css/webrefresh.png" width="15" height="15">Reload</a>
 							</td>
 							<td class="top_content_table"><a
-								href="main.jsp?id=<%=URLEncoder.encode(strid, "UTF-8")%>"
 								class="mylink" title="Create Folder"
-								onclick="modalPopup(&#39;&#39;, 1, 0);"><img
+								onclick="modalPopup(&#39;&#39;, 1, navigation.value);"><img
 									src="./css/webcreatefolder.png" width="20" height="14">
 									Create Folder</a></td>
 						</tr>
@@ -102,8 +102,8 @@
 									//建立代表目前目录位置的d变量
 									File d = new File(path);
 									//取得代表目录中所有文件
-
-									
+	
+									System.out.println(path);
 									File list[] = d.listFiles();
 									for (int i = 0; i < list.length; i++) {
 
@@ -111,9 +111,8 @@
 								%>
 
 								<tr>
-									<td class="i"><a
-										href=""><img
-											src="./css/unknown.png" width="20" height="20"></a></td>
+									<td class="i"><a href=""><img src="./css/unknown.png"
+											width="20" height="20"></a></td>
 									<td class="n"><a
 										href="<%="apk/" + strid + "/" + list[i].getName()%>"><%=list[i].getName()%></a>
 									</td>
@@ -124,11 +123,11 @@
 									</td>
 									<td class="e"><input type="image"
 										src="./css/webrename.png"
-										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 0, &quot;<%=strid+"/"+list[i].getName()%>&quot;);"
+										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 0, &quot;<%=strid + "/" + list[i].getName()%>&quot;);"
 										title="Rename file" width="15" height="15"></td>
 									<td class="e"><input type="image"
 										src="./css/webdelete.png"
-										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 2, &quot;<%=strid+list[i].getName()%>&quot;);"
+										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 2, &quot;<%=strid + "/" + list[i].getName()%>&quot;);"
 										title="Delete file" width="15" height="15"></td>
 								</tr>
 
@@ -150,11 +149,11 @@
 									</td>
 									<td class="e"><input type="image"
 										src="./css/webrename.png"
-										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 0, &quot;<%=strid+list[i].getName()%>&quot;);"
+										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 0, &quot;<%=strid + list[i].getName()%>&quot;);"
 										title="Rename file" width="15" height="15"></td>
 									<td class="e"><input type="image"
 										src="./css/webdelete.png"
-										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 2, &quot;<%=strid+list[i].getName()%>&quot;);"
+										onclick="modalPopup(&quot;<%=list[i].getName()%>&quot;, 2, &quot;<%=strid + list[i].getName()%>&quot;);"
 										title="Delete file" width="15" height="15"></td>
 								</tr>
 								<%
@@ -169,7 +168,7 @@
 				</td>
 				<!-- right table contents -->
 				<td class="right_content">
-				<form method="post" action="upload.do" enctype="multipart/form-data">
+					<form action="" id="upload_form">
 					<div id="file-uploader">
 						<div class="qq-uploader">
 							<div class="qq-upload-drop-area" style="display: inline-block;">
@@ -177,40 +176,43 @@
 							</div>
 							<div class="qq-upload-button"
 								style="position: relative; overflow: hidden; direction: ltr;">
-								<img src="./css/webupload.png" width="16" height="16">
-								
-								Upload File<input multiple="multiple" type="file" name="file"
+								<img src="./css/webupload.png"
+									width="16" height="16"> Upload File
+									<input
+									multiple="multiple" type="file" name="file" id="uploadFile_Id" 
 									style="position: absolute; right: 0px; top: 0px; font-family: Arial; font-size: 118px; margin: 0px; padding: 0px; cursor: pointer; opacity: 0;">
 							</div>
-							
 							<ul class="qq-upload-list">
 							</ul>
 						</div>
 					</div>
-					
 					</form>
 				</td>
 			</tr>
 		</tbody>
 
 	</table>
-<!-- modal content -->
-<div id="modal-content">
-	<div id="modal-title">
+
+	<!-- upload file script -->
+	<script>             
+function createUploader(){         
+	var uploader = new qq.FileUploader({         
+	element: document.getElementById('file-uploader')         
+	});    
+}    
+window.onload = createUploader;    
+</script>
+
+	<!-- modal content -->
+	<div id="modal-content">
+		<div id="modal-title"></div>
+		<div id="modal-text"></div>
+		<form name="input" action="" method="post">
+			<div id="modal-field"></div>
+			<input type="hidden" name="ID" id="ID"><input type="submit"
+				name="submitButton" id="submitButton">
+		</form>
 	</div>
-	<div id="modal-text">
-	</div>
-	<form name="input" action="rename.do" method="post">
-		<div id="modal-field">
-		</div>
-		<input type="hidden" name="ID" id="ID"><input type="submit" name="submitButton" id="submitButton">
-	</form>
-		<form name="input" action="deleteFile" method="post">
-		<div id="modal-field">
-		</div>
-		<input type="hidden" name="ID" id="ID"><input type="submit" name="submitButton" id="submitButton">
-	</form>
-</div>
 
 </body>
 </html>

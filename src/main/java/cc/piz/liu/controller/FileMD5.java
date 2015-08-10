@@ -66,10 +66,11 @@ public class FileMD5 {
 
 	public static String getFileSizes(File f) {// 取得文件大小
 		String size = "unknow";
+		FileInputStream fis = null;
 		try {
 			double s = 0;
 			if (f.exists()) {
-				FileInputStream fis = null;
+				
 
 				fis = new FileInputStream(f);
 
@@ -108,6 +109,13 @@ public class FileMD5 {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return size;
 	}
