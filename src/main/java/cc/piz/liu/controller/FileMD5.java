@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.security.AccessController;
 import java.security.MessageDigest;
+import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,28 +23,27 @@ import java.util.Date;
  */
 public class FileMD5 {
 
-	
-	
-	
-	
-	
-	
 	public static String getMd5ByFile(File file) throws FileNotFoundException {
 		String value = null;
 		FileInputStream in = new FileInputStream(file);
+
+
 		try {
 			MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(byteBuffer);
-			
 			BigInteger bi = new BigInteger(1, md5.digest());
 			value = bi.toString(16);
-			byteBuffer.clear();
+			byteBuffer.force();
+			clean(byteBuffer);
 		} catch (Exception e) {
+
 			e.printStackTrace();
+
 		} finally {
 			try {
 				in.close();
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -59,14 +61,37 @@ public class FileMD5 {
 
 	}
 
+	/**
+	 * 强制关闭 MappedByteBuffer
+	 * @param buffer
+	 * @throws Exception
+	 */
+	private static void clean(final Object buffer) throws Exception {
+		if (buffer != null) {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					try {
+						Method getCleanerMethod = buffer.getClass().getMethod("cleaner", new Class[0]);
+						getCleanerMethod.setAccessible(true);
+						sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
+						cleaner.clean();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+			});
+		}
+
+	}
+
 	public static void main(String[] args) throws IOException {
 
-//		String path = "E:\\commons-codec-1.9-bin.zip";
+		String path = "F:\\apache-tomcat-7.0.63\\webapps\\apk\\hhr\\HaowuAgent3.2.1.apk";
 
-//		String v = FileMD5.getFileSizes(new File(path));
-//		System.out.println("MD5:" + v.toUpperCase());
+		String md5 = FileMD5.getMd5ByFile(new File(path));
 
-//		FileInputStream fis = new FileInputStream(path);
+		System.out.println(md5);
 
 	}
 
@@ -76,7 +101,6 @@ public class FileMD5 {
 		try {
 			double s = 0;
 			if (f.exists()) {
-				
 
 				fis = new FileInputStream(f);
 
@@ -85,7 +109,7 @@ public class FileMD5 {
 				f.createNewFile();
 				System.out.println("文件不存在");
 			}
-			
+
 			if (s > 1024) {
 				s = (double) (s / 1024);
 				if (s > 1024) {
