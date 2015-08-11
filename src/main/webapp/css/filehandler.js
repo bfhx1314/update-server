@@ -84,7 +84,7 @@ function modalPopup(filename, option, filePath) {
 		document.getElementById("modal-field").appendChild(fieldObj);
 
 		// assign text field value
-		document.getElementById('submitButton').setAttribute("onClick","createFile("+filePath+'/'+"createFolder.value)");
+		document.getElementById('submitButton').setAttribute("onClick","createFile('"+filePath+'/'+"'+createFolder.value)");
 		document.getElementsByName('ID')[0].value = filePath;
 	}
 	else if (option==2) { // delete file
@@ -121,8 +121,9 @@ function deleteFileForPath(filePath){
 	$.post("deleteFile.do", { sourcePath: filePath },
 
 			function (data, textStatus){
-
-//			alert(data.detail);
+			if(data.status == 0){
+				alert(data.detail);
+			}
 
 			}, "json");
 	window.location.href=window.location.href;
@@ -139,7 +140,9 @@ function createFile(filename){
 
 			function (data, textStatus){
 
-//			alert(data.detail);
+			if(data.status == 0){
+				alert(data.detail);
+			}
 
 			}, "json");
 	window.location.href=window.location.href;
@@ -151,7 +154,9 @@ function renameFileForPath(modifyName1,filePath1){
 
 			function (data, textStatus){
 
-//			alert(data.detail);
+			if(data.status == 0){
+				alert(data.detail);
+			}
 
 			}, "json");
 	window.location.href=window.location.href;
@@ -682,6 +687,8 @@ qq.FileUploader = function(o){
             size: 'qq-upload-size',
             cancel: 'qq-upload-cancel',
 
+            status:'',
+            
             // added to list item when upload completes
             // used in css to hide progress spinner
             success: 'qq-upload-success',
@@ -820,19 +827,21 @@ qq.extend(qq.FileUploader.prototype, {
         qq.remove(this._find(item, 'cancel'));
         qq.remove(this._find(item, 'spinner'));
 		qq.remove(this._find(item, 'size'));
-        
-        if (result.success == 1){
+//		   status=JSON.parse(xhr.responseText).detail;
+        if (result.status == 1){
             qq.addClass(item, this._classes.success);
 			// my code
             this._listElement.removeChild(item);
             if(this._filesInProgress == 0)
                 window.location.href=window.location.href;  
         } 
-		else if (result.success == 2){
+		else if (result.status == 2){
             qq.addClass(item, this._classes.exist);
         }
-		else {
+		else{
 			qq.addClass(item, this._classes.fail);
+			item.childNodes[1].innerText=result.detail;
+//			qq.setText(item, result.detail);
 		}
     },
     _addToList: function(id, fileName){
@@ -1430,7 +1439,10 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         if (xhr.status == 200){
             this.log("xhr - server response received");
             this.log("responseText = " + xhr.responseText);
-                        
+//            status_log
+            
+         
+            
             var response;
                     
             try {
@@ -1439,7 +1451,7 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
                 response = {};
             }
             
-            this._options.onComplete(id, name, response);
+            this._options.onComplete(id, name, JSON.parse(xhr.responseText));
                         
         } else {                   
             this._options.onComplete(id, name, {});

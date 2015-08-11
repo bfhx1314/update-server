@@ -194,9 +194,14 @@ public class UpdataController {
 		
 		File file = new File(path);
 		if(file.exists() && file.isFile()){
-			file.delete();
-			data.put("status", "1");
-			data.put("detail", "文件已删除");
+			boolean isDeleted = file.delete();
+			if(isDeleted){
+				data.put("status", "1");
+				data.put("detail", "文件已删除");
+			}else{
+				data.put("status", "0");
+				data.put("detail", "文件被占用");				
+			}
 		}else{
 			data.put("status", "0");
 			data.put("detail", "未找到改文件");
@@ -256,9 +261,15 @@ public class UpdataController {
 
 		filePath = path + file.getOriginalFilename();
 
-		if(new File(filePath).exists()){
+		File saveFile = new File(filePath);
+		
+		if(saveFile.exists()){
 			data.put("status", "0");
 			data.put("detail", "文件已存在");
+			return data;
+		}else if(!getFileExtension(saveFile).equalsIgnoreCase("apk")){
+			data.put("status", "0");
+			data.put("detail", "拒绝上传非APK的文件");
 			return data;
 		}
 		
@@ -282,11 +293,21 @@ public class UpdataController {
 
 		}
 
-		data.put("success", "1");
-//		data.put("detail", "文件上传成功");
+		data.put("status", "1");
+		data.put("detail", "文件上传成功");
 		
 		return data;
 
 	}
-
+	
+	private String getFileExtension(File file) {
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		} else {
+			return "";
+		}
+	}
+	
+	
 }

@@ -20,6 +20,12 @@ import java.util.Date;
  */
 public class FileMD5 {
 
+	
+	
+	
+	
+	
+	
 	public static String getMd5ByFile(File file) throws FileNotFoundException {
 		String value = null;
 		FileInputStream in = new FileInputStream(file);
@@ -27,17 +33,17 @@ public class FileMD5 {
 			MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(byteBuffer);
+			
 			BigInteger bi = new BigInteger(1, md5.digest());
 			value = bi.toString(16);
+			byteBuffer.clear();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (null != in) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return value;
