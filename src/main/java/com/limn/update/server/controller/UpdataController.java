@@ -1,4 +1,4 @@
-package cc.piz.liu.controller;
+package com.limn.update.server.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

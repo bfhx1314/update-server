@@ -1,9 +1,10 @@
-package cc.piz.liu.controller;
+package com.limn.update.server.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,7 +14,12 @@ import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Properties;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 
 /**
  * MD5加密
@@ -26,7 +32,6 @@ public class FileMD5 {
 	public static String getMd5ByFile(File file) throws FileNotFoundException {
 		String value = null;
 		FileInputStream in = new FileInputStream(file);
-
 
 		try {
 			MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
@@ -43,7 +48,7 @@ public class FileMD5 {
 		} finally {
 			try {
 				in.close();
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -63,6 +68,7 @@ public class FileMD5 {
 
 	/**
 	 * 强制关闭 MappedByteBuffer
+	 * 
 	 * @param buffer
 	 * @throws Exception
 	 */
@@ -148,6 +154,24 @@ public class FileMD5 {
 			}
 		}
 		return size;
+	}
+
+	public static String getFilePath() {
+		Properties variableProps = new Properties();
+		InputStreamReader isr;
+		try {
+//			System.out.print(FileMD5.class.getClassLoader().getResourceAsStream("config/config.properties"));
+			
+			isr = new InputStreamReader(new FileInputStream(FileMD5.class.getClassLoader().getResource("/").getPath() + "/config/config.properties"));
+			variableProps.load(isr);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String filePath = variableProps.getProperty("filepath");
+		filePath = filePath == null ? "../apk/" : filePath;
+
+		return filePath;
 	}
 
 }

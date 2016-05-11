@@ -3,7 +3,8 @@
 <%@ page language="java"%>
 <%@ page import="java.io.*"%>
 <%@ page import="java.net.*"%>
-<%@ page import="cc.piz.liu.controller.*"%>
+<%@ page import="java.util.Arrays" %>>
+<%@ page import="com.limn.update.server.controller.*"%>
 
 
 <%
@@ -98,13 +99,16 @@
 
 								<%
 									//取得目前目录的磁盘目录
-									String path = request.getRealPath("apk/" + strid);
+									String path = request.getRealPath(FileMD5.getFilePath() + strid);
+								
 									//建立代表目前目录位置的d变量
 									File d = new File(path);
 									//取得代表目录中所有文件
 	
 									System.out.println(path);
-									File list[] = d.listFiles();
+									File[] list = d.listFiles();
+									
+									Arrays.sort(list, new CompratorByLastModified());  
 									for (int i = 0; i < list.length; i++) {
 
 										if (!list[i].isDirectory()) {
