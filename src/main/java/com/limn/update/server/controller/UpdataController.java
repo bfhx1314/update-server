@@ -4,14 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,14 +36,14 @@ public class UpdataController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping("index")
+	@RequestMapping("/index")
 	@ResponseBody
 	public Object weixinMsg(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
-		File file = new File(filePath + "/apk");
+		File file = new File(getAPKPath(filePath));
 		data.put("path", filePath);
 
 		int size = 0;
@@ -80,9 +80,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = "/apk/" + version;
-
-		filePath = filePath + path;
+		filePath = getAPKPath(filePath) + "/" + version;
 
 		File file = new File(filePath);
 
@@ -103,7 +101,7 @@ public class UpdataController {
 					if (type.equalsIgnoreCase("apk")) {
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("MD5", FileMD5.getMd5ByFile(fileType));
-						map.put("fileName", path + "/" + fileType.getName());
+						map.put("fileName", version + "/" + fileType.getName());
 
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 						// 前面的lSysTime是秒数，先乘1000得到毫秒数，再转为java.util.Date类型
@@ -126,6 +124,45 @@ public class UpdataController {
 		}
 
 		return data;
+	}
+
+	@RequestMapping({ "/download" })
+	public Object download(String version, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("text/html;charset=utf-8");
+		request.setCharacterEncoding("UTF-8");
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+
+		String filePath = request.getSession().getServletContext().getRealPath("/");
+
+		filePath = getAPKPath(filePath) + "/" + version;
+
+		String downLoadPath = filePath;
+
+		File file = new File(downLoadPath);
+		if ((file.exists()) && (file.isFile())) {
+			try {
+				long fileLength = new File(downLoadPath).length();
+				response.setContentType("application/x-msdownload;");
+				response.setHeader("Content-disposition",
+						"attachment; filename=" + new String(file.getName().getBytes("utf-8"), "ISO8859-1"));
+				response.setHeader("Content-Length", String.valueOf(fileLength));
+				bis = new BufferedInputStream(new FileInputStream(downLoadPath));
+				bos = new BufferedOutputStream(response.getOutputStream());
+				byte[] buff = new byte[2048];
+				int bytesRead;
+				while (-1 != (bytesRead = bis.read(buff, 0, buff.length)))
+					bos.write(buff, 0, bytesRead);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (bis != null)
+					bis.close();
+				if (bos != null)
+					bos.close();
+			}
+		}
+		return null;
 	}
 
 	public File[] orderByDate(File[] fs) {
@@ -151,128 +188,127 @@ public class UpdataController {
 		}
 		return fs;
 	}
-	
+
 	@RequestMapping("rename")
 	@ResponseBody
-	public Object renameFile(String modifyName, String sourcePath , HttpServletRequest request, HttpServletResponse response){
-		
+	public Object renameFile(String modifyName, String sourcePath, HttpServletRequest request,
+			HttpServletResponse response) {
+
 		Map<String, String> data = new HashMap<String, String>();
-		
+
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = filePath + "/apk/" + sourcePath;
-		
+		String path = getAPKPath(filePath) + sourcePath;
+
 		File file = new File(path);
-		if(file.exists() && file.isFile()){
+		if (file.exists() && file.isFile()) {
 			File newFile = new File(file.getParent() + "/" + modifyName);
-			if(!newFile.exists()){
+			if (!getFileExtension(newFile).equalsIgnoreCase("apk")) {
+				newFile = new File(file.getParent() + "/" + modifyName + ".apk");
+			}
+			if (!newFile.exists()) {
 				file.renameTo(newFile);
 				data.put("status", "1");
 				data.put("detail", "文件修改成功");
-			}else{
+			} else {
 				data.put("status", "0");
 				data.put("detail", "已经存在此文件");
 			}
-		}else{
+		} else {
 			data.put("status", "0");
 			data.put("detail", "未找到改文件");
 		}
-		
+
 		return data;
 	}
-	
-	
+
 	@RequestMapping("deleteFile")
 	@ResponseBody
-	public Object deleteFile(String sourcePath , HttpServletRequest request, HttpServletResponse response){
-		
+	public Object deleteFile(String sourcePath, HttpServletRequest request, HttpServletResponse response) {
+
 		Map<String, String> data = new HashMap<String, String>();
-		
+
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = filePath + "/apk/" + sourcePath;
-		
+		String path = getAPKPath(filePath) + sourcePath;
+
 		File file = new File(path);
-		if(file.exists() && file.isFile()){
+		if (file.exists() && file.isFile()) {
 			boolean isDeleted = file.delete();
-			if(isDeleted){
+			if (isDeleted) {
 				data.put("status", "1");
 				data.put("detail", "文件已删除");
-			}else{
+			} else {
 				data.put("status", "0");
-				data.put("detail", "文件被占用");				
+				data.put("detail", "文件被占用");
 			}
-		}else{
+		} else {
 			data.put("status", "0");
 			data.put("detail", "未找到改文件");
 		}
-		
+
 		return data;
 	}
-	
-	
-	
+
 	@RequestMapping("createFile")
 	@ResponseBody
-	public Object createFile(String sourcePath , HttpServletRequest request, HttpServletResponse response){
-		
+	public Object createFile(String sourcePath, HttpServletRequest request, HttpServletResponse response) {
+
 		Map<String, String> data = new HashMap<String, String>();
-		
+
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = filePath + "/apk/" + sourcePath;
-		
+		String path = getAPKPath(filePath) + sourcePath;
+
 		File file = new File(path);
-		if(file.exists()){
+		if (file.exists()) {
 			data.put("status", "0");
 			data.put("detail", "文件已存在");
-		}else{
+		} else {
 			file.mkdirs();
 			data.put("status", "1");
 			data.put("detail", "文件创建成功");
 		}
-		
+
 		return data;
 	}
-	
 
 	@RequestMapping("upload")
 	@ResponseBody
-	public Object upload( String path,MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public Object upload(String path, MultipartFile file, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		Map<String, Object> data = new HashMap<String, Object>();
-		
-		if(null == file){
-			
+
+		if (null == file) {
+
 			data.put("status", "0");
 			data.put("detail", "文件不能为空");
 			return data;
 		}
 		InputStream input = file.getInputStream();
-		
+
 		String filePath = request.getSession().getServletContext().getRealPath("/");
-		
-		
-		
-		path = filePath + "/apk/" + path + "/";
-		
-		if(!new File(path).exists()){
+
+		path = getAPKPath(filePath) + path + "/";
+
+		if (!new File(path).exists()) {
 			new File(path).mkdirs();
 		}
 
 		filePath = path + file.getOriginalFilename();
 
 		File saveFile = new File(filePath);
-		
-		if(saveFile.exists()){
+
+		if (saveFile.exists()) {
 			data.put("status", "0");
 			data.put("detail", "文件已存在");
 			return data;
-		}else if(!getFileExtension(saveFile).equalsIgnoreCase("apk")){
+		} else if (!getFileExtension(saveFile).equalsIgnoreCase("apk")) {
 			data.put("status", "0");
 			data.put("detail", "拒绝上传非APK的文件");
 			return data;
 		}
-		
+
 		FileOutputStream fos = new FileOutputStream(filePath);
 
 		// 把数据存入路径+文件名
@@ -295,11 +331,11 @@ public class UpdataController {
 
 		data.put("status", "1");
 		data.put("detail", "文件上传成功");
-		
+
 		return data;
 
 	}
-	
+
 	private String getFileExtension(File file) {
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
@@ -308,6 +344,8 @@ public class UpdataController {
 			return "";
 		}
 	}
-	
-	
+
+	private String getAPKPath(String path) {
+		return path + FileMD5.getFilePath();
+	}
 }

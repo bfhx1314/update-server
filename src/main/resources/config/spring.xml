@@ -9,7 +9,7 @@
 
 
     <!-- 扫描文件（自动将servicec层注入） -->
-    <context:component-scan base-package="cc.piz.liu.service"/>
+    <context:component-scan base-package="com.limn.update.server.controller"/>
     
   
     

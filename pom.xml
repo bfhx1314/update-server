@@ -27,7 +27,11 @@
 			<artifactId>json</artifactId>
 			<version>20131018</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.limn.frame</groupId>
+			<artifactId>limn-frame</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<!-- spring核心包 -->
 		<!-- springframe start -->
 		<dependency>

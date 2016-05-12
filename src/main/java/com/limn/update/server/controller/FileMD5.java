@@ -158,7 +158,7 @@ public class FileMD5 {
 
 	public static String getFilePath() {
 		Properties variableProps = new Properties();
-		InputStreamReader isr;
+		InputStreamReader isr = null;
 		try {
 //			System.out.print(FileMD5.class.getClassLoader().getResourceAsStream("config/config.properties"));
 			
@@ -167,6 +167,13 @@ public class FileMD5 {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+		}finally {
+			try {
+				isr.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		String filePath = variableProps.getProperty("filepath");
 		filePath = filePath == null ? "../apk/" : filePath;
