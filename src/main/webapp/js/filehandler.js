@@ -659,12 +659,20 @@ qq.FileUploader = function(o){
         // if set, will be used instead of qq-upload-list in template
         listElement: null,
                 
-        template: '<div class="qq-uploader">' + 
-                '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
-                '<div class="qq-upload-button"><img src="./css/webupload.png" width="16" height="16"/>  Upload File</div>' +
-                '<ul class="qq-upload-list"></ul>' + 
-             '</div>',
-         
+//        template: '<div class="qq-uploader">' + 
+//                '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
+//                '<div class="qq-upload-button"><img src="./css/webupload.png" width="16" height="16"/>  Upload File</div>' +
+//                '<ul class="qq-upload-list"></ul>' + 
+//             '</div>',
+     
+      template: 
+    	  '<div class="qq-upload-button">'+
+    	  '上传</div>' +
+    	  
+    	  '<div style="display:none"></div>'+
+    	  '<ul class="qq-upload-list"></ul>' + 
+    	  '</div>',
+        
         // template for one item in file list
         fileTemplate: '<li>' +
                 '<span class="qq-upload-file"></span>' +
@@ -708,7 +716,7 @@ qq.FileUploader = function(o){
     this._button = this._createUploadButton(this._find(this._element, 'button'));        
     
     this._bindCancelEvent();
-    this._setupDragDrop();
+//    this._setupDragDrop();
 };
 
 // inherit from Basic Uploader
@@ -832,8 +840,17 @@ qq.extend(qq.FileUploader.prototype, {
             qq.addClass(item, this._classes.success);
 			// my code
             this._listElement.removeChild(item);
-            if(this._filesInProgress == 0)
-                window.location.href=window.location.href;  
+            this._element.parentNode.childNodes[3].value = result.key;
+//            this._element.childNodes[1].type = 'text';
+            if(this._filesInProgress == 0){
+//                window.location.href=window.location.href;
+            	
+            	this._element.childNodes[0].style.display='none'
+            	this._element.childNodes[1].style.display='inline'
+            	this._element.childNodes[1].innerText=result.name;
+//            	qq.remove(this._element.childNodes[0]);
+            }
+            
         } 
 		else if (result.status == 2){
             qq.addClass(item, this._classes.exist);
@@ -1424,7 +1441,7 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
 		formData.append('path', navigationPath);
         
 
-        xhr.open("POST", "upload.do", true);
+        xhr.open("POST", "auto/uploadByFile.do", true);
         xhr.send(formData);
             
         

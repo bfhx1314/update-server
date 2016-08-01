@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery UI Autocomplete - Default functionality</title>
+<link rel="stylesheet"
+	href="jquery-ui/css/base/jquery-ui-1.10.4.custom.css" />
+
+<script src="jquery-ui/js/jquery-1.10.2.js"></script>
+<script src="jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+<link rel="stylesheet" href="css/autotest.css">
+<style>
+#sortable1 {
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 2.5em;
+	float: left;
+	margin-right: 10px;
+	width: 150px;
+}
+
+#sortable2 {
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 2.5em;
+	float: left;
+	margin-right: 10px;
+	width: 200px;
+}
+
+#sortable1 li {
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	width: 200px;
+}
+
+#sortable2 li {
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	width: 200px;
+}
+
+.ui-progressbar {
+	position: relative;
+}
+
+.progress-label {
+	position: absolute;
+	left: 50%;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
+}
+
+#bb {
+	background: url("css/bg_02.png");
+}
+</style>
+
+<script>
+
+
+	$(function() {
+		var LocString=String(window.document.location.href);   
+	       
+	    function getQueryStr(str){   
+	        var rs = new RegExp("(^|)"+str+"=([^/&]*)(/&|$)","gi").exec(LocString), tmp;   
+	       
+	        if(tmp=rs){   
+	            return tmp[2];   
+	        }   
+	       
+	        // parameter cannot be found   
+	        return "";   
+	    }   
+	    
+	    var progressbar = $( "#progressbar" ),
+	    progressLabel = $( ".progress-label" );
+	    progressbar.progressbar({
+	        value: false,
+	        change: function() {
+	          	progressLabel.text( progressbar.progressbar( "value" ) + "%");
+	        },
+	        complete: function() {
+	          	progressLabel.text( "完成！" );
+	          	$.get("/update-server/auto/getResult.do?id="+getQueryStr("id"), function(response,
+						code) {
+	          		$("#results").empty();
+	          		$("#results").append("<a href='" + response.url + "'>自动化测试报告</a>");
+	          	});
+	        }
+	    });
+		
+		
+
+		setInterval(function() {
+			$.get("/update-server/auto/getProgress.do?id="+getQueryStr("id"), function(response,
+					code) {
+				if (response.status != "1") {
+					alert("发生异常: " + response.detail);
+				} else {
+					/* progressbar.progressbar( "title", response.executeCaseCount/response.caseCount*100 + "%" + 
+							"(" + response.executeCaseCount + "/" + response.caseCount + ")"); */
+					progressbar.progressbar( "value", Math.round(response.executeCaseCount/response.caseCount*100))
+					
+				
+				/* 	$("#progressbar").progressbar({
+						value : response.executeCaseCount/response.caseCount*100,
+						change: function() {
+							progressLabel.text( response.executeCaseCount/response.caseCount*100 + "%" );
+						      },
+					}); */
+				
+				}
+			}, "json");
+		 	$.get("/update-server/auto/getCurrentStep.do?id="+getQueryStr("id"), function(response,
+					code) {
+				if (response.status != "1") {
+					alert("发生异常: " + response.detail);
+				}else{
+					setStep(response.testStep,response.testStepIndex);
+				}
+				
+			}, "json"); 
+		 	
+		 	
+		}, 1000);
+	});
+	
+	function setStep(steps,index){
+		$('#steps').empty();
+		var stepArr = steps.split("\n");
+		for(var key in stepArr){
+			if(index == key){
+				$('#steps').append("<li style='background-color:yellow;'>"+ stepArr[key] + "</li>");
+			}else{
+				$('#steps').append("<li>"+ stepArr[key] + "</li>");
+			}
+		}
+	}
+	
+	
+</script>
+
+</head>
+<body id="bb">
+
+
+	<div class="ui-center">
+		<h3>用例步骤:</h3>
+		<ul id="steps"></ul>
+
+		<h3>当前进度:</h3>
+		<div id="progressbar">
+			<div class="progress-label">加载...</div>
+		</div>
+	</div>
+	<div id="results"></div>
+
+
+
+</body>
+</html>

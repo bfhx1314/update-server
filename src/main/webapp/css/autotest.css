@@ -1,0 +1,31 @@
+.ui-center{
+	margin:0px auto;
+	width:400px;
+	height:400px;
+	margin-top: 100px;
+}
+
+.ui-select{
+	width:200px;
+	text-align:center;
+	height:20px;
+}
+
+.ui-label{
+	font-size: 12px;
+	width:150px;
+	height:20px;
+	
+}
+
+.ui-text{
+	height:12px;
+	width:200px;
+}
+
+.ui-control{
+	
+}
+.ui-commit{
+	width:400px;'
+}

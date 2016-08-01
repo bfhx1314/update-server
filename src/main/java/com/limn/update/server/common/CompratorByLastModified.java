@@ -1,4 +1,4 @@
-package com.limn.update.server.controller;
+package com.limn.update.server.common;
 
 import java.io.File;
 import java.util.Comparator;

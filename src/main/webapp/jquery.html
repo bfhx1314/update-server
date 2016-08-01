@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery UI Autocomplete - Default functionality</title>
+<link rel="stylesheet"
+	href="jquery-ui/css/base/jquery-ui-1.10.4.custom.css" />
+
+<script src="jquery-ui/js/jquery-1.10.2.js"></script>
+<script src="jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/filehandler.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/pagecontent.css">
+<link rel="stylesheet" href="css/autotest.css">
+<style>
+#sortable1 {
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 2.5em;
+	float: left;
+	margin-right: 10px;
+	width: 150px;
+}
+
+#sortable2 {
+	list-style-type: none;
+	margin: 0;
+	padding: 0 0 2.5em;
+	float: left;
+	margin-right: 10px;
+	width: 200px;
+}
+
+#sortable1 li {
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	width: 200px;
+}
+
+#sortable2 li {
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+	width: 200px;
+}
+
+#bb {
+	background: url("css/bg_02.png");
+}
+</style>
+
+<script>
+	$(function() {
+		$("#sm").click(
+				function() {
+					$.get("/update-server/auto/run.do?",
+							$("#form").serialize(), function(response, code) {
+								if (response.status != "1") {
+									alert("发生异常: " + response.detail);
+									location.href = "jquery2.html?id="
+											+ response.id;
+								} else {
+									location.href = "jquery2.html?id="
+											+ response.id;
+								}
+							}, "json");
+				});
+		$("#progress").click(
+				function() {
+					$.get("/update-server/auto/getProgress.do?", function(
+							response, code) {
+						if (response.status != "1") {
+							alert("发生异常: " + response.detail);
+						} else {
+							alert("进度" + response.executeCaseCount + "/"
+									+ response.caseCount);
+						}
+					}, "json");
+				});
+		$("#currentStep").click(
+				function() {
+					$.get("/update-server/auto/getCurrentStep.do?", function(
+							response, code) {
+						if (response.status != "1") {
+							alert("发生异常: " + response.detail);
+						}
+					}, "json");
+				});
+	});
+</script>
+
+</head>
+<body id="bb">
+
+	<form id="form" method="get" action="/update-server/auto/run.do?">
+		<div class="ui-center">
+			<table>
+				<tr>
+					<td class="ui-label">指定运行电脑:</td>
+					<td><select name="computer" class="ui-select">
+							<option value="本机">本机</option>
+							<option value="远程">远程</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td class="ui-label">测试类型:</td>
+					<td><select name="runTestModel" class="ui-select">
+							<option value="Android">Android</option>
+							<option value="Web">Web</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td class="ui-label">APP文件:</td>
+					<td>
+						<div id="file-uploader">
+							
+						</div>
+						<input type="hidden" name="appFile"/>
+						<ul class="qq-upload-list">
+						</ul>
+						
+					</td>
+				</tr>
+				<tr>
+					<td class="ui-label">测试用例文件:</td>
+					<td>
+						<div id="file-uploader1">
+						</div>
+						<input type="hidden" name="testCaseFile"/>
+						<ul class="qq-upload-list">
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="ui-label">用例指定模式:</td>
+					<td><select name="specify" class="ui-select">
+							<option value="不指定">不指定</option>
+							<option value="指定">指定</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td class="ui-label">指定步骤运行:</td>
+					<td><select name="specify" class="ui-select">
+							<option value="不指定">不指定</option>
+							<option value="指定">指定</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td colSpan="2" align="center"><input type="button" value="提交"
+						id="sm" /></td>
+				</tr>
+			</table>
+
+			<script>
+				function createUploader() {
+					var uploader = new qq.FileUploader({
+						element : document.getElementById('file-uploader')
+					});
+
+					var uploader1 = new qq.FileUploader({
+						element : document.getElementById('file-uploader1')
+					});
+
+				}
+				window.onload = createUploader;
+			</script>
+		</div>
+	</form>
+
+	<div class="filepath">
+		<input type="hidden" id="navigation" value="" />
+		<p></p>
+	</div>
+
+</body>
+</html>

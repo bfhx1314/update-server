@@ -337,7 +337,7 @@ div.copyright
 .qq-upload-spinner 
 {
 	display:inline-block; 
-	background:url("/webloading.gif"); 
+	background:url("webloading.gif"); 
 	width:20px; 
 	height:20px; 
 	vertical-align:text-bottom;

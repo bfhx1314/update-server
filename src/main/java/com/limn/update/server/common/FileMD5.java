@@ -1,4 +1,4 @@
-package com.limn.update.server.controller;
+package com.limn.update.server.common;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -156,29 +156,6 @@ public class FileMD5 {
 		return size;
 	}
 
-	public static String getFilePath() {
-		Properties variableProps = new Properties();
-		InputStreamReader isr = null;
-		try {
-//			System.out.print(FileMD5.class.getClassLoader().getResourceAsStream("config/config.properties"));
-			
-			isr = new InputStreamReader(new FileInputStream(FileMD5.class.getClassLoader().getResource("/").getPath() + "/config/config.properties"));
-			variableProps.load(isr);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}finally {
-			try {
-				isr.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		String filePath = variableProps.getProperty("filepath");
-		filePath = filePath == null ? "../apk/" : filePath;
-
-		return filePath;
-	}
+	
 
 }

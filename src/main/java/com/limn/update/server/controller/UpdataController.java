@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.limn.update.server.common.Utils;
+import com.limn.update.server.common.FileMD5;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,7 +46,7 @@ public class UpdataController {
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
-		File file = new File(getAPKPath(filePath));
+		File file = new File(Utils.getAPKPath(filePath));
 		data.put("path", filePath);
 
 		int size = 0;
@@ -80,7 +83,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		filePath = getAPKPath(filePath) + "/" + version;
+		filePath = Utils.getAPKPath(filePath) + "/" + version;
 
 		File file = new File(filePath);
 
@@ -135,7 +138,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		filePath = getAPKPath(filePath) + "/" + version;
+		filePath = Utils.getAPKPath(filePath) + "/" + version;
 
 		String downLoadPath = filePath;
 
@@ -198,7 +201,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = getAPKPath(filePath) + sourcePath;
+		String path = Utils.getAPKPath(filePath) + sourcePath;
 
 		File file = new File(path);
 		if (file.exists() && file.isFile()) {
@@ -230,7 +233,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = getAPKPath(filePath) + sourcePath;
+		String path = Utils.getAPKPath(filePath) + sourcePath;
 
 		File file = new File(path);
 		if (file.exists() && file.isFile()) {
@@ -258,7 +261,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		String path = getAPKPath(filePath) + sourcePath;
+		String path = Utils.getAPKPath(filePath) + sourcePath;
 
 		File file = new File(path);
 		if (file.exists()) {
@@ -289,7 +292,7 @@ public class UpdataController {
 
 		String filePath = request.getSession().getServletContext().getRealPath("/");
 
-		path = getAPKPath(filePath) + path + "/";
+		path = Utils.getAPKPath(filePath) + path + "/";
 
 		if (!new File(path).exists()) {
 			new File(path).mkdirs();
@@ -303,7 +306,15 @@ public class UpdataController {
 			data.put("status", "0");
 			data.put("detail", "文件已存在");
 			return data;
-		} else if (!getFileExtension(saveFile).equalsIgnoreCase("apk")) {
+			
+		}else if(getFileExtension(saveFile).equalsIgnoreCase("ipa")){
+			
+//			new PgyerAppPackageInfoController().upload(file, "默认上传", request, response);
+			data.put("status", "1");
+			data.put("detail", "上传成功!");
+			return data;
+
+		}else if (!getFileExtension(saveFile).equalsIgnoreCase("apk")) {
 			data.put("status", "0");
 			data.put("detail", "拒绝上传非APK的文件");
 			return data;
@@ -336,6 +347,8 @@ public class UpdataController {
 
 	}
 
+	
+	
 	private String getFileExtension(File file) {
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
@@ -345,7 +358,4 @@ public class UpdataController {
 		}
 	}
 
-	private String getAPKPath(String path) {
-		return path + FileMD5.getFilePath();
-	}
 }

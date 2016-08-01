@@ -5,7 +5,7 @@
 <%@ page import="java.net.*"%>
 <%@ page import="java.util.Arrays" %>>
 <%@ page import="com.limn.update.server.controller.*"%>
-
+<%@ page import="com.limn.update.server.common.*"%>
 
 <%
 	String strid = request.getParameter("id");
@@ -99,13 +99,15 @@
 
 								<%
 									//取得目前目录的磁盘目录
-									String path = request.getRealPath(FileMD5.getFilePath() + strid);
-								
+									String path = request.getRealPath("/");
+									
 									//建立代表目前目录位置的d变量
-									File d = new File(path);
+									System.out.println(path + Utils.getAPKPath("") + strid);
+									
+									File d = new File(path + Utils.getAPKPath("") + strid);
 									//取得代表目录中所有文件
 	
-									System.out.println(path);
+									
 									File[] list = d.listFiles();
 									
 									Arrays.sort(list, new CompratorByLastModified());  
@@ -118,7 +120,7 @@
 									<td class="i"><a href=""><img src="./css/unknown.png"
 											width="20" height="20"></a></td>
 									<td class="n"><a
-										href="<%="apk/" + strid + "/" + list[i].getName()%>"><%=list[i].getName()%></a>
+										href="<%=Utils.getAPKPath("") + strid + "/" + list[i].getName()%>"><%=list[i].getName()%></a>
 									</td>
 									<td class="m"><%=FileMD5.dataFormat(list[i].lastModified())%></td>
 									<td class="s"><%=FileMD5.getFileSizes(list[i])%></td>
