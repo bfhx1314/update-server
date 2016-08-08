@@ -32,10 +32,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.limn.tool.common.AppPackageInfo;
+import com.limn.tool.app.AppPackageInfo;
+import com.limn.tool.app.IOSPackageInfo;
 import com.limn.tool.common.DateFormat;
 import com.limn.tool.common.FileUtil;
-import com.limn.tool.common.IOSPackageInfo;
 import com.limn.tool.external.JSONReader;
 import com.limn.update.server.common.Utils;
 

@@ -207,13 +207,14 @@ public class AutomationController {
 			for(File result:results.listFiles()){
 				Map<String, String> resultData = new HashMap<String, String>();
 				resultData.put("time",result.getName());
-				resultData.put("url","/ResultsFolder/" + results.getName() + "/" + result.getName() + "/Report/ReportFrame.htm");
+				resultData.put("url","ResultsFolder/" + results.getName() + "/" + result.getName() + "/Report/ReportFrame.htm");
 				resultArray.add(resultData);
 			}
 			resultsData.put("data",resultArray);
 			resultsArray.add(resultsData);
 		}
 		data.put("data", resultsArray);
+		data.put("status", "1");
 		return data;
 		
 	}
