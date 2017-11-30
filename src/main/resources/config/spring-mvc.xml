@@ -15,7 +15,7 @@
 	<mvc:annotation-driven />
 	<!-- 避免IE在ajax请求时，返回json出现下载 -->
 	<bean id="jacksonMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
 				<value>text/html;charset=UTF-8</value>

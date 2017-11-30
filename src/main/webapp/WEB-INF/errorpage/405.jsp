@@ -11,6 +11,6 @@
     <title>对不起,您没有权限访问</title>
 </head>
 <body>
-如题所示,如有疑问,请联系weixin:Piz.liu
+
 </body>
 </html>

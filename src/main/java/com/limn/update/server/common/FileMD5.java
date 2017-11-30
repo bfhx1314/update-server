@@ -16,6 +16,7 @@ import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.servlet.Servlet;
@@ -28,9 +29,18 @@ import javax.servlet.ServletConfig;
  *
  */
 public class FileMD5 {
+	
+	
+	private static HashMap<String,String> md5Data = new HashMap<String,String>();
 
 	public static String getMd5ByFile(File file) throws FileNotFoundException {
 		String value = null;
+		
+		if(md5Data.containsKey(file.getName()+file.getTotalSpace()+file.lastModified())){
+			return md5Data.get(file.getName()+file.getTotalSpace()+file.lastModified());
+		}
+		
+		
 		FileInputStream in = new FileInputStream(file);
 
 		try {
@@ -53,6 +63,7 @@ public class FileMD5 {
 				e.printStackTrace();
 			}
 		}
+		md5Data.put(file.getName()+file.getTotalSpace()+file.lastModified(),value);
 		return value;
 	}
 

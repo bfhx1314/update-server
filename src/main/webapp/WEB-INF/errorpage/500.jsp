@@ -11,6 +11,6 @@
     <title>内部错误</title>
 </head>
 <body>
-内部报错,与您无关!
+
 </body>
 </html>

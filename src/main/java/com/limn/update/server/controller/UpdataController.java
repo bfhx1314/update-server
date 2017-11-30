@@ -278,7 +278,7 @@ public class UpdataController {
 
 	@RequestMapping("upload")
 	@ResponseBody
-	public Object upload(String path, MultipartFile file, HttpServletRequest request, HttpServletResponse response)
+	public Object upload(String path, MultipartFile file,String fileName , HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		Map<String, Object> data = new HashMap<String, Object>();
 
@@ -297,8 +297,11 @@ public class UpdataController {
 		if (!new File(path).exists()) {
 			new File(path).mkdirs();
 		}
-
-		filePath = path + file.getOriginalFilename();
+		if(null == fileName || fileName.isEmpty()){
+			filePath = path + file.getOriginalFilename();
+		}else{
+			filePath = path + fileName;
+		}
 
 		File saveFile = new File(filePath);
 
@@ -310,14 +313,14 @@ public class UpdataController {
 		}else if(getFileExtension(saveFile).equalsIgnoreCase("ipa")){
 			
 //			new PgyerAppPackageInfoController().upload(file, "默认上传", request, response);
-			data.put("status", "1");
-			data.put("detail", "上传成功!");
-			return data;
+//			data.put("status", "1");
+//			data.put("detail", "上传成功!");
+//			return data;
 
-		}else if (!getFileExtension(saveFile).equalsIgnoreCase("apk")) {
-			data.put("status", "0");
-			data.put("detail", "拒绝上传非APK的文件");
-			return data;
+//		}else if (!getFileExtension(saveFile).equalsIgnoreCase("apk")) {
+//			data.put("status", "0");
+//			data.put("detail", "拒绝上传非APK的文件");
+//			return data;
 		}
 
 		FileOutputStream fos = new FileOutputStream(filePath);

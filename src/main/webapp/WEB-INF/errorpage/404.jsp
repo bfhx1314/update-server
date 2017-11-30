@@ -14,7 +14,7 @@
 Sorry ! 页面未找到!
 <br>
 <P>
-  请联系管理员! weixin:Piz.liu
+
 </P>
 </body>
 </html>

@@ -9,12 +9,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- spring版本号 -->
-		<spring.version>3.2.4.RELEASE</spring.version>
+		<spring.version>4.3.13.RELEASE</spring.version>
+		<hibernate.version>5.2.12.Final</hibernate.version>
+		<mysql.version>8.0.8-dmr</mysql.version>
 		<!-- mybatis版本号 -->
-		<mybatis.version>3.2.4</mybatis.version>
+		<!--<mybatis.version>3.2.4</mybatis.version>-->
 		<!-- log4j日志文件管理包版本 -->
 		<slf4j.version>1.6.6</slf4j.version>
-		<log4j.version>1.2.9</log4j.version>
+		<log4j.version>1.2.15</log4j.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,6 +33,16 @@
 			<groupId>com.limn.frame</groupId>
 			<artifactId>limn-frame</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 		<!-- spring核心包 -->
 		<!-- springframe start -->
@@ -100,7 +112,11 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
@@ -112,6 +128,27 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+
+
+        <!--com/fasterxml/jackson/core/JsonProcessingException-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+
 		<!-- springframe end -->
 
 		<!-- mybatis核心包 -->
@@ -124,6 +161,12 @@
 		<!-- 阿里巴巴数据源包 -->
 		<!-- <dependency> <groupId>com.alibaba</groupId> <artifactId>druid</artifactId> 
 			<version>1.0.2</version> </dependency> -->
+
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.2</version>
+		</dependency>
 
 		<!-- json数据 -->
 		<dependency>

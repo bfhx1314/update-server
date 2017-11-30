@@ -1,6 +1,10 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.dao.PersonEntityDao;
+import com.limn.update.server.entity.PersonEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,15 +47,20 @@ public class AutomationController {
 
 	private static LinkedHashMap<String, BeforeTest> testingRC = new LinkedHashMap<String, BeforeTest>();
 	private static HashMap<String,String> fileData = new HashMap<String,String>();
+
+
+
+
+
+
 	/**
 	 * 运行 详情可以参考 StartConfigBean 类
-	 * 
 	 * @param request
 	 * @param response
-	 * @param appFilePath
+	 * @param appFile
 	 * @param browserType
 	 * @param computer
-	 * @param excelPath
+	 * @param testCaseFile
 	 * @param executeMode
 	 * @param frontSteps
 	 * @param debug
@@ -275,6 +285,22 @@ public class AutomationController {
 		return data;
 
 	}
-	
+
+	@Autowired
+	PersonEntityDao personEntityDao;
+
+	@RequestMapping("testSql")
+	@ResponseBody
+	public Object testSql(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		PersonEntity personEntity = new PersonEntity();
+		personEntity.setUser_name("aaaaaa");
+		personEntityDao.save(personEntity);
+
+
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("data", "111");
+		return data;
+	}
 	
 }
