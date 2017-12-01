@@ -11,8 +11,14 @@ import com.limn.update.server.entity.FindCoordinateRecordEntity;
 import com.limn.update.server.service.ElePullService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -32,10 +38,9 @@ public class ElePullServiceImpl implements ElePullService {
     @Autowired
     FindCoordinateRecordDao findCoordinateRecordDao;
 
-
     @Override
     @Transactional
-    public void saveShopByCoordinate(String latitude, String longitude) {
+    public FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude) {
 //        DataBaseConnection conn1 = new DataBaseConnection();
 
         FindCoordinateRecordEntity fcre = new FindCoordinateRecordEntity();
@@ -65,7 +70,7 @@ public class ElePullServiceImpl implements ElePullService {
                     EleShopEntity eleshop = new EleShopEntity();
                     BeanUtils.copyProperties(eleshop, shop);
                     eleshop.setFindid(findId);
-                    eleShopDao.saveOrUpdate(eleshop);
+                    eleShopDao.save(eleshop);
 //                    conn.executeSave(eleshop);
 
                     //添加距离
@@ -78,7 +83,7 @@ public class ElePullServiceImpl implements ElePullService {
                 }
             }
         }
-
+        eleShopDao.flush();
 
         Long newCount = eleShopDao.count();
 //                (Long) conn1.query("select count(DISTINCT id) from com.ele.entity.EleShopEntity");
@@ -101,6 +106,9 @@ public class ElePullServiceImpl implements ElePullService {
         findCoordinateRecordDao.save(fcre);
 //        conn1.executeSave(fcre);
 //        conn1.commit();
+        return fcre;
 
     }
+
+
 }

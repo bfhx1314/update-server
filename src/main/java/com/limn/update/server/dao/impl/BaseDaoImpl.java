@@ -3,6 +3,7 @@ package com.limn.update.server.dao.impl;
 import com.limn.update.server.dao.BaseDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -50,6 +51,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public void flush() {
-
+        getSession().flush();
     }
 }

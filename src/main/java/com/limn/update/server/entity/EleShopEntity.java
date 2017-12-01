@@ -61,8 +61,8 @@ public class EleShopEntity {
     }
 
     @Basic
-    @GeneratedValue(generator = "id")
-    @GenericGenerator(name = "id", strategy = "assigned")
+//    @GeneratedValue(generator = "id")
+//    @GenericGenerator(name = "id", strategy = "assigned")
     @Column(name = "id", nullable = true)
     public Integer getId() {
         return id;

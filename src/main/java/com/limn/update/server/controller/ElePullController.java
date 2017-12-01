@@ -12,6 +12,7 @@ import com.limn.update.server.common.Utils;
 import com.limn.update.server.dao.EleShopDao;
 import com.limn.update.server.dao.FindCoordinateRecordDao;
 import com.limn.update.server.dao.PersonEntityDao;
+import com.limn.update.server.entity.FindCoordinateRecordEntity;
 import com.limn.update.server.entity.PersonEntity;
 import com.limn.update.server.service.ElePullService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,12 +64,19 @@ public class ElePullController {
 
 	@RequestMapping("saveShop")
 	@ResponseBody
-	public Object saveShop(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		elePullService.saveShopByCoordinate( "31.30","121.13");
+	public Object saveShop(HttpServletRequest request, HttpServletResponse response , String latitude , String longitude) throws IOException {
 
 		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("data", "111");
+		try {
+			FindCoordinateRecordEntity fcre = elePullService.saveShopByCoordinate(latitude, longitude);
+			data.put("data", "查询成功");
+			data.put("detail", fcre);
+		}catch (Exception e){
+			data.put("data", "查询失败");
+		}
+
+
+
 		return data;
 	}
 
