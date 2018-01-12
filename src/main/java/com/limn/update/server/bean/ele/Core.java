@@ -9,6 +9,15 @@ public class Core {
     Target target;
     String come_from;
     Next next;
+    String extraInfo;
+
+    public String getExtraInfo() {
+        return extraInfo;
+    }
+
+    public void setExtraInfo(String extraInfo) {
+        this.extraInfo = extraInfo;
+    }
 
     public String getIndex() {
         return index;

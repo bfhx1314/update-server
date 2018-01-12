@@ -1,5 +1,6 @@
 package com.limn.update.server.common;
 
+import com.limn.tool.common.BaseToolParameter;
 import com.limn.tool.common.Print;
 import com.limn.update.server.bean.ele.*;
 import net.sf.json.JSONArray;
@@ -33,7 +34,7 @@ public class GetEleOrderInfo {
         String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw3s78hjff&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
 
         if(null == shopList || shopList.isEmpty()){
-            Print.log("店铺列表无数据返回 latitude : " + latitude + " longitude : " + longitude + " limit : " + limit + " offset : " + offset ,2);
+            BaseToolParameter.getPrintThreadLocal().log("店铺列表无数据返回 latitude : " + latitude + " longitude : " + longitude + " limit : " + limit + " offset : " + offset ,2);
             return eleshos;
         }
 
@@ -63,7 +64,7 @@ public class GetEleOrderInfo {
 
 
         if(null == menusList || menusList.isEmpty()){
-            Print.log("菜单列表无数据返回 restaurant_id : " + restaurant_id,2);
+            BaseToolParameter.getPrintThreadLocal().log("菜单列表无数据返回 restaurant_id : " + restaurant_id,2);
             return eleMenus;
         }
 
