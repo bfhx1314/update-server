@@ -1,4 +1,6 @@
 /target/
-/.idea/
+*/.idea/
+.idea/
 /.settings/
 .classpath
+.idea
