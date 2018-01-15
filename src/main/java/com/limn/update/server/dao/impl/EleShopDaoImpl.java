@@ -27,8 +27,7 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
 
     @Override
     public long count() {
-        return 0;
-//                (Long) getSession().createQuery("select count(DISTINCT id) from com.limn.update.server.entity.EleShopEntity").uniqueResult();
+        return (Long) getSession().createQuery("select count(DISTINCT id) from com.limn.update.server.entity.EleShopEntity").uniqueResult();
     }
 
     @Override
