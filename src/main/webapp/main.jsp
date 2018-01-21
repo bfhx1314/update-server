@@ -99,13 +99,11 @@
 							<tbody>
 
 								<%
-									//取得目前目录的磁盘目录
-									String path = request.getRealPath("/");
-									
+
 									//建立代表目前目录位置的d变量
-									System.out.println(path + Utils.getAPKPath("") + strid);
+									System.out.println(Utils.getConfigVar("fileServerPath") + strid);
 									
-									File d = new File(path + Utils.getAPKPath("") + strid);
+									File d = new File( Utils.getConfigVar("fileServerPath") + strid);
 									//取得代表目录中所有文件
 	
 									

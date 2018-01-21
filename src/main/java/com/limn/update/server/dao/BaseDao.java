@@ -17,4 +17,6 @@ public interface BaseDao<T>{
     void saveOrUpdate(T entity);
 
     void flush();
+
+    void update(T entity);
 }

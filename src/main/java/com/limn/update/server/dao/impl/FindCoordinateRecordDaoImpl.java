@@ -3,7 +3,6 @@ package com.limn.update.server.dao.impl;
 import com.limn.update.server.dao.BaseDao;
 import com.limn.update.server.dao.FindCoordinateRecordDao;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
-import com.limn.update.server.entity.PersonEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

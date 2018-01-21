@@ -5,5 +5,6 @@ import com.limn.update.server.entity.QttUserEntity;
 
 public interface QttUserDao extends BaseDao<QttUserEntity> {
 
+    QttUserEntity getExeUser();
 
 }

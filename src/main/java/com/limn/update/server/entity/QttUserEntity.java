@@ -112,6 +112,18 @@ public class QttUserEntity {
     @Column(name = "uuid")
     private String uuid;
 
+    @Basic
+    @Column(name = "status")
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public String getUuid() {
         return uuid;
     }

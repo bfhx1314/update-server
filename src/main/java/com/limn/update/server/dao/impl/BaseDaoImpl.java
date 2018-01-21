@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * Created by limengnan on 2017/11/30.
  */
 
+
+@Transactional
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
     private BaseDao<T> dao;
@@ -25,7 +28,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 
     protected Session getSession() {
-        return this.sessionFactory.openSession();
+        return this.sessionFactory.getCurrentSession();
     }
 
 
@@ -41,16 +44,26 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public void save(Object entity) {
-        getSession().save(entity);
+        Session newSeesion = getSession();
+        newSeesion.save(entity);
     }
 
     @Override
     public void saveOrUpdate(Object entity) {
-        getSession().saveOrUpdate(entity);
+        Session newSeesion = getSession();
+        newSeesion.saveOrUpdate(entity);
+
+    }
+
+    public void update(Object entity) {
+        Session newSeesion = getSession();
+        newSeesion.update(entity);
+
     }
 
     @Override
     public void flush() {
         getSession().flush();
     }
+
 }

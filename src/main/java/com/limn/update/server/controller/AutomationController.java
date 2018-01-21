@@ -1,37 +1,25 @@
 package com.limn.update.server.controller;
 
-import com.limn.update.server.dao.PersonEntityDao;
-import com.limn.update.server.entity.PersonEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.limn.frame.control.BeforeTest;
-import com.limn.frame.control.ConsoleFrame;
-import com.limn.frame.control.Test;
 import com.limn.frame.keyword.BaseAppKeyWordDriverImpl;
 import com.limn.frame.keyword.BaseAppKeyWordType;
 import com.limn.frame.keyword.BaseKeyWordDriverImpl;
 import com.limn.frame.keyword.BaseKeyWordType;
-import com.limn.tool.bean.RunParameter;
 import com.limn.tool.bean.StartConfigBean;
 import com.limn.tool.common.DateFormat;
-import com.limn.tool.common.FileUtil;
-import com.limn.tool.exception.SeleniumException;
 import com.limn.tool.parameter.Parameter;
 import com.limn.update.server.common.Utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -286,21 +274,5 @@ public class AutomationController {
 
 	}
 
-	@Autowired
-	PersonEntityDao personEntityDao;
 
-	@RequestMapping("testSql")
-	@ResponseBody
-	public Object testSql(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		PersonEntity personEntity = new PersonEntity();
-		personEntity.setUser_name("aaaaaa");
-		personEntityDao.save(personEntity);
-
-
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("data", "111");
-		return data;
-	}
-	
 }

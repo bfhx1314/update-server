@@ -7,12 +7,14 @@ import com.limn.update.server.entity.EleShopEntity;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by limengnan on 2017/11/30.
  */
 
 @Repository
+@Transactional
 public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleShopDao {
 
     @Autowired

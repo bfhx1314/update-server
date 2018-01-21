@@ -1,5 +1,8 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.bean.ResponseVo;
+import com.limn.update.server.service.FileServerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/")
 public class UpdataController {
+
+
+	@Autowired
+	FileServerService fileServerService;
 
 	/**
 	 * 获取以文件夹为单位的APP类型
@@ -276,6 +283,24 @@ public class UpdataController {
 		return data;
 	}
 
+
+
+
+	@RequestMapping("uploadBase")
+	@ResponseBody
+	public Object uploadBase(String filePath, MultipartFile file ,String fileName , HttpServletRequest request, HttpServletResponse response) {
+		ResponseVo responseVo = fileServerService.upLoad(file,filePath,fileName);
+		return responseVo;
+	}
+
+	@RequestMapping("listBase")
+	@ResponseBody
+	public Object listBase(String filePath , HttpServletRequest request, HttpServletResponse response) {
+		ResponseVo responseVo = fileServerService.list(filePath);
+		return responseVo;
+	}
+
+
 	@RequestMapping("upload")
 	@ResponseBody
 	public Object upload(String path, MultipartFile file,String fileName , HttpServletRequest request, HttpServletResponse response)
@@ -309,9 +334,9 @@ public class UpdataController {
 			data.put("status", "0");
 			data.put("detail", "文件已存在");
 			return data;
-			
+
 		}else if(getFileExtension(saveFile).equalsIgnoreCase("ipa")){
-			
+
 //			new PgyerAppPackageInfoController().upload(file, "默认上传", request, response);
 //			data.put("status", "1");
 //			data.put("detail", "上传成功!");
