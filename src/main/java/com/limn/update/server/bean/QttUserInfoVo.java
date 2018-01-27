@@ -2,6 +2,7 @@ package com.limn.update.server.bean;
 
 
 import com.limn.update.server.entity.QttUserAttachmentEntity;
+import com.limn.update.server.entity.QttUserEntity;
 
 import java.util.List;
 
@@ -12,6 +13,16 @@ public class QttUserInfoVo extends ResponseVo {
     List<QttUserAttachmentEntity> qttUserAttachmentEntityList;
 
     String phone;
+
+    QttUserEntity qttUserEntity;
+
+    public QttUserEntity getQttUserEntity() {
+        return qttUserEntity;
+    }
+
+    public void setQttUserEntity(QttUserEntity qttUserEntity) {
+        this.qttUserEntity = qttUserEntity;
+    }
 
     public String getPhone() {
         return phone;

@@ -135,6 +135,7 @@ public class QTTServiceImpl implements QTTService {
 
 
         qttUserInfoVo.setKey(key);
+        qttUserInfoVo.setQttUserEntity(qttUserEntity);
         return qttUserInfoVo;
     }
 }
