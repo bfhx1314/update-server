@@ -17,7 +17,7 @@
     <!--********************************************配置hibernate********************************************-->
 
     <!--扫描配置文件(这里指向的是之前配置的那个config.properties)-->
-    <context:property-placeholder location="classpath:/config/config.properties" />
+    <context:property-placeholder location="classpath:/config/config.properties,file:${catalina.home}/config.properties" ignore-resource-not-found="true" ignore-unresolvable="true"/>
 
     <!--配置数据源-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">

@@ -1,8 +1,10 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.bean.FileServerListVo;
 import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.service.FileServerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +38,11 @@ public class UpdataController {
 
 	@Autowired
 	FileServerService fileServerService;
+
+
+	@Value("${fileServerPath}")
+	private String fileServerPath;
+
 
 	/**
 	 * 获取以文件夹为单位的APP类型
@@ -235,55 +242,34 @@ public class UpdataController {
 	@RequestMapping("deleteFile")
 	@ResponseBody
 	public Object deleteFile(String sourcePath, HttpServletRequest request, HttpServletResponse response) {
-
-		Map<String, String> data = new HashMap<String, String>();
-
-		String filePath = request.getSession().getServletContext().getRealPath("/");
-
-		String path = Utils.getAPKPath(filePath) + sourcePath;
-
-		File file = new File(path);
-		if (file.exists() && file.isFile()) {
-			boolean isDeleted = file.delete();
-			if (isDeleted) {
-				data.put("status", "1");
-				data.put("detail", "文件已删除");
-			} else {
-				data.put("status", "0");
-				data.put("detail", "文件被占用");
-			}
-		} else {
-			data.put("status", "0");
-			data.put("detail", "未找到改文件");
+		ResponseVo responseVo = new ResponseVo();
+		if(fileServerService.delete(sourcePath)){
+			responseVo.setStatus("1");
+		}else{
+			responseVo.setStatus("0");
+			responseVo.setDetail("删除失败");
 		}
-
-		return data;
+		return responseVo;
 	}
 
 	@RequestMapping("createFile")
 	@ResponseBody
 	public Object createFile(String sourcePath, HttpServletRequest request, HttpServletResponse response) {
-
-		Map<String, String> data = new HashMap<String, String>();
-
-		String filePath = request.getSession().getServletContext().getRealPath("/");
-
-		String path = Utils.getAPKPath(filePath) + sourcePath;
-
-		File file = new File(path);
-		if (file.exists()) {
-			data.put("status", "0");
-			data.put("detail", "文件已存在");
-		} else {
-			file.mkdirs();
-			data.put("status", "1");
-			data.put("detail", "文件创建成功");
+		ResponseVo responseVo = new ResponseVo();
+		if(fileServerService.createFile(sourcePath)){
+			responseVo.setStatus("1");
+		}else{
+			responseVo.setStatus("0");
 		}
-
-		return data;
+		return responseVo;
 	}
 
-
+	@RequestMapping("upload")
+	@ResponseBody
+	public Object upload(String filePath, MultipartFile file ,String fileName , HttpServletRequest request, HttpServletResponse response) {
+		ResponseVo responseVo = fileServerService.upLoad(file,filePath,fileName);
+		return responseVo;
+	}
 
 
 	@RequestMapping("uploadBase")
@@ -296,14 +282,14 @@ public class UpdataController {
 	@RequestMapping("listBase")
 	@ResponseBody
 	public Object listBase(String filePath , HttpServletRequest request, HttpServletResponse response) {
-		ResponseVo responseVo = fileServerService.list(filePath);
+		FileServerListVo responseVo = fileServerService.list(filePath);
 		return responseVo;
 	}
 
 
-	@RequestMapping("upload")
+	@RequestMapping("upload_old")
 	@ResponseBody
-	public Object upload(String path, MultipartFile file,String fileName , HttpServletRequest request, HttpServletResponse response)
+	public Object uploadOld(String path, MultipartFile file,String fileName , HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		Map<String, Object> data = new HashMap<String, Object>();
 

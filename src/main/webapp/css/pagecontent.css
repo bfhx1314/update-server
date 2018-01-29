@@ -114,18 +114,24 @@ img {
 	width:280px;
 }
 .filesTable thead td.hm
+  {
+	  padding-left:0px;
+	  width:200px;
+  }
+.filesTable thead td.hmmd5
 {
 	padding-left:0px;
-	width:150px;
+	width:180px;
 }
 .filesTable thead td.hs
 {
 	text-align:right;
 	width:70px;
 }
+
 .filesTable thead td.hk
 {
-	width:180px;
+	width:50px;
 }
 .filesTable thead td.he
 {
@@ -168,6 +174,10 @@ img {
 }
 .filesTable tbody td.m
 {
+	width:150px;
+}
+.filesTable tbody td.ms
+{
 	width:135px;
 }
 .filesTable tbody td.s
@@ -180,7 +190,7 @@ img {
 {
 	padding-left:10px;
 	padding-right:5px;
-	width:180px;
+	width:50px;
 }
 .filesTable tbody td.e
 {

@@ -80,7 +80,7 @@ function modalPopup(filename, option, filePath) {
 		var fieldObj = document.createElement("input");
 		fieldObj.setAttribute("type","input");
 		fieldObj.setAttribute("id","createFolder");
-		fieldObj.setAttribute("value","New Folder");
+		fieldObj.setAttribute("value","NewFolder");
 		document.getElementById("modal-field").appendChild(fieldObj);
 
 		// assign text field value
@@ -1438,15 +1438,11 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         }
 		var formData = new FormData();
 		formData.append('file', file);
-		formData.append('path', navigationPath);
-        
+		formData.append('filePath', navigationPath);
 
-        xhr.open("POST", "auto/uploadByFile.do", true);
+        xhr.open("POST", "/uploadBase.do", true);
         xhr.send(formData);
-            
-        
-        
-        
+
     },
     _onComplete: function(id, xhr){
         // the request was aborted/cancelled

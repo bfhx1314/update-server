@@ -33,17 +33,15 @@ public class FileMD5 {
 	
 	private static HashMap<String,String> md5Data = new HashMap<String,String>();
 
-	public static String getMd5ByFile(File file) throws FileNotFoundException {
+	public static String getMd5ByFile(File file) {
 		String value = null;
 		
 		if(md5Data.containsKey(file.getName()+file.getTotalSpace()+file.lastModified())){
 			return md5Data.get(file.getName()+file.getTotalSpace()+file.lastModified());
 		}
-		
-		
-		FileInputStream in = new FileInputStream(file);
-
+		FileInputStream in = null;
 		try {
+			in = new FileInputStream(file);
 			MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(byteBuffer);

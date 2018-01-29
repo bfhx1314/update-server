@@ -6,8 +6,8 @@
 <%@ page import="java.util.Arrays" %>>
 <%@ page import="com.limn.update.server.controller.*"%>
 <%@ page import="com.limn.update.server.common.*"%>
-
 <%
+
 	String strid = request.getParameter("id");
 	//解码
 	if (null == strid) {
@@ -49,7 +49,7 @@
 
 
 	<table class="frameTable" cellpadding="0" cellspacing="0">
-
+		<thead>
 		<tr>
 			<td class="top_content">
 				<!-- top table contents -->
@@ -89,8 +89,9 @@
 									<td class="hi"></td>
 									<td class="hn">名称</td>
 									<td class="hm">修改时间</td>
-									<td class="hs">大小</td>
-									<td class="hk">类型</td>
+									<td class="hm">大小</td>
+									<td class="hm">MD5</td>
+									<td class="hm">类型</td>
 									<td class="he"></td>
 									<td class="he"></td>
 									<td class="hl"></td>
@@ -122,8 +123,10 @@
 										href="<%=Utils.getAPKPath("") + strid + "/" + list[i].getName()%>"><%=list[i].getName()%></a>
 									</td>
 									<td class="m"><%=FileMD5.dataFormat(list[i].lastModified())%></td>
-									<td class="s"><%=FileMD5.getFileSizes(list[i])%></td>
-									<td class="k">file</td>
+									<td class="ms"><%=FileMD5.getFileSizes(list[i])%></td>
+									<td class="m"><%=FileMD5.getMd5ByFile(list[i])%></td>
+									<td class="ms">file</td>
+
 									<td class="e"><span style="height: 15px; width: 15px;">&nbsp;</span>
 									</td>
 									<td class="e"><input type="image"

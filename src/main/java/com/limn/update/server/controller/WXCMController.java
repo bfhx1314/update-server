@@ -1,7 +1,11 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.bean.WXCMUpdateVO;
+import com.limn.update.server.common.BaseUtil;
+import com.limn.update.server.dao.WXCMUpdateDao;
 import com.limn.update.server.dao.WXCMinfoDao;
 import com.limn.update.server.entity.WXCMInfoEntity;
+import com.limn.update.server.entity.WXCMUpdateEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,8 @@ public class WXCMController {
 	@Autowired
 	WXCMinfoDao wxcMinfoDao;
 
+	@Autowired
+	WXCMUpdateDao wxcmUpdateDao;
 
 	@Transactional
 	@RequestMapping("info")
@@ -59,10 +65,55 @@ public class WXCMController {
 		wxcmInfoEntity.setDate(nousedate);
 		wxcMinfoDao.save(wxcmInfoEntity);
 
-
-
 		return data;
 	}
+
+	@Transactional
+	@RequestMapping("update")
+	@ResponseBody
+	public Object updatePhpFile(HttpServletRequest request, HttpServletResponse response , String version , String uuid , String type
+	,String md5){
+		WXCMUpdateVO wxcmUpdateVO = new WXCMUpdateVO();
+		if(BaseUtil.isEmpty(version)){
+			wxcmUpdateVO.setStatus("0");
+			wxcmUpdateVO.setDetail("version不能为空");
+			return wxcmUpdateVO;
+		}
+
+		if(BaseUtil.isEmpty(type)){
+			wxcmUpdateVO.setStatus("0");
+			wxcmUpdateVO.setDetail("type不能为空");
+			return wxcmUpdateVO;
+		}
+
+		if(BaseUtil.isEmpty(md5)){
+			wxcmUpdateVO.setStatus("0");
+			wxcmUpdateVO.setDetail("md5不能为空");
+			return wxcmUpdateVO;
+		}
+
+		WXCMUpdateEntity wxcmUpdateEntity = new WXCMUpdateEntity();
+		wxcmUpdateEntity.setVersion(Integer.valueOf(version));
+		wxcmUpdateEntity.setType(type);
+		wxcmUpdateEntity.setMd5(md5);
+		WXCMUpdateEntity up = wxcmUpdateDao.getUpdateVersion(wxcmUpdateEntity);
+
+		wxcmUpdateVO.setStatus("1");
+		if(up == null || up.getUpdatePath() == null || up.getUpdatePath().isEmpty()){
+			wxcmUpdateVO.setVersion(Integer.valueOf(version));
+		}else{
+			wxcmUpdateVO.setVersion(up.getVersion());
+			wxcmUpdateVO.setUpdateFilePath(up.getUpdatePath());
+		}
+
+		return wxcmUpdateVO;
+	}
+
+
+
+
+
+
 
 
 }

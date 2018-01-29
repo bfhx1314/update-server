@@ -2,7 +2,7 @@ package com.limn.update.server.bean;
 
 import java.util.List;
 
-public class FileServerListVo {
+public class FileServerListVo extends ResponseVo {
 
     List<FileServerVo> fileServerVoList;
 

@@ -1,9 +1,13 @@
 package com.limn.update.server.service.impl;
 
+import com.limn.update.server.bean.FileServerListVo;
 import com.limn.update.server.bean.FileServerVo;
 import com.limn.update.server.bean.ResponseVo;
+import com.limn.update.server.common.BaseUtil;
+import com.limn.update.server.common.FileMD5;
 import com.limn.update.server.common.Utils;
 import com.limn.update.server.service.FileServerService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,11 +22,61 @@ import java.util.List;
 @Service
 public class FileServerServiceImpl implements FileServerService {
 
+    @Value("${fileServerPath}")
+    private String fileServerPath;
+
+    @Value("${serverURL}")
+    private String serverURL;
+
+    @Override
+    public boolean delete(String path){
+        if(BaseUtil.isEmpty(path)){
+            return false;
+        }
+        path = fileServerPath + "/" + path;
+
+        File file = new File(path);
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+            if (isDeleted) {
+               return true;
+            } else {
+               return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createFile(String path){
+        if(BaseUtil.isEmpty(path)){
+            return false;
+        }
+        path = fileServerPath + "/" + path;
+
+        File file = new File(path);
+        if (file.exists()) {
+           return false;
+        } else {
+            file.mkdirs();
+        }
+        return true;
+    }
+
+
+
+
+
+
 
 
     @Override
     public FileServerVo upLoad(MultipartFile file, String path , String fileName) {
 
+        if(BaseUtil.isEmpty(path)){
+            path = "";
+        }
 
         FileServerVo fileServerVo = new FileServerVo();
         try {
@@ -36,7 +90,7 @@ public class FileServerServiceImpl implements FileServerService {
 
             input = file.getInputStream();
 
-            String filePath = Utils.getConfigVar("fileServerPath") + path + "/";
+            String filePath = fileServerPath + path + "/";
 
             if (!new File(filePath).exists()) {
                 new File(filePath).mkdirs();
@@ -68,7 +122,7 @@ public class FileServerServiceImpl implements FileServerService {
 
             fileServerVo.setStatus("1");
             fileServerVo.setDetail("文件上传成功");
-            String url = Utils.getConfigVar("serverURL");
+            String url = serverURL;
             fileServerVo.setFilePath(url + "/" + path + "/" + fileName);
             fileServerVo.setFileName(fileName);
 
@@ -81,11 +135,14 @@ public class FileServerServiceImpl implements FileServerService {
     }
 
     @Override
-    public ResponseVo list(String path) {
+    public FileServerListVo list(String path) {
+        if(BaseUtil.isEmpty(path)){
+            path = "";
+        }
 
-        ResponseVo responseVo = new ResponseVo();
+        FileServerListVo responseVo = new FileServerListVo();
 
-        String fileServerPath = Utils.getConfigVar("fileServerPath") + "/" + path;
+        String fileServerPath = this.fileServerPath + "/" + path;
 
         File files = new File(fileServerPath);
 
@@ -95,12 +152,20 @@ public class FileServerServiceImpl implements FileServerService {
             return responseVo;
         }
 
-        String url = Utils.getConfigVar("serverURL");
+        String url = serverURL;
         List<FileServerVo> fileServerVoList = new ArrayList<>();
         for(File file : files.listFiles()){
             FileServerVo fileServerVo = new FileServerVo();
             fileServerVo.setFileName(file.getName());
             fileServerVo.setFilePath(url + "/" + path + "/" + file.getName());
+            if(file.isDirectory()){
+                fileServerVo.setType("Folder");
+            }else {
+                fileServerVo.setType("File");
+                fileServerVo.setMd5(FileMD5.getMd5ByFile(file));
+                fileServerVo.setLastModfiyTime(FileMD5.dataFormat(file.lastModified()));
+                fileServerVo.setSize(FileMD5.getFileSizes(file));
+            }
             fileServerVoList.add(fileServerVo);
         }
 
