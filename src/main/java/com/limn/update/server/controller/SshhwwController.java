@@ -134,18 +134,35 @@ public class SshhwwController {
 	@Transactional
 	@RequestMapping("taskDone")
 	@ResponseBody
-	public Object taskDone(HttpServletRequest request, HttpServletResponse response, String uuid, String taskId, String result){
+	public Object taskDone(HttpServletRequest request, HttpServletResponse response, String uuid, String taskRecordId, String result){
 		ResponseVo responseVo = new ResponseVo();
+
+		if(BaseUtil.isEmpty(uuid)){
+			responseVo.setStatus("0");
+			responseVo.setDetail("uuid不能为空");
+			return responseVo;
+		}
+		if(BaseUtil.isEmpty(taskRecordId)){
+			responseVo.setStatus("0");
+			responseVo.setDetail("taskRecordId不能为空");
+			return responseVo;
+		}
+		if(BaseUtil.isEmpty(result)){
+			responseVo.setStatus("0");
+			responseVo.setDetail("result不能为空");
+			return responseVo;
+		}
+
 
 		SshhwwTaskRecordEntity taskRecord = new SshhwwTaskRecordEntity();
 		taskRecord.setUuid(uuid);
-		taskRecord.setTaskId(Integer.valueOf(taskId));
+		taskRecord.setId(Integer.valueOf(taskRecordId));
 		taskRecord.setStatus("0");
 		SshhwwTaskRecordEntity tRecord = sshhwwTaskRecordDao.getTaskRecord(taskRecord);
 
 		if(tRecord == null){
 			responseVo.setStatus("0");
-			responseVo.setStatus("请求失败");
+			responseVo.setDetail("请求失败");
 			return responseVo;
 		}
 

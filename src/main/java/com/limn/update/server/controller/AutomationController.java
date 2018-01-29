@@ -1,5 +1,9 @@
 package com.limn.update.server.controller;
 
+import com.limn.frame.control.ConsoleFrame;
+import com.limn.tool.common.BaseToolParameter;
+import com.qtt.console.QuTouTiaoKeyWordDriverImpl;
+import com.qtt.console.QuTouTiaoKeyWordType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +39,6 @@ public class AutomationController {
 
 	private static LinkedHashMap<String, BeforeTest> testingRC = new LinkedHashMap<String, BeforeTest>();
 	private static HashMap<String,String> fileData = new HashMap<String,String>();
-
-
-
-
 
 
 	/**
@@ -273,6 +273,19 @@ public class AutomationController {
 		return data;
 
 	}
+
+	@RequestMapping("runqtt")
+	@ResponseBody
+	public Object runqtt(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Parameter.setDefaultTestcasePath("D:\\workspace\\update-server\\");
+		ConsoleFrame consoleFrame = new ConsoleFrame();
+		consoleFrame.addKeyWordDriver("基础关键字", new BaseKeyWordDriverImpl(), BaseKeyWordType.class);
+		consoleFrame.addKeyWordDriver("App基础关键字", new BaseAppKeyWordDriverImpl(), BaseAppKeyWordType.class);
+		consoleFrame.addKeyWordDriver("qtt", new QuTouTiaoKeyWordDriverImpl(), QuTouTiaoKeyWordType.class);
+		consoleFrame.showUIFrame();
+		return null;
+	}
+
 
 
 }

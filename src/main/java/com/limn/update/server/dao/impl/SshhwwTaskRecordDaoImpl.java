@@ -26,9 +26,11 @@ public class SshhwwTaskRecordDaoImpl extends BaseDaoImpl<SshhwwTaskRecordEntity>
     @Override
     public SshhwwTaskRecordEntity getTaskRecord(SshhwwTaskRecordEntity sshhwwTaskRecordEntity) {
 
-        Query query = getSession().createQuery("from SshhwwTaskRecordEntity");
-
-        List<SshhwwTaskRecordEntity> list = query.setProperties(sshhwwTaskRecordEntity).list();
+        Query query = getSession().createQuery("from SshhwwTaskRecordEntity where uuid = ? and id = ? and status = ?");
+        query.setParameter(0,sshhwwTaskRecordEntity.getUuid());
+        query.setParameter(1,sshhwwTaskRecordEntity.getId());
+        query.setParameter(2,sshhwwTaskRecordEntity.getStatus());
+        List<SshhwwTaskRecordEntity> list = query.list();
         if(list == null || list.size() == 0){
             return null;
         }
