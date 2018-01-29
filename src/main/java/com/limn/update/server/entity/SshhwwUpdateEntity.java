@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "wxcm_update", schema = "ele", catalog = "")
-public class WXCMUpdateEntity {
+public class SshhwwUpdateEntity {
     private int id;
     private int version;
     private String updatePath;
@@ -80,7 +80,7 @@ public class WXCMUpdateEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        WXCMUpdateEntity that = (WXCMUpdateEntity) o;
+        SshhwwUpdateEntity that = (SshhwwUpdateEntity) o;
 
         if (id != that.id) return false;
         if (version != that.version) return false;

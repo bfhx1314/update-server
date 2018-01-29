@@ -1,11 +1,16 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.bean.ResponseVo;
+import com.limn.update.server.bean.TaskRecordVo;
 import com.limn.update.server.bean.WXCMUpdateVO;
 import com.limn.update.server.common.BaseUtil;
-import com.limn.update.server.dao.WXCMUpdateDao;
-import com.limn.update.server.dao.WXCMinfoDao;
-import com.limn.update.server.entity.WXCMInfoEntity;
-import com.limn.update.server.entity.WXCMUpdateEntity;
+import com.limn.update.server.dao.SshhwwTaskRecordDao;
+import com.limn.update.server.dao.SshhwwUpdateDao;
+import com.limn.update.server.dao.SshhwwinfoDao;
+import com.limn.update.server.entity.SshhhwwInfoEntity;
+import com.limn.update.server.entity.SshhwwTaskRecordEntity;
+import com.limn.update.server.entity.SshhwwUpdateEntity;
+import com.limn.update.server.service.SshhwwService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +33,20 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/wxcm")
-public class WXCMController {
+public class SshhwwController {
 
 	@Autowired
-	WXCMinfoDao wxcMinfoDao;
+	SshhwwinfoDao sshhwwinfoDao;
 
 	@Autowired
-	WXCMUpdateDao wxcmUpdateDao;
+	SshhwwUpdateDao sshhwwUpdateDao;
+
+	@Autowired
+	SshhwwService sshhwwService;
+
+
+	@Autowired
+	SshhwwTaskRecordDao sshhwwTaskRecordDao;
 
 	@Transactional
 	@RequestMapping("info")
@@ -58,12 +70,12 @@ public class WXCMController {
 		Date date = new Date();
 		Timestamp nousedate = new Timestamp(date.getTime());
 
-		WXCMInfoEntity wxcmInfoEntity = new WXCMInfoEntity();
-		wxcmInfoEntity.setType(type);
-		wxcmInfoEntity.setRequestUrl(requestUrl);
-		wxcmInfoEntity.setResponseData(responseData);
-		wxcmInfoEntity.setDate(nousedate);
-		wxcMinfoDao.save(wxcmInfoEntity);
+		SshhhwwInfoEntity sshhhwwInfoEntity = new SshhhwwInfoEntity();
+		sshhhwwInfoEntity.setType(type);
+		sshhhwwInfoEntity.setRequestUrl(requestUrl);
+		sshhhwwInfoEntity.setResponseData(responseData);
+		sshhhwwInfoEntity.setDate(nousedate);
+		sshhwwinfoDao.save(sshhhwwInfoEntity);
 
 		return data;
 	}
@@ -92,11 +104,11 @@ public class WXCMController {
 			return wxcmUpdateVO;
 		}
 
-		WXCMUpdateEntity wxcmUpdateEntity = new WXCMUpdateEntity();
-		wxcmUpdateEntity.setVersion(Integer.valueOf(version));
-		wxcmUpdateEntity.setType(type);
-		wxcmUpdateEntity.setMd5(md5);
-		WXCMUpdateEntity up = wxcmUpdateDao.getUpdateVersion(wxcmUpdateEntity);
+		SshhwwUpdateEntity sshhwwUpdateEntity = new SshhwwUpdateEntity();
+		sshhwwUpdateEntity.setVersion(Integer.valueOf(version));
+		sshhwwUpdateEntity.setType(type);
+		sshhwwUpdateEntity.setMd5(md5);
+		SshhwwUpdateEntity up = sshhwwUpdateDao.getUpdateVersion(sshhwwUpdateEntity);
 
 		wxcmUpdateVO.setStatus("1");
 		if(up == null || up.getUpdatePath() == null || up.getUpdatePath().isEmpty()){
@@ -110,9 +122,39 @@ public class WXCMController {
 	}
 
 
+	@Transactional
+	@RequestMapping("task")
+	@ResponseBody
+	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type){
 
+		TaskRecordVo taskRecordVo = sshhwwService.getTask(uuid, type);
+		return taskRecordVo;
+	}
 
+	@Transactional
+	@RequestMapping("taskDone")
+	@ResponseBody
+	public Object taskDone(HttpServletRequest request, HttpServletResponse response, String uuid, String taskId, String result){
+		ResponseVo responseVo = new ResponseVo();
 
+		SshhwwTaskRecordEntity taskRecord = new SshhwwTaskRecordEntity();
+		taskRecord.setUuid(uuid);
+		taskRecord.setTaskId(Integer.valueOf(taskId));
+		taskRecord.setStatus("0");
+		SshhwwTaskRecordEntity tRecord = sshhwwTaskRecordDao.getTaskRecord(taskRecord);
+
+		if(tRecord == null){
+			responseVo.setStatus("0");
+			responseVo.setStatus("请求失败");
+			return responseVo;
+		}
+
+		tRecord.setStatus(result);
+		sshhwwTaskRecordDao.saveOrUpdate(tRecord);
+		responseVo.setStatus("1");
+		responseVo.setDetail("提交成功");
+		return responseVo;
+	}
 
 
 

@@ -1,25 +1,17 @@
 package com.limn.update.server.controller;
 
 import com.limn.update.server.dao.RecordLogDao;
-import com.limn.update.server.dao.WXCMinfoDao;
 import com.limn.update.server.entity.RecordLogEntity;
-import com.limn.update.server.entity.WXCMInfoEntity;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * 自动化测试运行类

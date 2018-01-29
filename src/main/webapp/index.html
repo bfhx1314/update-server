@@ -23,7 +23,7 @@
             if(lastNum <= 0){
                 flush("");
             }else{
-                flush(path.substring(0,path.lastIndexOf("/")-1));
+                flush(path.substring(0,path.lastIndexOf("/")));
             }
         }
 
@@ -40,7 +40,7 @@
                 innerHtml = innerHtml + "<tr>";
                 if(data['data'][i].type == "File"){
                     innerHtml = innerHtml + "<td class='i'><a href=''><img src='./css/unknown.png' width='20' height='20'></a></td>" +
-                            "<td class='n'><a href='" + data['data'][i].filePath + "' >"+data['data'][i].fileName+"</a></td>" +
+                            "<td class='n'><a href='" + data['data'][i].filePath + "' >" + data['data'][i].fileName + "</a></td>" +
                             "<td class='m'>"+data['data'][i].lastModfiyTime+"</td>" +
                             "<td class='ms'>"+data['data'][i].size+"</td>" +
                             "<td class='m'>"+data['data'][i].md5+"</td>" +
@@ -56,7 +56,7 @@
                             "title='Delete file' width='15' height='15'></td>";
                 }else{
                     innerHtml = innerHtml + "<td class='i'><a href=''><img src='./css/unknown.png' width='20' height='20'></a></td>" +
-                            "<td class='n'><a href='javascript:void(0)' onclick='flush(\""+data['data'][i].fileName+"\")'>"+data['data'][i].fileName+"</a></td>" +
+                            "<td class='n'><a href='javascript:void(0)' onclick='flush(\"" + storage.getItem('updateFilePath') + "/" + data['data'][i].fileName+"\")'>"+ data['data'][i].fileName+"</a></td>" +
                             "<td class='m'></td>" +
                             "<td class='ms'></td>" +
                             "<td class='m'></td>" +
@@ -134,7 +134,7 @@
                                 <td class="hn">名称</td>
                                 <td class="hm">修改时间</td>
                                 <td class="hm">大小</td>
-                                <td class="hm">MD5</td>
+                                <td class="hn">MD5</td>
                                 <td class="hm">类型</td>
                                 <td class="he"></td>
                                 <td class="he"></td>

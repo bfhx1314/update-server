@@ -111,12 +111,12 @@ img {
 .filesTable thead td.hn
 {
 	padding-left:0px;
-	width:280px;
+	width:220px;
 }
 .filesTable thead td.hm
   {
 	  padding-left:0px;
-	  width:200px;
+	  width:150px;
   }
 .filesTable thead td.hmmd5
 {

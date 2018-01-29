@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "wxcm_info")
-public class WXCMInfoEntity {
+public class SshhhwwInfoEntity {
 
 
     @Id

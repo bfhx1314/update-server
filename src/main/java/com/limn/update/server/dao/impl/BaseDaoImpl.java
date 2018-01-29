@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 @Transactional
-public class BaseDaoImpl<T> implements BaseDao<T> {
+public class BaseDaoImpl<T> implements BaseDao<T>{
 
     private BaseDao<T> dao;
     @Autowired
@@ -45,7 +46,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     public void save(Object entity) {
         Session newSeesion = getSession();
-        newSeesion.save(entity);
+        Serializable id =  newSeesion.save(entity);
+        System.out.println(id);
     }
 
     @Override

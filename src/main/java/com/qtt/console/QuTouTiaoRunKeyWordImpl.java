@@ -134,7 +134,7 @@ public class QuTouTiaoRunKeyWordImpl {
     private void saveCurrent(String fileName){
 
         AppDriverParameter.getDriverConfigBean().screenshot(RunParameter.getResultPaht().getResultFolderBitMap() + "/" + fileName + ".png");
-        AppDriverParameter.getDriverConfigBean().saveCurrentUIXML(RunParameter.getResultPaht().getResultFolderBitMap() + "/" + fileName + ".xml");
+//        AppDriverParameter.getDriverConfigBean().saveCurrentUIXML(RunParameter.getResultPaht().getResultFolderBitMap() + "/" + fileName + ".xml");
     }
 
     /**
@@ -143,7 +143,7 @@ public class QuTouTiaoRunKeyWordImpl {
     private void repairStep(){
         if(1 == baseAppKeyWordDriver.start("M录入:dnp_text_cancel:[Click]".split(":"))) return;
         if(1 == baseAppKeyWordDriver.start("M录入:avnd_img_back:[Click]".split(":"))) return;
-        AppDriverParameter.getDriverConfigBean().pressesKeyCode(AndroidKeyCode.BACK);
+//        AppDriverParameter.getDriverConfigBean().pressesKeyCode(AndroidKeyCode.BACK);
     }
 
 
