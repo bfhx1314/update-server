@@ -30,7 +30,7 @@ public class RecordLogController {
 	@RequestMapping("log")
 	@ResponseBody
 	public Object info(String type ,
-					   String source, String exeResult , String log1 , String log2 , String log3 , String log4, String uuid) throws IOException {
+					   String source, String exeResult , String log1 , String log2 , String log3 , String log4, String uuid, String deviceName) throws IOException {
 
 
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -66,6 +66,7 @@ public class RecordLogController {
 		recordLogEntity.setLog4(log4);
 		recordLogEntity.setCreateDate(new Date());
 		recordLogEntity.setUuid(uuid);
+		recordLogEntity.setDeviceName(deviceName);
 		recordLogDao.save(recordLogEntity);
 
 		return data;

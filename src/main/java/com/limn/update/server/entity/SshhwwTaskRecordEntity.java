@@ -19,6 +19,11 @@ public class SshhwwTaskRecordEntity {
     private Date createDate;
     private String valid;
     private String status;
+    private String deviceName;
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -52,7 +57,7 @@ public class SshhwwTaskRecordEntity {
     }
 
     @Basic
-    @Column(name = "value", nullable = false, length = 255)
+    @Column(name = "value", nullable = true, length = 255)
     public String getValue() {
         return value;
     }
@@ -62,7 +67,7 @@ public class SshhwwTaskRecordEntity {
     }
 
     @Basic
-    @Column(name = "createDate", nullable = false)
+    @Column(name = "create_date", nullable = true)
     public Date getCreateDate() {
         return createDate;
     }
@@ -119,5 +124,15 @@ public class SshhwwTaskRecordEntity {
         result = 31 * result + (valid != null ? valid.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "device_name", nullable = true, length = 255)
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 }

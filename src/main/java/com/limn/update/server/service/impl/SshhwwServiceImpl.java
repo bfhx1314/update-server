@@ -2,6 +2,7 @@ package com.limn.update.server.service.impl;
 
 import com.limn.tool.common.DateFormat;
 import com.limn.update.server.bean.TaskRecordVo;
+import com.limn.update.server.dao.SshhwwAuthUuidDao;
 import com.limn.update.server.dao.SshhwwTaskDao;
 import com.limn.update.server.dao.SshhwwTaskRecordDao;
 import com.limn.update.server.dao.SshhwwUpdateDao;
@@ -35,6 +36,9 @@ public class SshhwwServiceImpl implements SshhwwService {
     @Autowired
     SshhwwTaskRecordDao sshhwwTaskRecordDao;
 
+    @Autowired
+    SshhwwAuthUuidDao sshhwwAuthUuidDao;
+
     @Override
     public void uploadLua(MultipartFile file) {
         fileServerService.upLoad(file,WXCMEnum.UPDATEPATH.getCode(), WXCMEnum.LUA.getCode());
@@ -47,9 +51,16 @@ public class SshhwwServiceImpl implements SshhwwService {
     }
 
     @Override
-    public TaskRecordVo getTask(String uuid, String type) {
+    public TaskRecordVo getTask(String uuid, String type, String deviceName) {
 
         TaskRecordVo taskRecordVo = new TaskRecordVo();
+
+        if (!sshhwwAuthUuidDao.isAuthByUuid(uuid)){
+            taskRecordVo.setStatus("1");
+            taskRecordVo.setTaskRecordId(-1);
+            taskRecordVo.setDetail("无授权执行脚本");
+            return taskRecordVo;
+        }
 
         List<SshhwwTaskEntity> listTask = sshhwwTaskDao.getTask(uuid);
 
@@ -68,6 +79,7 @@ public class SshhwwServiceImpl implements SshhwwService {
         taskRecord.setTaskId(sshhwwTaskEntity.getId());
         taskRecord.setUuid(uuid);
         taskRecord.setValue("");
+        taskRecord.setDeviceName(deviceName);
         taskRecord.setCreateDate(new Date());
         sshhwwTaskRecordDao.save(taskRecord);
 
@@ -76,5 +88,10 @@ public class SshhwwServiceImpl implements SshhwwService {
 
         return taskRecordVo;
 
+    }
+
+    @Override
+    public boolean isAuthByUuid(String uuid) {
+        return sshhwwAuthUuidDao.isAuthByUuid(uuid);
     }
 }

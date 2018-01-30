@@ -125,9 +125,9 @@ public class SshhwwController {
 	@Transactional
 	@RequestMapping("task")
 	@ResponseBody
-	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type){
+	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type , String deviceName){
 
-		TaskRecordVo taskRecordVo = sshhwwService.getTask(uuid, type);
+		TaskRecordVo taskRecordVo = sshhwwService.getTask(uuid, type,deviceName);
 		return taskRecordVo;
 	}
 

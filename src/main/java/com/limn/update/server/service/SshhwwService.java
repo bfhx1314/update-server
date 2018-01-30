@@ -10,6 +10,7 @@ public interface SshhwwService {
 
     void uploadLua(MultipartFile file);
     void uploadPhp(MultipartFile file);
-    TaskRecordVo getTask(String uuid , String type);
+    TaskRecordVo getTask(String uuid , String type, String deviceName);
+    boolean isAuthByUuid(String uuid);
 
 }

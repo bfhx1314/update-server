@@ -81,7 +81,7 @@ public class SshhwwTaskEntity {
     }
 
     @Basic
-    @Column(name = "startTime", nullable = true)
+    @Column(name = "start_time", nullable = true)
     public Time getStartTime() {
         return startTime;
     }
@@ -91,7 +91,7 @@ public class SshhwwTaskEntity {
     }
 
     @Basic
-    @Column(name = "endTime", nullable = true)
+    @Column(name = "end_time", nullable = true)
     public Time getEndTime() {
         return endTime;
     }

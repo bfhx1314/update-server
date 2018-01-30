@@ -1,10 +1,10 @@
 package com.limn.update.server.service.impl;
 
-import com.limn.tool.common.BaseUntil;
 import com.limn.tool.common.DateFormat;
 import com.limn.update.server.bean.FileServerVo;
 import com.limn.update.server.bean.QttUserInfoVo;
 import com.limn.update.server.bean.ResponseVo;
+import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.dao.QttRunRecordDao;
 import com.limn.update.server.dao.QttUserAttachmentDao;
 import com.limn.update.server.dao.QttUserDao;
@@ -47,7 +47,7 @@ public class QTTServiceImpl implements QTTService {
     @Override
     public List<QttUserAttachmentEntity> getFileListByUser(String key) {
         String phone = getPhoneByKey(key);
-        if(BaseUntil.isEmpty(phone)){
+        if(BaseUtil.isEmpty(phone)){
             return null;
         }
         QttUserAttachmentEntity qtt = new QttUserAttachmentEntity();
@@ -60,7 +60,7 @@ public class QTTServiceImpl implements QTTService {
     @Override
     public String getPhoneByKey(String key){
         QttRunRecordEntity qttRunRecordEntity = qttRunRecordDao.getUserByKey(key);
-        if(qttRunRecordEntity == null || BaseUntil.isEmpty(qttRunRecordEntity.getPhone())){
+        if(qttRunRecordEntity == null || BaseUtil.isEmpty(qttRunRecordEntity.getPhone())){
             return null;
         }
         return qttRunRecordEntity.getPhone();
@@ -79,7 +79,7 @@ public class QTTServiceImpl implements QTTService {
     public FileServerVo uploadUserCacheFile(MultipartFile file, String key, String type) {
         FileServerVo fileServerVo = new FileServerVo();
         QttRunRecordEntity qttRunRecordEntity = qttRunRecordDao.getUserByKey(key);
-        if(qttRunRecordEntity == null || BaseUntil.isEmpty(qttRunRecordEntity.getPhone())){
+        if(qttRunRecordEntity == null || BaseUtil.isEmpty(qttRunRecordEntity.getPhone())){
             fileServerVo.setStatus("0");
             fileServerVo.setDetail("未查询到用户附件");
             return fileServerVo;
