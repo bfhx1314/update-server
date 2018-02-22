@@ -1,15 +1,22 @@
 package com.limn.update.server.service.impl;
 
 import com.limn.update.server.bean.CoordinateVO;
+import com.limn.update.server.bean.ele.EleFoodBean;
+import com.limn.update.server.bean.ele.EleMenuBean;
 import com.limn.update.server.bean.ele.EleShopBean;
 import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.common.GetEleOrderInfo;
+import com.limn.update.server.dao.EleMenuDao;
+import com.limn.update.server.dao.EleMenuFoodDao;
 import com.limn.update.server.dao.EleShopDao;
 import com.limn.update.server.dao.FindCoordinateRecordDao;
+import com.limn.update.server.entity.EleMenuEntity;
+import com.limn.update.server.entity.EleMenuFoodEntity;
 import com.limn.update.server.entity.EleShopEntity;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
 import com.limn.update.server.service.ElePullService;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -18,10 +25,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,19 +43,23 @@ public class ElePullServiceImpl implements ElePullService {
     EleShopDao eleShopDao;
 
     @Autowired
+    EleMenuDao eleMenuDao;
+
+    @Autowired
+    EleMenuFoodDao eleMenuFoodDao;
+
+    @Autowired
     FindCoordinateRecordDao findCoordinateRecordDao;
 
     @Override
     @Transactional
     public FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude) {
-//        DataBaseConnection conn1 = new DataBaseConnection();
 
         FindCoordinateRecordEntity fcre = new FindCoordinateRecordEntity();
         fcre.setLatitude(latitude);
         fcre.setLongitude(longitude);
         int findId = 1;
         Object findIdObject = eleShopDao.findMaxID();
-//                conn1.query("select max(findid) from com.ele.entity.EleShopEntity");
         if(null != findIdObject && !findIdObject.toString().isEmpty()){
             findId = (int) findIdObject;
         }
@@ -56,7 +67,6 @@ public class ElePullServiceImpl implements ElePullService {
 
 
         Long originalCount = eleShopDao.count();
-//                (Long) conn1.query("select count(DISTINCT id) from com.ele.entity.EleShopEntity");
 
         List<Double> distance = new ArrayList<>();
 
@@ -64,17 +74,36 @@ public class ElePullServiceImpl implements ElePullService {
 
             List<EleShopBean> shops = GetEleOrderInfo.getEleShopByCoordinate(latitude, longitude,  String.valueOf(i),String.valueOf(i+24));
             for (EleShopBean shop : shops) {
-//                DataBaseConnection conn = new DataBaseConnection();
                 try {
 
                     EleShopEntity eleshop = new EleShopEntity();
                     BeanUtils.copyProperties(eleshop, shop);
                     eleshop.setFindid(findId);
                     eleShopDao.save(eleshop);
-//                    conn.executeSave(eleshop);
 
                     //添加距离
                     distance.add(BaseUtil.getDistance(latitude,longitude,eleshop.getLatitude(),eleshop.getLongitude()));
+
+
+                    //获取菜单
+                    List<EleMenuBean> menus = GetEleOrderInfo.getEleMenuById(eleshop.getId().toString());
+                    for(EleMenuBean menu : menus){
+                        EleMenuEntity eleMenuEntity = new EleMenuEntity();
+                        BeanUtils.copyProperties(eleMenuEntity,menu);
+                        eleMenuEntity.setShopId(eleshop.getId().toString());
+                        eleMenuEntity.setCreateDate(new Date());
+                        eleMenuDao.save(eleMenuEntity);
+
+                        List<EleFoodBean> foods = menu.getFoods();
+                        for(EleFoodBean food : foods){
+                            EleMenuFoodEntity eleMenuFoodEntity = new EleMenuFoodEntity();
+                            BeanUtils.copyProperties(eleMenuFoodEntity,food);
+                            eleMenuFoodEntity.setMenu_id(eleMenuEntity.getMenu_id());
+                            eleMenuFoodEntity.setCreateDate(new Date());
+                            eleMenuFoodDao.save(eleMenuFoodEntity);
+                        }
+
+                    }
 
 //                    saveActivitie(shop, conn);
 //                    saveMenu(shop.getId(), conn);

@@ -38,10 +38,9 @@ public class ElePullController {
 			data.put("data", "查询成功");
 			data.put("detail", fcre);
 		}catch (Exception e){
+			e.printStackTrace();
 			data.put("data", "查询失败");
 		}
-
-
 
 		return data;
 	}

@@ -1,6 +1,7 @@
 package com.limn.update.server.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by limengnan on 2017/11/17.
@@ -33,8 +34,19 @@ public class EleMenuFoodEntity {
     private String specifications;
     private String tips;
     private String virtualFoodId;
-    private String menu_id;
+    private int menu_id;
     private int food_id;
+    private Date createDate;
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     @Basic
     @Column(name = "attribute", nullable = true, length = 255)
@@ -287,12 +299,12 @@ public class EleMenuFoodEntity {
     }
 
     @Basic
-    @Column(name = "menu_id", nullable = true, length = 255)
-    public String getMenu_id() {
+    @Column(name = "menu_id", nullable = true, length = 12)
+    public int getMenu_id() {
         return menu_id;
     }
 
-    public void setMenu_id(String menu_id) {
+    public void setMenu_id(int menu_id) {
         this.menu_id = menu_id;
     }
 
@@ -345,7 +357,7 @@ public class EleMenuFoodEntity {
         if (tips != null ? !tips.equals(that.tips) : that.tips != null) return false;
         if (virtualFoodId != null ? !virtualFoodId.equals(that.virtualFoodId) : that.virtualFoodId != null)
             return false;
-        if (menu_id != null ? !menu_id.equals(that.menu_id) : that.menu_id != null) return false;
+        if (menu_id != that.menu_id) return false;
 
         return true;
     }
@@ -377,7 +389,7 @@ public class EleMenuFoodEntity {
         result = 31 * result + (specifications != null ? specifications.hashCode() : 0);
         result = 31 * result + (tips != null ? tips.hashCode() : 0);
         result = 31 * result + (virtualFoodId != null ? virtualFoodId.hashCode() : 0);
-        result = 31 * result + (menu_id != null ? menu_id.hashCode() : 0);
+        result = 31 * result + menu_id;
         result = 31 * result + food_id;
         return result;
     }

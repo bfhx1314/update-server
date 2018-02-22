@@ -46,6 +46,33 @@ public class EleShopBean implements Serializable {
     String promotion_info;
     List<EleShopSupport> supports;
     EleShopBidding bidding;
+    Object flavors;
+    Object recommend_reasons;
+    Object support_tags;
+
+    public Object getSupport_tags() {
+        return support_tags;
+    }
+
+    public void setSupport_tags(Object support_tags) {
+        this.support_tags = support_tags;
+    }
+
+    public Object getRecommend_reasons() {
+        return recommend_reasons;
+    }
+
+    public void setRecommend_reasons(Object recommend_reasons) {
+        this.recommend_reasons = recommend_reasons;
+    }
+
+    public Object getFlavors() {
+        return flavors;
+    }
+
+    public void setFlavors(Object flavors) {
+        this.flavors = flavors;
+    }
 
     public String getJson() {
         return json;

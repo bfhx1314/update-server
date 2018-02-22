@@ -1,6 +1,7 @@
 package com.limn.update.server.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by limengnan on 2017/11/17.
@@ -23,8 +24,50 @@ public class EleMenuEntity {
     private String iconUrl;
     private String isActivity;
     private String isSelected;
-    private int menuId;
+    private Date createDate;
 
+    public String getGreyIconUrl() {
+        return greyIconUrl;
+    }
+
+    public void setGreyIconUrl(String greyIconUrl) {
+        this.greyIconUrl = greyIconUrl;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getIsActivity() {
+        return isActivity;
+    }
+
+    public void setIsActivity(String isActivity) {
+        this.isActivity = isActivity;
+    }
+
+    public String getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(String isSelected) {
+        this.isSelected = isSelected;
+    }
+
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     @Basic
     @Column(name = "attribute", nullable = true, length = 255)
