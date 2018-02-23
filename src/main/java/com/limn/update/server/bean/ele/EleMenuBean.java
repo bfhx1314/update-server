@@ -19,6 +19,15 @@ public class EleMenuBean {
     String id;
     String is_activity;
     String grey_icon_url;
+    String json;
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
 
     public String getGrey_icon_url() {
         return grey_icon_url;

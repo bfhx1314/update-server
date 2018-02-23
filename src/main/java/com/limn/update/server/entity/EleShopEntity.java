@@ -3,6 +3,7 @@ package com.limn.update.server.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "ele_shop", schema = "ele", catalog = "")
@@ -39,6 +40,29 @@ public class EleShopEntity {
     private int shop_id;
     private String json;
     private int findid;
+    private Date createDate;
+    private Date updateTime;
+
+    @Basic
+    @Column(name = "update_time", nullable = true)
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
 
     @Basic
     @Column(name = "findid", nullable = true)
@@ -60,9 +84,7 @@ public class EleShopEntity {
         this.json = json;
     }
 
-    @Basic
-//    @GeneratedValue(generator = "id")
-//    @GenericGenerator(name = "id", strategy = "assigned")
+    @Id
     @Column(name = "id", nullable = true)
     public Integer getId() {
         return id;
@@ -352,9 +374,8 @@ public class EleShopEntity {
         this.regular_customer_count = regular_customer_count;
     }
 
-    @Id
+    @Basic
     @Column(name = "shop_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getShop_id() {
         return shop_id;
     }

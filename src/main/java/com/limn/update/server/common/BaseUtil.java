@@ -12,6 +12,7 @@ public class BaseUtil {
 
     /**
      * 通过经纬度获取距离(单位：米)
+     *
      * @param lat1Str
      * @param lng1Str
      * @param lat2Str
@@ -36,37 +37,41 @@ public class BaseUtil {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000d) / 10000d;
-        s = s*1000;
+        s = s * 1000;
         return s;
     }
 
 
-    public static double getAvgByList(List<Double> values){
+    public static double getAvgByList(List<Double> values) {
 
-        if(null == values || values.size() == 0){
+        if (null == values || values.size() == 0) {
             return 0;
         }
 
         Double sum = 0.00;
 
-        for(Double value : values){
+        for (Double value : values) {
             sum = sum + value;
         }
 
-        return sum/values.size();
+        return sum / values.size();
 
 
     }
 
-    public static boolean isEmpty(String string){
+    public static boolean isEmpty(String string) {
 
-        if(string == null || string.isEmpty()) {
+        if (string == null || string.isEmpty()) {
             return true;
         }
         return false;
     }
 
-
-
-
+    public static String filterEmoji(String source) {
+        if (source != null && source.length() > 0) {
+            return source.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+        } else {
+            return source;
+        }
+    }
 }

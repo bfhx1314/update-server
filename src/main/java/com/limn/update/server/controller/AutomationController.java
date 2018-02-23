@@ -277,12 +277,12 @@ public class AutomationController {
 	@RequestMapping("runqtt")
 	@ResponseBody
 	public Object runqtt(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		Parameter.setDefaultTestcasePath("D:\\workspace\\update-server\\");
-		ConsoleFrame consoleFrame = new ConsoleFrame();
-		consoleFrame.addKeyWordDriver("基础关键字", new BaseKeyWordDriverImpl(), BaseKeyWordType.class);
-		consoleFrame.addKeyWordDriver("App基础关键字", new BaseAppKeyWordDriverImpl(), BaseAppKeyWordType.class);
-		consoleFrame.addKeyWordDriver("qtt", new QuTouTiaoKeyWordDriverImpl(), QuTouTiaoKeyWordType.class);
-		consoleFrame.showUIFrame();
+//		Parameter.setDefaultTestcasePath("D:\\workspace\\update-server\\");
+//		ConsoleFrame consoleFrame = new ConsoleFrame();
+//		consoleFrame.addKeyWordDriver("基础关键字", new BaseKeyWordDriverImpl(), BaseKeyWordType.class);
+//		consoleFrame.addKeyWordDriver("App基础关键字", new BaseAppKeyWordDriverImpl(), BaseAppKeyWordType.class);
+//		consoleFrame.addKeyWordDriver("qtt", new QuTouTiaoKeyWordDriverImpl(), QuTouTiaoKeyWordType.class);
+//		consoleFrame.showUIFrame();
 		return null;
 	}
 

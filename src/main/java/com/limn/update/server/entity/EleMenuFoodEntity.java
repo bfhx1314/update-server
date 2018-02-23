@@ -4,26 +4,27 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by limengnan on 2017/11/17.
+ * Created by limengnan on 2018/2/23.
  */
 @Entity
 @Table(name = "ele_menu_food", schema = "ele", catalog = "")
 public class EleMenuFoodEntity {
-    private String attribute;
+    private int food_id;
+    private String item_id;
+    private int category_id;
+    private int menuId;
+    private String name;
     private String attributes;
     private String attrs;
-    private String category_id;
-    private String cold_box;
+    private String coldBox;
     private String description;
     private String display_times;
     private String image_path;
     private String is_essential;
     private String is_featured;
-    private String item_id;
     private String limitation;
     private String min_purchase;
     private String month_sales;
-    private String name;
     private String pinyin_name;
     private String rating;
     private String rating_count;
@@ -33,29 +34,60 @@ public class EleMenuFoodEntity {
     private String server_utc;
     private String specifications;
     private String tips;
-    private String virtualFoodId;
-    private int menu_id;
-    private int food_id;
+    private String virtual_food_id;
     private Date createDate;
+    private String attribute;
+
+    @Id
+    @Column(name = "food_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int getFood_id() {
+        return food_id;
+    }
+
+    public void setFood_id(int foodId) {
+        this.food_id = foodId;
+    }
+
 
     @Basic
-    @Column(name = "create_date", nullable = true)
-    public Date getCreateDate() {
-        return createDate;
+    @Column(name = "item_id", nullable = false, length = 25)
+    public String getItem_id() {
+        return item_id;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setItem_id(String itemId) {
+        this.item_id = itemId;
     }
 
     @Basic
-    @Column(name = "attribute", nullable = true, length = 255)
-    public String getAttribute() {
-        return attribute;
+    @Column(name = "category_id", nullable = false)
+    public int getCategory_id() {
+        return category_id;
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
+    public void setCategory_id(int categoryId) {
+        this.category_id = categoryId;
+    }
+
+    @Basic
+    @Column(name = "menu_id", nullable = false)
+    public int getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(int menuId) {
+        this.menuId = menuId;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = true, length = 255)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Basic
@@ -79,23 +111,13 @@ public class EleMenuFoodEntity {
     }
 
     @Basic
-    @Column(name = "category_id", nullable = true, length = 255)
-    public String getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(String category_id) {
-        this.category_id = category_id;
-    }
-
-    @Basic
     @Column(name = "cold_box", nullable = true, length = 255)
-    public String getCold_box() {
-        return cold_box;
+    public String getColdBox() {
+        return coldBox;
     }
 
-    public void setCold_box(String cold_box) {
-        this.cold_box = cold_box;
+    public void setColdBox(String coldBox) {
+        this.coldBox = coldBox;
     }
 
     @Basic
@@ -114,8 +136,8 @@ public class EleMenuFoodEntity {
         return display_times;
     }
 
-    public void setDisplay_times(String display_times) {
-        this.display_times = display_times;
+    public void setDisplay_times(String displayTimes) {
+        this.display_times = displayTimes;
     }
 
     @Basic
@@ -124,8 +146,8 @@ public class EleMenuFoodEntity {
         return image_path;
     }
 
-    public void setImage_path(String image_path) {
-        this.image_path = image_path;
+    public void setImage_path(String imagePath) {
+        this.image_path = imagePath;
     }
 
     @Basic
@@ -134,8 +156,8 @@ public class EleMenuFoodEntity {
         return is_essential;
     }
 
-    public void setIs_essential(String is_essential) {
-        this.is_essential = is_essential;
+    public void setIs_essential(String isEssential) {
+        this.is_essential = isEssential;
     }
 
     @Basic
@@ -144,18 +166,8 @@ public class EleMenuFoodEntity {
         return is_featured;
     }
 
-    public void setIs_featured(String is_featured) {
-        this.is_featured = is_featured;
-    }
-
-    @Basic
-    @Column(name = "item_id", nullable = true, length = 255)
-    public String getItem_id() {
-        return item_id;
-    }
-
-    public void setItem_id(String item_id) {
-        this.item_id = item_id;
+    public void setIs_featured(String isFeatured) {
+        this.is_featured = isFeatured;
     }
 
     @Basic
@@ -174,8 +186,8 @@ public class EleMenuFoodEntity {
         return min_purchase;
     }
 
-    public void setMin_purchase(String min_purchase) {
-        this.min_purchase = min_purchase;
+    public void setMin_purchase(String minPurchase) {
+        this.min_purchase = minPurchase;
     }
 
     @Basic
@@ -184,18 +196,8 @@ public class EleMenuFoodEntity {
         return month_sales;
     }
 
-    public void setMonth_sales(String month_sales) {
-        this.month_sales = month_sales;
-    }
-
-    @Basic
-    @Column(name = "name", nullable = true, length = 255)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setMonth_sales(String monthSales) {
+        this.month_sales = monthSales;
     }
 
     @Basic
@@ -204,8 +206,8 @@ public class EleMenuFoodEntity {
         return pinyin_name;
     }
 
-    public void setPinyin_name(String pinyin_name) {
-        this.pinyin_name = pinyin_name;
+    public void setPinyin_name(String pinyinName) {
+        this.pinyin_name = pinyinName;
     }
 
     @Basic
@@ -224,8 +226,8 @@ public class EleMenuFoodEntity {
         return rating_count;
     }
 
-    public void setRating_count(String rating_count) {
-        this.rating_count = rating_count;
+    public void setRating_count(String ratingCount) {
+        this.rating_count = ratingCount;
     }
 
     @Basic
@@ -234,8 +236,8 @@ public class EleMenuFoodEntity {
         return restaurant_id;
     }
 
-    public void setRestaurant_id(String restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setRestaurant_id(String restaurantId) {
+        this.restaurant_id = restaurantId;
     }
 
     @Basic
@@ -244,8 +246,8 @@ public class EleMenuFoodEntity {
         return satisfy_count;
     }
 
-    public void setSatisfy_count(String satisfy_count) {
-        this.satisfy_count = satisfy_count;
+    public void setSatisfy_count(String satisfyCount) {
+        this.satisfy_count = satisfyCount;
     }
 
     @Basic
@@ -254,8 +256,8 @@ public class EleMenuFoodEntity {
         return satisfy_rate;
     }
 
-    public void setSatisfy_rate(String satisfy_rate) {
-        this.satisfy_rate = satisfy_rate;
+    public void setSatisfy_rate(String satisfyRate) {
+        this.satisfy_rate = satisfyRate;
     }
 
     @Basic
@@ -264,8 +266,8 @@ public class EleMenuFoodEntity {
         return server_utc;
     }
 
-    public void setServer_utc(String server_utc) {
-        this.server_utc = server_utc;
+    public void setServer_utc(String serverUtc) {
+        this.server_utc = serverUtc;
     }
 
     @Basic
@@ -290,33 +292,32 @@ public class EleMenuFoodEntity {
 
     @Basic
     @Column(name = "virtual_food_id", nullable = true, length = 255)
-    public String getVirtualFoodId() {
-        return virtualFoodId;
+    public String getVirtual_food_id() {
+        return virtual_food_id;
     }
 
-    public void setVirtualFoodId(String virtualFoodId) {
-        this.virtualFoodId = virtualFoodId;
+    public void setVirtual_food_id(String virtualFoodId) {
+        this.virtual_food_id = virtualFoodId;
     }
 
     @Basic
-    @Column(name = "menu_id", nullable = true, length = 12)
-    public int getMenu_id() {
-        return menu_id;
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setMenu_id(int menu_id) {
-        this.menu_id = menu_id;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    @Id
-    @Column(name = "food_id", nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    public int getFood_id() {
-        return food_id;
+    @Basic
+    @Column(name = "attribute", nullable = true, length = 255)
+    public String getAttribute() {
+        return attribute;
     }
 
-    public void setFood_id(int food_id) {
-        this.food_id = food_id;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     @Override
@@ -327,58 +328,57 @@ public class EleMenuFoodEntity {
         EleMenuFoodEntity that = (EleMenuFoodEntity) o;
 
         if (food_id != that.food_id) return false;
-        if (attribute != null ? !attribute.equals(that.attribute) : that.attribute != null) return false;
+        if (category_id != that.category_id) return false;
+        if (menuId != that.menuId) return false;
+        if (item_id != null ? !item_id.equals(that.item_id) : that.item_id != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) return false;
         if (attrs != null ? !attrs.equals(that.attrs) : that.attrs != null) return false;
-        if (category_id != null ? !category_id.equals(that.category_id) : that.category_id != null) return false;
-        if (cold_box != null ? !cold_box.equals(that.cold_box) : that.cold_box != null) return false;
+        if (coldBox != null ? !coldBox.equals(that.coldBox) : that.coldBox != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (display_times != null ? !display_times.equals(that.display_times) : that.display_times != null)
-            return false;
+        if (display_times != null ? !display_times.equals(that.display_times) : that.display_times != null) return false;
         if (image_path != null ? !image_path.equals(that.image_path) : that.image_path != null) return false;
         if (is_essential != null ? !is_essential.equals(that.is_essential) : that.is_essential != null) return false;
         if (is_featured != null ? !is_featured.equals(that.is_featured) : that.is_featured != null) return false;
-        if (item_id != null ? !item_id.equals(that.item_id) : that.item_id != null) return false;
         if (limitation != null ? !limitation.equals(that.limitation) : that.limitation != null) return false;
         if (min_purchase != null ? !min_purchase.equals(that.min_purchase) : that.min_purchase != null) return false;
         if (month_sales != null ? !month_sales.equals(that.month_sales) : that.month_sales != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (pinyin_name != null ? !pinyin_name.equals(that.pinyin_name) : that.pinyin_name != null) return false;
         if (rating != null ? !rating.equals(that.rating) : that.rating != null) return false;
         if (rating_count != null ? !rating_count.equals(that.rating_count) : that.rating_count != null) return false;
-        if (restaurant_id != null ? !restaurant_id.equals(that.restaurant_id) : that.restaurant_id != null)
-            return false;
-        if (satisfy_count != null ? !satisfy_count.equals(that.satisfy_count) : that.satisfy_count != null)
-            return false;
+        if (restaurant_id != null ? !restaurant_id.equals(that.restaurant_id) : that.restaurant_id != null) return false;
+        if (satisfy_count != null ? !satisfy_count.equals(that.satisfy_count) : that.satisfy_count != null) return false;
         if (satisfy_rate != null ? !satisfy_rate.equals(that.satisfy_rate) : that.satisfy_rate != null) return false;
         if (server_utc != null ? !server_utc.equals(that.server_utc) : that.server_utc != null) return false;
         if (specifications != null ? !specifications.equals(that.specifications) : that.specifications != null)
             return false;
         if (tips != null ? !tips.equals(that.tips) : that.tips != null) return false;
-        if (virtualFoodId != null ? !virtualFoodId.equals(that.virtualFoodId) : that.virtualFoodId != null)
+        if (virtual_food_id != null ? !virtual_food_id.equals(that.virtual_food_id) : that.virtual_food_id != null)
             return false;
-        if (menu_id != that.menu_id) return false;
+        if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
+        if (attribute != null ? !attribute.equals(that.attribute) : that.attribute != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = attribute != null ? attribute.hashCode() : 0;
+        int result = food_id;
+        result = 31 * result + (item_id != null ? item_id.hashCode() : 0);
+        result = 31 * result + category_id;
+        result = 31 * result + menuId;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (attrs != null ? attrs.hashCode() : 0);
-        result = 31 * result + (category_id != null ? category_id.hashCode() : 0);
-        result = 31 * result + (cold_box != null ? cold_box.hashCode() : 0);
+        result = 31 * result + (coldBox != null ? coldBox.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (display_times != null ? display_times.hashCode() : 0);
         result = 31 * result + (image_path != null ? image_path.hashCode() : 0);
         result = 31 * result + (is_essential != null ? is_essential.hashCode() : 0);
         result = 31 * result + (is_featured != null ? is_featured.hashCode() : 0);
-        result = 31 * result + (item_id != null ? item_id.hashCode() : 0);
         result = 31 * result + (limitation != null ? limitation.hashCode() : 0);
         result = 31 * result + (min_purchase != null ? min_purchase.hashCode() : 0);
         result = 31 * result + (month_sales != null ? month_sales.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (pinyin_name != null ? pinyin_name.hashCode() : 0);
         result = 31 * result + (rating != null ? rating.hashCode() : 0);
         result = 31 * result + (rating_count != null ? rating_count.hashCode() : 0);
@@ -388,9 +388,10 @@ public class EleMenuFoodEntity {
         result = 31 * result + (server_utc != null ? server_utc.hashCode() : 0);
         result = 31 * result + (specifications != null ? specifications.hashCode() : 0);
         result = 31 * result + (tips != null ? tips.hashCode() : 0);
-        result = 31 * result + (virtualFoodId != null ? virtualFoodId.hashCode() : 0);
-        result = 31 * result + menu_id;
-        result = 31 * result + food_id;
+        result = 31 * result + (virtual_food_id != null ? virtual_food_id.hashCode() : 0);
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (attribute != null ? attribute.hashCode() : 0);
         return result;
     }
+
 }

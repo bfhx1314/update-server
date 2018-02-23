@@ -60,8 +60,7 @@ public class GetEleOrderInfo {
         classMap.put("specfoods", EleMenuSpecfood.class);
         classMap.put("attr", Attr.class);
 
-        String menusList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/v2/menu?restaurant_id=" + restaurant_id);
-
+        String menusList = BaseUtil.filterEmoji(BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/v2/menu?restaurant_id=" + restaurant_id));
 
         if(null == menusList || menusList.isEmpty()){
             BaseToolParameter.getPrintThreadLocal().log("菜单列表无数据返回 restaurant_id : " + restaurant_id,2);
@@ -69,17 +68,17 @@ public class GetEleOrderInfo {
         }
 
 
-        menusList = menusList.replace("{}","\"\"");
+//        menusList = menusList.replace("{}","\"\"");
 //        Print.log("menusList : " + menusList,1);
         JSONArray menus = JSONArray.fromObject(menusList);
 //        Print.log("menus : " + menus.toString(),1);
 
 
-
-
         for(int i = 0 ; i < menus.size() ; i++){
-
-            eleMenus.add((EleMenuBean) JSONObject.toBean((JSONObject)menus.get(i),EleMenuBean.class,classMap));
+            JSONObject json = (JSONObject)menus.get(i);
+            EleMenuBean eleMenuBean = (EleMenuBean) JSONObject.toBean(json,EleMenuBean.class,classMap);
+            eleMenuBean.setJson(json.toString());
+            eleMenus.add(eleMenuBean);
         }
 
         return  eleMenus;

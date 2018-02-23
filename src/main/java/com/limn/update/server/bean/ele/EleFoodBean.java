@@ -35,6 +35,15 @@ public class EleFoodBean implements Serializable {
     String satisfy_rate;
     List<EleMenuSpecfood> specfoods;
     String category_id;
+    String food_id;
+
+    public String getFood_id() {
+        return food_id;
+    }
+
+    public void setFood_id(String food_id) {
+        this.food_id = food_id;
+    }
 
     public String getRating() {
         return rating;
@@ -102,7 +111,7 @@ public class EleFoodBean implements Serializable {
     }
 
     public Object getDescription() {
-        return "无法解析";
+        return description;
     }
 
     public void setDescription(Object description) {
