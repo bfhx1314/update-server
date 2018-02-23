@@ -21,7 +21,7 @@ public class FindCoordinateRecordEntity {
     private BigDecimal avgdistance;
 
     @Basic
-    @Column(name = "avgdistance", nullable = false)
+    @Column(name = "avgdistance", nullable = true)
     public BigDecimal getAvgdistance() {
         return avgdistance;
     }
@@ -31,7 +31,7 @@ public class FindCoordinateRecordEntity {
     }
 
     @Basic
-    @Column(name = "minlongitude", nullable = false)
+    @Column(name = "minlongitude", nullable = true)
     public String getMinlongitude() {
         return minlongitude;
     }
@@ -40,7 +40,7 @@ public class FindCoordinateRecordEntity {
         this.minlongitude = minlongitude;
     }
     @Basic
-    @Column(name = "minlatitude", nullable = false)
+    @Column(name = "minlatitude", nullable = true)
     public String getMinlatitude() {
         return minlatitude;
     }

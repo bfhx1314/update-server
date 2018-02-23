@@ -51,7 +51,7 @@ public class ElePullServiceImpl implements ElePullService {
 
     @Override
     @Transactional
-    public FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude) {
+    public FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update) {
 
         FindCoordinateRecordEntity fcre = new FindCoordinateRecordEntity();
         fcre.setLatitude(latitude);
@@ -71,48 +71,14 @@ public class ElePullServiceImpl implements ElePullService {
 
             List<EleShopBean> shops = GetEleOrderInfo.getEleShopByCoordinate(latitude, longitude,  String.valueOf(i),String.valueOf(i+24));
             for (EleShopBean shop : shops) {
-                try {
-                    EleShopEntity eleshop = new EleShopEntity();
-                    BeanUtils.copyProperties(eleshop, shop);
-                    eleshop.setFindid(findId);
-                    eleShopDao.saveOrUpdate(eleshop);
-
-                    //添加距离
-                    distance.add(BaseUtil.getDistance(latitude,longitude,eleshop.getLatitude(),eleshop.getLongitude()));
-
-                    //获取菜单大类
-                    List<EleMenuBean> menus = GetEleOrderInfo.getEleMenuById(eleshop.getId().toString());
-                    for(EleMenuBean menu : menus){
-                        EleMenuEntity eleMenuEntity = new EleMenuEntity();
-                        BeanUtils.copyProperties(eleMenuEntity,menu);
-                        eleMenuEntity.setShopId(eleshop.getId().toString());
-                        eleMenuEntity.setCreateDate(new Date());
-                        eleMenuDao.saveOrUpdate(eleMenuEntity);
-//
-                        //获取具体明细
-                        List<EleFoodBean> foods = menu.getFoods();
-                        for(EleFoodBean food : foods){
-                            EleMenuFoodEntity eleMenuFoodEntity = new EleMenuFoodEntity();
-                            BeanUtils.copyProperties(eleMenuFoodEntity,food);
-                            eleMenuFoodEntity.setMenuId(eleMenuEntity.getId());
-                            eleMenuFoodEntity.setCreateDate(new Date());
-                            eleMenuFoodDao.saveOrUpdate(eleMenuFoodEntity);
-
-                            List<EleMenuSpecfood> eleMenuSpecfoods = food.getSpecfoods();
-                            for(EleMenuSpecfood eleMenuSpecfood : eleMenuSpecfoods){
-                                EleMenuSpecfoodEntity eleMenuSpecfoodEntity = new EleMenuSpecfoodEntity();
-                                BeanUtils.copyProperties(eleMenuSpecfoodEntity,eleMenuSpecfood);
-
-                                eleMenuSpecfoodDao.saveOrUpdate(eleMenuSpecfoodEntity);
-
-                            }
-                        }
-//
+                //添加距离
+                distance.add(BaseUtil.getDistance(latitude,longitude,shop.getLatitude(),shop.getLongitude()));
+                if(eleShopDao.isExistShop(Integer.valueOf(shop.getId()))) {
+                    if(!update){
+                        break;
                     }
-                    //TODO 活动
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                saveShop(shop, findId);
             }
         }
         eleShopDao.flush();
@@ -122,12 +88,14 @@ public class ElePullServiceImpl implements ElePullService {
         fcre.setAddcount(newCount.intValue()-originalCount.intValue());
         fcre.setCurrentcount(newCount.intValue());
 
-        CoordinateVO coordinateVO = eleShopDao.getCoordinateByID(findId);
-        fcre.setMaxlongitude(coordinateVO.getMaxlongitude());
-        fcre.setMinlongitude(coordinateVO.getMinlongitude());
-        fcre.setMaxlatitude(coordinateVO.getMaxlatitude());
-        fcre.setMinlatitude(coordinateVO.getMinlatitude());
-        fcre.setAvgdistance(new BigDecimal(BaseUtil.getAvgByList(distance)).setScale(2,BigDecimal.ROUND_HALF_DOWN));
+        if(fcre.getAddcount() != 0) {
+            CoordinateVO coordinateVO = eleShopDao.getCoordinateByID(findId);
+            fcre.setMaxlongitude(coordinateVO.getMaxlongitude());
+            fcre.setMinlongitude(coordinateVO.getMinlongitude());
+            fcre.setMaxlatitude(coordinateVO.getMaxlatitude());
+            fcre.setMinlatitude(coordinateVO.getMinlatitude());
+            fcre.setAvgdistance(new BigDecimal(BaseUtil.getAvgByList(distance)).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+        }
 
         System.out.print("原：" + originalCount);
         System.out.print("新：" + newCount);
@@ -136,6 +104,61 @@ public class ElePullServiceImpl implements ElePullService {
         findCoordinateRecordDao.save(fcre);
         return fcre;
     }
+
+
+    private void saveShop(EleShopBean shop,int findId){
+
+        try {
+            EleShopEntity eleshop = new EleShopEntity();
+            BeanUtils.copyProperties(eleshop, shop);
+            eleshop.setFindid(findId);
+            eleShopDao.merge(eleshop);
+
+            //删除门店下所有分类菜单
+            eleMenuDao.deleteByShopId(shop.getId());
+            eleMenuFoodDao.deleteByShopId(shop.getId());
+            eleMenuSpecfoodDao.deleteByShopId(shop.getId());
+
+            //分类菜单
+            List<EleMenuBean> menus = GetEleOrderInfo.getEleMenuById(eleshop.getId().toString());
+            for(EleMenuBean menu : menus){
+                EleMenuEntity eleMenuEntity = new EleMenuEntity();
+                BeanUtils.copyProperties(eleMenuEntity,menu);
+                eleMenuEntity.setShopId(eleshop.getId().toString());
+                eleMenuEntity.setCreateDate(new Date());
+                eleMenuDao.saveOrUpdate(eleMenuEntity);
+
+                //食物菜单
+                List<EleFoodBean> foods = menu.getFoods();
+                for(EleFoodBean food : foods){
+                    EleMenuFoodEntity eleMenuFoodEntity = new EleMenuFoodEntity();
+                    BeanUtils.copyProperties(eleMenuFoodEntity,food);
+                    eleMenuFoodEntity.setShopId(eleMenuEntity.getShopId());
+                    eleMenuFoodEntity.setMenuId(eleMenuEntity.getId());
+                    eleMenuFoodEntity.setCreateDate(new Date());
+                    eleMenuFoodDao.saveOrUpdate(eleMenuFoodEntity);
+
+                    //食物明细
+                    List<EleMenuSpecfood> eleMenuSpecfoods = food.getSpecfoods();
+                    for(EleMenuSpecfood eleMenuSpecfood : eleMenuSpecfoods){
+                        EleMenuSpecfoodEntity eleMenuSpecfoodEntity = new EleMenuSpecfoodEntity();
+                        BeanUtils.copyProperties(eleMenuSpecfoodEntity,eleMenuSpecfood);
+                        eleMenuSpecfoodEntity.setCreateDate(new Date());
+                        eleMenuSpecfoodEntity.setShopId(eleMenuEntity.getShopId());
+                        eleMenuSpecfoodDao.saveOrUpdate(eleMenuSpecfoodEntity);
+                    }
+                }
+//
+            }
+            //TODO 活动
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 
 
 }

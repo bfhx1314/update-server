@@ -49,6 +49,15 @@ public class EleShopBean implements Serializable {
     Object flavors;
     Object recommend_reasons;
     Object support_tags;
+    String rankId;
+
+    public String getRankId() {
+        return rankId;
+    }
+
+    public void setRankId(String rankId) {
+        this.rankId = rankId;
+    }
 
     public Object getSupport_tags() {
         return support_tags;

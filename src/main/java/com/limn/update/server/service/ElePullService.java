@@ -7,6 +7,6 @@ import com.limn.update.server.entity.FindCoordinateRecordEntity;
  */
 public interface ElePullService {
 
-    FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude);
+    FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update);
 
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ele_menu_food", schema = "ele", catalog = "")
 public class EleMenuFoodEntity {
-    private int food_id;
+    private String food_id;
     private String item_id;
     private int category_id;
     private int menuId;
@@ -37,15 +37,26 @@ public class EleMenuFoodEntity {
     private String virtual_food_id;
     private Date createDate;
     private String attribute;
+    private String shopId;
+
+    @Basic
+    @Column(name = "shop_id", nullable = false, length = 25)
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     @Id
     @Column(name = "food_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getFood_id() {
+    public String getFood_id() {
         return food_id;
     }
 
-    public void setFood_id(int foodId) {
+    public void setFood_id(String foodId) {
         this.food_id = foodId;
     }
 
@@ -363,7 +374,7 @@ public class EleMenuFoodEntity {
 
     @Override
     public int hashCode() {
-        int result = food_id;
+        int  result = food_id != null ? food_id.hashCode() : 0;
         result = 31 * result + (item_id != null ? item_id.hashCode() : 0);
         result = 31 * result + category_id;
         result = 31 * result + menuId;

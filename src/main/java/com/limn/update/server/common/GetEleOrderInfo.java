@@ -31,7 +31,7 @@ public class GetEleOrderInfo {
         List<EleShopBean> eleshos = new ArrayList<EleShopBean>();
         classMap.put("activities", EleShopActivitie.class);
 
-        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw3s78hjff&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
+        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw3sm8qm8t8&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
 
         if(null == shopList || shopList.isEmpty()){
             BaseToolParameter.getPrintThreadLocal().log("店铺列表无数据返回 latitude : " + latitude + " longitude : " + longitude + " limit : " + limit + " offset : " + offset ,2);

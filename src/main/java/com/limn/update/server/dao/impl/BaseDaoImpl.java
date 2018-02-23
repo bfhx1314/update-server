@@ -57,6 +57,16 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 
     }
 
+
+    @Override
+    public void merge(Object entity) {
+        Session newSeesion = getSession();
+        newSeesion.merge(entity);
+
+    }
+
+
+
     public void update(Object entity) {
         Session newSeesion = getSession();
         newSeesion.update(entity);

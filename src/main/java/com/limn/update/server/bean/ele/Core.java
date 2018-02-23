@@ -9,13 +9,13 @@ public class Core {
     Target target;
     String come_from;
     Next next;
-    String extraInfo;
+    Object extraInfo;
 
-    public String getExtraInfo() {
+    public Object getExtraInfo() {
         return extraInfo;
     }
 
-    public void setExtraInfo(String extraInfo) {
+    public void setExtraInfo(Object extraInfo) {
         this.extraInfo = extraInfo;
     }
 

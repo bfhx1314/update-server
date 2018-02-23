@@ -48,4 +48,14 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
         }
         return null;
     }
+
+    @Override
+    public boolean isExistShop(int shopId) {
+        Query query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where id =" + shopId);
+        if(query.list().size() > 0){
+            getSession().refresh(query.list().get(0));
+            return true;
+        }
+        return false;
+    }
 }

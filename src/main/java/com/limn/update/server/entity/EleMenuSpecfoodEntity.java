@@ -1,6 +1,7 @@
 package com.limn.update.server.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by limengnan on 2017/11/17.
@@ -28,8 +29,30 @@ public class EleMenuSpecfoodEntity {
     private String stock;
     private String virtualFoodId;
     private String weight;
-    private String foodId;
     private int specfood_id;
+    private String shopId;
+    private Date createDate;
+
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "shop_id", nullable = false, length = 25)
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     @Basic
     @Column(name = "checkout_mode", nullable = true, length = 255)
@@ -231,16 +254,6 @@ public class EleMenuSpecfoodEntity {
         this.weight = weight;
     }
 
-    @Basic
-    @Column(name = "foodId", nullable = true, length = 255)
-    public String getFoodId() {
-        return foodId;
-    }
-
-    public void setFoodId(String foodId) {
-        this.foodId = foodId;
-    }
-
     @Id
     @Column(name = "specfood_id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -288,7 +301,6 @@ public class EleMenuSpecfoodEntity {
         if (virtualFoodId != null ? !virtualFoodId.equals(that.virtualFoodId) : that.virtualFoodId != null)
             return false;
         if (weight != null ? !weight.equals(that.weight) : that.weight != null) return false;
-        if (foodId != null ? !foodId.equals(that.foodId) : that.foodId != null) return false;
 
         return true;
     }
@@ -315,7 +327,6 @@ public class EleMenuSpecfoodEntity {
         result = 31 * result + (stock != null ? stock.hashCode() : 0);
         result = 31 * result + (virtualFoodId != null ? virtualFoodId.hashCode() : 0);
         result = 31 * result + (weight != null ? weight.hashCode() : 0);
-        result = 31 * result + (foodId != null ? foodId.hashCode() : 0);
         result = 31 * result + specfood_id;
         return result;
     }

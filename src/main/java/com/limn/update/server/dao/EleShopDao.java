@@ -17,7 +17,7 @@ public interface EleShopDao extends BaseDao<EleShopEntity> {
 
     CoordinateVO getCoordinateByID(int id);
 
-
+    boolean isExistShop(int shopId);
 
 
 }

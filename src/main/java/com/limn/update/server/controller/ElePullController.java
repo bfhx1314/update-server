@@ -1,5 +1,6 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
 import com.limn.update.server.service.ElePullService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,26 @@ public class ElePullController {
 
 	@RequestMapping("saveShop")
 	@ResponseBody
-	public Object saveShop(HttpServletRequest request, HttpServletResponse response , String latitude , String longitude) throws IOException {
+	public Object saveShop(HttpServletRequest request, HttpServletResponse response , String latitude , String longitude , String update) throws IOException {
 
 		Map<String, Object> data = new HashMap<String, Object>();
+
+		if(BaseUtil.isEmpty(latitude)){
+			data.put("data", "latitude不能为空");
+			return data;
+		}
+		if(BaseUtil.isEmpty(longitude)){
+			data.put("data", "longitude不能为空");
+			return data;
+		}
+
+		boolean up = false;
+		if(!BaseUtil.isEmpty(update) &&( "1".equalsIgnoreCase(update) || "true".equalsIgnoreCase(update))){
+			up = true;
+		}
+
 		try {
-			FindCoordinateRecordEntity fcre = elePullService.saveShopByCoordinate(latitude, longitude);
+			FindCoordinateRecordEntity fcre = elePullService.saveShopByCoordinate(latitude, longitude,up);
 			data.put("data", "查询成功");
 			data.put("detail", fcre);
 		}catch (Exception e){

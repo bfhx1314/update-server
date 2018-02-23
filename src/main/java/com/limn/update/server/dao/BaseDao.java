@@ -19,4 +19,6 @@ public interface BaseDao<T>{
     void flush();
 
     void update(T entity);
+
+    void merge(T entity);
 }
