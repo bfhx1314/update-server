@@ -25,14 +25,15 @@ public class SshhwwTaskDaoImpl extends BaseDaoImpl<SshhwwTaskEntity> implements 
     }
 
     @Override
-    public List<SshhwwTaskEntity> getTask(String uuid) {
+    public List<SshhwwTaskEntity> getTask(String uuid,String type) {
         Query query = getSession().createQuery("select t1 from SshhwwTaskEntity t1 " +
                 "left join SshhwwTaskRecordEntity t2 on t1.id = t2.taskId and TO_DAYS(t2.createDate) = TO_DAYS(?) and t2.uuid = ? and t2.valid = 'Y'" +
-                "where t1.startTime < ? and t1.endTime > ? and t2.id is null and t1.valid = 'Y'");
+                "where t1.startTime < ? and t1.endTime > ? and t2.id is null and t1.valid = 'Y' and t1.type = ?");
         query.setParameter(0,new Date());
         query.setParameter(1,uuid);
         query.setParameter(2,new Date());
         query.setParameter(3,new Date());
+        query.setParameter(4,type);
         List<SshhwwTaskEntity> list = query.list();
         return list;
     }

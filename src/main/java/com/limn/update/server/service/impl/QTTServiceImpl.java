@@ -110,16 +110,19 @@ public class QTTServiceImpl implements QTTService {
             qttUserInfoVo.setDetail("无用户信息");
             return qttUserInfoVo;
         }
-
-
-
         qttUserInfoVo.setStatus("1");
-        qttUserInfoVo.setPhone(qttUserEntity.getPhone());
 
         QttUserAttachmentEntity qttUserAttachmentEntity = new QttUserAttachmentEntity();
         qttUserAttachmentEntity.setPhone(qttUserEntity.getPhone());
         qttUserAttachmentEntity.setType(QttUserAttachmentEnum.CACHE.getCode());
         qttUserInfoVo.setQttUserAttachmentEntityList(getFileListByUser(qttUserAttachmentEntity));
+
+        //没有缓存文件标记为第一次执行(存在图形识别码 需要人工参与)
+        if(qttUserInfoVo.getQttUserAttachmentEntityList().size() == 0){
+            qttUserInfoVo.setFirst(true);
+        }else{
+            qttUserInfoVo.setFirst(false);
+        }
 
         qttUserEntity.setStatus(1);
         qttUserDao.update(qttUserEntity);

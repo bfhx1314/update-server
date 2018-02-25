@@ -1,5 +1,6 @@
 package com.limn.update.server.service;
 
+import com.limn.update.server.bean.QttUserInfoVo;
 import com.limn.update.server.bean.TaskRecordVo;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -76,7 +76,7 @@ public class BaseHttpConnection {
         try {
             httpget.setConfig(requestConfig);
 
-            httpget.addHeader("cookie","_utrace=498bbfca29f26bc475d6b6e6fefbbb8f_2017-10-30; firstEnterUrlInSession=https%3A//www.ele.me/shop/81782; perf_ssid=hfsxu21x43l3pzdw4wmi2w74tvxxtpba_2017-11-08; ubt_ssid=uifjmxnuc23j45zs2hcr1vdapuvmx_2017-10-30; pageReferrInSession=https%3A//www.ele.me/place/wtw3s7d3x6w%3Flatitude%3D31.22067%26longitude%3D121.47924");
+            httpget.addHeader("cookie","SID=BJtpinU4w9oHWRy1y8W9gXi64aJer5rzCrQg;USERID=1294125794;_utrace=498bbfca29f26bc475d6b6e6fefbbb8f_2017-10-30; firstEnterUrlInSession=https%3A//www.ele.me/shop/81782; perf_ssid=hfsxu21x43l3pzdw4wmi2w74tvxxtpba_2017-11-08; ubt_ssid=uifjmxnuc23j45zs2hcr1vdapuvmx_2017-10-30; pageReferrInSession=https%3A//www.ele.me/place/wtw3s7d3x6w%3Flatitude%3D31.22067%26longitude%3D121.47924");
             httpget.addHeader("accept","application/json, text/plain, */*");
             httpget.addHeader("accept-encoding","gzip, deflate, br");
             httpget.addHeader("accept-language","zh-CN,zh;q=0.9,en;q=0.8");

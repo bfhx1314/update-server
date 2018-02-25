@@ -12,9 +12,17 @@ public class QttUserInfoVo extends ResponseVo {
 
     List<QttUserAttachmentEntity> qttUserAttachmentEntityList;
 
-    String phone;
-
     QttUserEntity qttUserEntity;
+
+    boolean isFirst;
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
+    }
 
     public QttUserEntity getQttUserEntity() {
         return qttUserEntity;
@@ -22,14 +30,6 @@ public class QttUserInfoVo extends ResponseVo {
 
     public void setQttUserEntity(QttUserEntity qttUserEntity) {
         this.qttUserEntity = qttUserEntity;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public List<QttUserAttachmentEntity> getQttUserAttachmentEntityList() {
