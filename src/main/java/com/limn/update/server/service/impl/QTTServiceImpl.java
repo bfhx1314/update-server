@@ -87,7 +87,7 @@ public class QTTServiceImpl implements QTTService {
 
         String phone = qttRunRecordEntity.getPhone();
 
-        fileServerVo = fileServerService.upLoad(file,qttPath + "/" + type + "/" + phone,null );
+        fileServerVo = fileServerService.upLoad(file,qttPath + "/" + phone + "/" + type,null );
         if(fileServerVo.getStatus().equalsIgnoreCase("1")){
             QttUserAttachmentEntity qttUserAttachmentEntity = new QttUserAttachmentEntity();
             qttUserAttachmentEntity.setFileName(fileServerVo.getFileName());

@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -40,7 +42,7 @@ public class QTTController {
     @Transactional
     @RequestMapping("/getUser")
     @ResponseBody
-    public Object run(HttpServletRequest request, HttpServletResponse response){
+    public Object run(){
         return qttService.getExeUserInfo();
     }
 
@@ -48,9 +50,23 @@ public class QTTController {
     @Transactional
     @RequestMapping("/upload")
     @ResponseBody
-    public Object upload(HttpServletRequest request, HttpServletResponse response ,MultipartFile file, String key, String type){
-        FileServerVo fileServerVo = qttService.uploadUserCacheFile(file, key, type);
-        return fileServerVo;
+    public Object upload(MultipartFile[] files, String key, String type){
+        ArrayList<FileServerVo> fileServerVos = new ArrayList<>();
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus("1");
+        String errFileName = "";
+        for(MultipartFile file : files) {
+            FileServerVo fileServerVo = qttService.uploadUserCacheFile(file, key, type);
+            fileServerVos.add(fileServerVo);
+            if(fileServerVo.getStatus() == "0"){
+                responseVo.setStatus("0");
+                errFileName = errFileName + "["+ file.getName() +"] ";
+                responseVo.setDetail("文件名:" + errFileName + "  上传失败");
+            }
+        }
+
+        responseVo.setData(fileServerVos);
+        return responseVo;
     }
 
 }
