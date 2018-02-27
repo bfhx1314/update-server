@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface SshhwwTaskDao extends BaseDao<SshhwwTaskEntity> {
 
-    List<SshhwwTaskEntity> getTask(String uuid);
+    List<SshhwwTaskEntity> getTask(String uuid,String type);
 
 
 }

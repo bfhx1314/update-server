@@ -31,7 +31,7 @@ public class QttUserDaoImpl extends BaseDaoImpl<QttUserEntity> implements QttUse
     @Override
     public QttUserEntity getExeUser() {
         Session newSession = getSession();
-        Query query = newSession.createQuery("from QttUserEntity where lastActivate < ? and valid='Y' and status = 0 order by lastActivate");
+        Query query = newSession.createQuery("from QttUserEntity where lastActivate < ? and valid='Y' and status = 1 order by lastActivate");
 
         Date dt= DateFormat.getDate();
         Calendar rightNow = Calendar.getInstance();

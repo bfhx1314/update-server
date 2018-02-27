@@ -1,6 +1,7 @@
 package com.limn.update.server.service.impl;
 
 import com.limn.tool.common.DateFormat;
+import com.limn.update.server.bean.QttUserInfoVo;
 import com.limn.update.server.bean.TaskRecordVo;
 import com.limn.update.server.dao.SshhwwAuthUuidDao;
 import com.limn.update.server.dao.SshhwwTaskDao;
@@ -62,7 +63,7 @@ public class SshhwwServiceImpl implements SshhwwService {
             return taskRecordVo;
         }
 
-        List<SshhwwTaskEntity> listTask = sshhwwTaskDao.getTask(uuid);
+        List<SshhwwTaskEntity> listTask = sshhwwTaskDao.getTask(uuid,type);
 
         if(listTask == null || listTask.size() == 0){
             taskRecordVo.setStatus("1");
@@ -84,14 +85,15 @@ public class SshhwwServiceImpl implements SshhwwService {
         sshhwwTaskRecordDao.save(taskRecord);
 
         taskRecordVo.setTaskRecordId(taskRecord.getId());
-        taskRecordVo.setTaskRecordName(sshhwwTaskEntity.getType());
+        taskRecordVo.setTaskRecordName(sshhwwTaskEntity.getValue());
 
         return taskRecordVo;
-
     }
+
 
     @Override
     public boolean isAuthByUuid(String uuid) {
         return sshhwwAuthUuidDao.isAuthByUuid(uuid);
     }
+
 }
