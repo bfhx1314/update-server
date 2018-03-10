@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Repository
@@ -27,5 +28,17 @@ public class QttRunRecordDaoImpl extends BaseDaoImpl<QttRunRecordEntity> impleme
         query.setParameter(0,key);
         QttRunRecordEntity  qttRunRecordEntity = (QttRunRecordEntity)query.uniqueResult();
         return qttRunRecordEntity;
+    }
+
+    @Override
+    public QttRunRecordEntity getLastUserByPhone(String phone) {
+        Query query = getSession().createQuery("from QttRunRecordEntity where phone = ? order by id desc");
+        query.setParameter(0,phone);
+        List<QttRunRecordEntity> qttRunRecordEntity = query.list();
+        if(null != qttRunRecordEntity && qttRunRecordEntity.size() > 0){
+            return qttRunRecordEntity.get(0);
+        }else {
+            return null;
+        }
     }
 }

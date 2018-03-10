@@ -14,10 +14,20 @@ public class QttUserAttachmentEntity {
     private String url;
     private String fileName;
     private String valid;
+    private String key;
+
+    @Basic
+    @Column(name = "`key`", nullable = false)
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
-    @GenericGenerator(name = "id", strategy = "assigned")
     public int getId() {
         return id;
     }

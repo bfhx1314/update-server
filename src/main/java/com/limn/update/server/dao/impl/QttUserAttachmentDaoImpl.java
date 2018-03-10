@@ -21,11 +21,12 @@ public class QttUserAttachmentDaoImpl extends BaseDaoImpl<QttUserAttachmentEntit
 
     @Override
     public List<QttUserAttachmentEntity> getUserAttachments(QttUserAttachmentEntity entity) {
-        Query query =  getSession().createQuery("from QttUserAttachmentEntity");
-        query.setProperties(entity);
+        Query query =  getSession().createQuery("from QttUserAttachmentEntity where " +
+                "key = ? and phone = ? and type = ?");
+        query.setParameter(1,entity.getPhone());
+        query.setParameter(0,entity.getKey());
+        query.setParameter(2,entity.getType());
         return query.list();
     }
-
-
 
 }

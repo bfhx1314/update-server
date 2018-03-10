@@ -4,7 +4,6 @@ package com.limn.update.server.controller;
 import com.limn.update.server.bean.FileServerVo;
 import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.entity.QttUserAttachmentEntity;
-import com.limn.update.server.enumeration.QttUserAttachmentEnum;
 import com.limn.update.server.service.QTTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

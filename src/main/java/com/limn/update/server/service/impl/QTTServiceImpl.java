@@ -93,7 +93,9 @@ public class QTTServiceImpl implements QTTService {
             qttUserAttachmentEntity.setFileName(fileServerVo.getFileName());
             qttUserAttachmentEntity.setPhone(phone);
             qttUserAttachmentEntity.setUrl(fileServerVo.getFilePath());
-            qttUserAttachmentEntity.setType(type);
+            qttUserAttachmentEntity.setType(QttUserAttachmentEnum.CACHE.getCode());
+            qttUserAttachmentEntity.setKey(key);
+            qttUserAttachmentEntity.setValid("Y");
             qttUserAttachmentDao.save(qttUserAttachmentEntity);
         }
         return fileServerVo;
@@ -112,9 +114,13 @@ public class QTTServiceImpl implements QTTService {
         }
         qttUserInfoVo.setStatus("1");
 
+        QttRunRecordEntity qttRunRecordEntity = qttRunRecordDao.getLastUserByPhone(qttUserEntity.getPhone());
+
+
         QttUserAttachmentEntity qttUserAttachmentEntity = new QttUserAttachmentEntity();
-        qttUserAttachmentEntity.setPhone(qttUserEntity.getPhone());
+        qttUserAttachmentEntity.setPhone(qttRunRecordEntity.getPhone());
         qttUserAttachmentEntity.setType(QttUserAttachmentEnum.CACHE.getCode());
+        qttUserAttachmentEntity.setKey(qttRunRecordEntity.getKey());
         qttUserInfoVo.setQttUserAttachmentEntityList(getFileListByUser(qttUserAttachmentEntity));
 
         //没有缓存文件标记为第一次执行(存在图形识别码 需要人工参与)
@@ -127,14 +133,14 @@ public class QTTServiceImpl implements QTTService {
         qttUserEntity.setStatus(1);
         qttUserDao.update(qttUserEntity);
 
-        QttRunRecordEntity qttRunRecordEntity = new QttRunRecordEntity();
-        qttRunRecordEntity.setPhone(qttUserEntity.getPhone());
+        QttRunRecordEntity qttRunRecordEntityNew = new QttRunRecordEntity();
+        qttRunRecordEntityNew.setPhone(qttUserEntity.getPhone());
         String key = UUID.randomUUID().toString().replaceAll("-","");
-        qttRunRecordEntity.setKey(key);
+        qttRunRecordEntityNew.setKey(key);
 
 
-        qttRunRecordEntity.setCreateDate(new Timestamp(System.currentTimeMillis()));
-        qttRunRecordDao.save(qttRunRecordEntity);
+        qttRunRecordEntityNew.setCreateDate(new Timestamp(System.currentTimeMillis()));
+        qttRunRecordDao.save(qttRunRecordEntityNew);
 
 
         qttUserInfoVo.setKey(key);

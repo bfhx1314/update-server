@@ -7,5 +7,6 @@ public interface QttRunRecordDao extends BaseDao<QttRunRecordEntity> {
 
     QttRunRecordEntity getUserByKey(String key);
 
+    QttRunRecordEntity getLastUserByPhone(String phone);
 
 }
