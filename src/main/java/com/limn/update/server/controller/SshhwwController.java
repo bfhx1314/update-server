@@ -98,12 +98,6 @@ public class SshhwwController {
 			return wxcmUpdateVO;
 		}
 
-		if(BaseUtil.isEmpty(md5)){
-			wxcmUpdateVO.setStatus("0");
-			wxcmUpdateVO.setDetail("md5不能为空");
-			return wxcmUpdateVO;
-		}
-
 		SshhwwUpdateEntity sshhwwUpdateEntity = new SshhwwUpdateEntity();
 		sshhwwUpdateEntity.setVersion(Integer.valueOf(version));
 		sshhwwUpdateEntity.setType(type);
@@ -116,6 +110,7 @@ public class SshhwwController {
 		}else{
 			wxcmUpdateVO.setVersion(up.getVersion());
 			wxcmUpdateVO.setUpdateFilePath(up.getUpdatePath());
+			wxcmUpdateVO.setMd5(md5);
 		}
 
 		return wxcmUpdateVO;
