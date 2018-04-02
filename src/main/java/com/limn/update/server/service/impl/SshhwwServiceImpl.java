@@ -55,9 +55,9 @@ public class SshhwwServiceImpl implements SshhwwService {
     public TaskRecordVo getTask(String uuid, String type, String deviceName) {
 
         TaskRecordVo taskRecordVo = new TaskRecordVo();
-
+        taskRecordVo.setStatus("1");
         if (!sshhwwAuthUuidDao.isAuthByUuid(uuid)){
-            taskRecordVo.setStatus("1");
+
             taskRecordVo.setTaskRecordId(-1);
             taskRecordVo.setDetail("无授权执行脚本");
             return taskRecordVo;
@@ -66,7 +66,6 @@ public class SshhwwServiceImpl implements SshhwwService {
         List<SshhwwTaskEntity> listTask = sshhwwTaskDao.getTask(uuid,type);
 
         if(listTask == null || listTask.size() == 0){
-            taskRecordVo.setStatus("1");
             taskRecordVo.setTaskRecordId(-1);
             taskRecordVo.setDetail("无任务");
             return taskRecordVo;

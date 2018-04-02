@@ -8,6 +8,15 @@ public class WXCMUpdateVO extends ResponseVo{
     int version;
     String updateFilePath;
     String md5;
+    String update;
+
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
+    }
 
     public String getMd5() {
         return md5;

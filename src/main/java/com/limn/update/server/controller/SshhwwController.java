@@ -107,10 +107,12 @@ public class SshhwwController {
 		wxcmUpdateVO.setStatus("1");
 		if(up == null || up.getUpdatePath() == null || up.getUpdatePath().isEmpty()){
 			wxcmUpdateVO.setVersion(Integer.valueOf(version));
+			wxcmUpdateVO.setUpdate("N");
 		}else{
 			wxcmUpdateVO.setVersion(up.getVersion());
 			wxcmUpdateVO.setUpdateFilePath(up.getUpdatePath());
-			wxcmUpdateVO.setMd5(md5);
+			wxcmUpdateVO.setMd5(up.getMd5());
+			wxcmUpdateVO.setUpdate("Y");
 		}
 
 		return wxcmUpdateVO;
