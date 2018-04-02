@@ -170,6 +170,15 @@ public class SshhwwController {
 		return responseVo;
 	}
 
+	@Transactional
+	@RequestMapping("insurance")
+	@ResponseBody
+	public Object insurance(HttpServletRequest request, HttpServletResponse response){
+
+
+
+		return "YES";
+	}
 
 
 }
