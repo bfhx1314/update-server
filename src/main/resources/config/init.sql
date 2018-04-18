@@ -18,33 +18,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for bbs_user
--- ----------------------------
-DROP TABLE IF EXISTS `bbs_user`;
-CREATE TABLE `bbs_user` (
-  `id` int(32) NOT NULL AUTO_INCREMENT,
-  `nickname` varchar(50) DEFAULT '' COMMENT '昵称',
-  `score` int(11) DEFAULT '0' COMMENT '积分',
-  `token` varchar(255) DEFAULT '' COMMENT '用户唯一标识，用于客户端和网页存入cookie',
-  `avatar` varchar(255) DEFAULT '/static/upload/avatar/default_avatar.png' COMMENT '头像',
-  `mission` datetime DEFAULT NULL COMMENT '签到日期',
-  `in_time` datetime DEFAULT NULL COMMENT '录入时间',
-  `email` varchar(255) DEFAULT '' COMMENT '邮箱',
-  `password` varchar(255) DEFAULT '' COMMENT '密码',
-  `url` varchar(255) DEFAULT NULL COMMENT '个人主页',
-  `signature` varchar(1000) DEFAULT NULL COMMENT '个性签名',
-  `qq_open_id` varchar(255) DEFAULT NULL COMMENT 'qq登录唯一标识',
-  `qq_avatar` varchar(255) DEFAULT NULL COMMENT 'qq头像',
-  `qq_nickname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT 'qq昵称',
-  `sina_open_id` varchar(255) DEFAULT NULL COMMENT '新浪微博登录唯一标识',
-  `sina_avatar` varchar(255) DEFAULT NULL COMMENT '新浪微博头像',
-  `sina_nickname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '新浪微博昵称',
-  `type` varchar(2) DEFAULT '1' COMMENT '1普通用户 2官方用户',
-  `user_id` bigint(10) DEFAULT NULL COMMENT '网站用户ID',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
--- ----------------------------
 -- Table structure for ele_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `ele_menu`;
@@ -297,8 +270,9 @@ CREATE TABLE `sshhww_task_record` (
   `valid` varchar(1) NOT NULL,
   `status` varchar(50) NOT NULL DEFAULT '0' COMMENT '1 成功, 0 运行中 , -1失败',
   `device_name` varchar(255) DEFAULT NULL,
+  `version` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1166 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1167 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for wxcm_info
@@ -328,4 +302,16 @@ CREATE TABLE `wxcm_update` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
+
+DROP TABLE IF EXISTS `sshhww_config`;
+CREATE TABLE `sshhww_config` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `valid` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;
+

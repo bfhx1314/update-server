@@ -1,12 +1,7 @@
 package com.limn.update.server.service.impl;
 
-import com.limn.tool.common.DateFormat;
-import com.limn.update.server.bean.QttUserInfoVo;
 import com.limn.update.server.bean.TaskRecordVo;
-import com.limn.update.server.dao.SshhwwAuthUuidDao;
-import com.limn.update.server.dao.SshhwwTaskDao;
-import com.limn.update.server.dao.SshhwwTaskRecordDao;
-import com.limn.update.server.dao.SshhwwUpdateDao;
+import com.limn.update.server.dao.*;
 import com.limn.update.server.entity.SshhwwTaskEntity;
 import com.limn.update.server.entity.SshhwwTaskRecordEntity;
 import com.limn.update.server.enumeration.WXCMEnum;
@@ -40,6 +35,9 @@ public class SshhwwServiceImpl implements SshhwwService {
     @Autowired
     SshhwwAuthUuidDao sshhwwAuthUuidDao;
 
+    @Autowired
+    SshhwwConfigDao sshhwwConfigDao;
+
     @Override
     public void uploadLua(MultipartFile file) {
         fileServerService.upLoad(file,WXCMEnum.UPDATEPATH.getCode(), WXCMEnum.LUA.getCode());
@@ -52,7 +50,7 @@ public class SshhwwServiceImpl implements SshhwwService {
     }
 
     @Override
-    public TaskRecordVo getTask(String uuid, String type, String deviceName) {
+    public TaskRecordVo getTask(String uuid, String type, String deviceName, String version) {
 
         TaskRecordVo taskRecordVo = new TaskRecordVo();
         taskRecordVo.setStatus("1");
@@ -73,7 +71,7 @@ public class SshhwwServiceImpl implements SshhwwService {
 
         SshhwwTaskEntity sshhwwTaskEntity = listTask.get(0);
         SshhwwTaskRecordEntity taskRecord = new SshhwwTaskRecordEntity();
-
+        taskRecord.setVersion(version);
         taskRecord.setStatus("0");
         taskRecord.setValid("Y");
         taskRecord.setTaskId(sshhwwTaskEntity.getId());
@@ -94,5 +92,16 @@ public class SshhwwServiceImpl implements SshhwwService {
     public boolean isAuthByUuid(String uuid) {
         return sshhwwAuthUuidDao.isAuthByUuid(uuid);
     }
+
+    @Override
+    public String insurance() {
+
+        String value = sshhwwConfigDao.getConfigByKey("insurance");
+        if(value.equalsIgnoreCase("YES")){
+            return "YES";
+        }
+        return "NO";
+    }
+
 
 }

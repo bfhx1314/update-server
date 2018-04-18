@@ -20,7 +20,18 @@ public class SshhwwTaskRecordEntity {
     private String valid;
     private String status;
     private String deviceName;
+    private String version;
 
+
+    @Basic
+    @Column(name = "version", nullable = false)
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }

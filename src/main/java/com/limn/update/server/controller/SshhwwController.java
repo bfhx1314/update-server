@@ -122,9 +122,9 @@ public class SshhwwController {
 	@Transactional
 	@RequestMapping("task")
 	@ResponseBody
-	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type , String deviceName){
+	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type , String deviceName, String version){
 
-		TaskRecordVo taskRecordVo = sshhwwService.getTask(uuid, type,deviceName);
+		TaskRecordVo taskRecordVo = sshhwwService.getTask(uuid, type,deviceName,version);
 		return taskRecordVo;
 	}
 
@@ -174,10 +174,7 @@ public class SshhwwController {
 	@RequestMapping("insurance")
 	@ResponseBody
 	public Object insurance(HttpServletRequest request, HttpServletResponse response){
-
-
-
-		return "YES";
+		return sshhwwService.insurance();
 	}
 
 
