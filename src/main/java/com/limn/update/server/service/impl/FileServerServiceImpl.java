@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -168,6 +169,7 @@ public class FileServerServiceImpl implements FileServerService {
             }
             fileServerVoList.add(fileServerVo);
         }
+        Collections.sort(fileServerVoList);
 
         responseVo.setData(fileServerVoList);
         responseVo.setStatus("1");

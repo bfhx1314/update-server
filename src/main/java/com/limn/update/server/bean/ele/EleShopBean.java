@@ -50,6 +50,15 @@ public class EleShopBean implements Serializable {
     Object recommend_reasons;
     Object support_tags;
     String rankId;
+    Object posters;
+
+    public Object getPosters() {
+        return posters;
+    }
+
+    public void setPosters(Object posters) {
+        this.posters = posters;
+    }
 
     public String getRankId() {
         return rankId;

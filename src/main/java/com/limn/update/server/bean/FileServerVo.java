@@ -1,6 +1,9 @@
 package com.limn.update.server.bean;
 
-public class FileServerVo extends ResponseVo{
+import com.limn.tool.common.DateFormat;
+import com.limn.update.server.common.BaseUtil;
+
+public class FileServerVo extends ResponseVo implements Comparable<FileServerVo>{
 
     String fileName;
     String filePath;
@@ -56,4 +59,25 @@ public class FileServerVo extends ResponseVo{
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    @Override
+    public int compareTo(FileServerVo o) {
+
+        if(this.getType().equalsIgnoreCase("Folder")) {
+            return-1;
+        }else if(o.getType().equalsIgnoreCase("Folder")){
+            return 1;
+        }else{
+            if(BaseUtil.isEmpty(this.getLastModfiyTime()) || BaseUtil.isEmpty(o.getLastModfiyTime())){
+                return 1;
+            }
+            if(DateFormat.getData("yyyy/MM/dd HH:mm:ss",this.getLastModfiyTime()).getTime() < DateFormat.getData("yyyy/MM/dd HH:mm:ss", o.getLastModfiyTime()).getTime()){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+    }
+
+
 }

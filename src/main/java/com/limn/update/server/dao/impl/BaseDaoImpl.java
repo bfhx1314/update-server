@@ -47,7 +47,6 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
     public void save(Object entity) {
         Session newSeesion = getSession();
         Serializable id =  newSeesion.save(entity);
-        System.out.println(id);
     }
 
     @Override

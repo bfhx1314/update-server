@@ -24,10 +24,10 @@ public class GetEleOrderInfo {
      * @param offset 第几个开始
      * @return
      */
-    public static List<EleShopBean> getEleShopByCoordinate(String latitude, String longitude, String limit, String offset){
+    public static List<EleShopJsonBean> getEleShopByCoordinate(String latitude, String longitude, String limit, String offset){
 
         Map<String, Class> classMap = new HashMap<String, Class>();
-        List<EleShopBean> eleshos = new ArrayList<EleShopBean>();
+        List<EleShopJsonBean> eleshos = new ArrayList<EleShopJsonBean>();
         classMap.put("activities", EleShopActivitie.class);
 
         String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw3sjukz16x&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
@@ -42,8 +42,12 @@ public class GetEleOrderInfo {
 
         for(int i = 0 ; i < shops.size() ; i++){
             JSONObject json = (JSONObject)shops.get(i);
-            EleShopBean shop = (EleShopBean) JSONObject.toBean(json,EleShopBean.class,classMap);
+            EleShopJsonBean shop = new EleShopJsonBean();
             shop.setJson(json.toString());
+            shop.setShopId(json.getInt("id"));
+            shop.setLatitude(json.getString("latitude"));
+            shop.setLongitude(json.getString("longitude"));
+            shop.setShopName(json.getString("name"));
             eleshos.add(shop);
         }
         return  eleshos;
@@ -52,12 +56,8 @@ public class GetEleOrderInfo {
 
 
 
-    public static List<EleMenuBean> getEleMenuById(String restaurant_id){
-        List<EleMenuBean> eleMenus = new ArrayList<EleMenuBean>();
-        Map<String, Class> classMap = new HashMap<String, Class>();
-        classMap.put("foods", EleFoodBean.class);
-        classMap.put("specfoods", EleMenuSpecfood.class);
-        classMap.put("attr", Attr.class);
+    public static List<EleMenuJsonBean> getEleMenuById(int restaurant_id){
+        List<EleMenuJsonBean> eleMenus = new ArrayList<EleMenuJsonBean>();
 
         String menusList = BaseUtil.filterEmoji(BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/v2/menu?restaurant_id=" + restaurant_id));
 
@@ -75,8 +75,10 @@ public class GetEleOrderInfo {
 
         for(int i = 0 ; i < menus.size() ; i++){
             JSONObject json = (JSONObject)menus.get(i);
-            EleMenuBean eleMenuBean = (EleMenuBean) JSONObject.toBean(json,EleMenuBean.class,classMap);
+            EleMenuJsonBean eleMenuBean = new EleMenuJsonBean();
             eleMenuBean.setJson(json.toString());
+            eleMenuBean.setShopId(restaurant_id);
+            eleMenuBean.setMenuId(json.getInt("id"));
             eleMenus.add(eleMenuBean);
         }
 

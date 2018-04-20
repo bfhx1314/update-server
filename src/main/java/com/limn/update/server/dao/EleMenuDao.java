@@ -4,7 +4,7 @@ import com.limn.update.server.entity.EleMenuEntity;
 
 public interface EleMenuDao  extends BaseDao<EleMenuEntity> {
 
-    void deleteByShopId(String shopId);
+    void deleteByShopId(int shopId);
 
 
 
