@@ -19,6 +19,11 @@ public class EleShopJsonEntity {
     private int findId;
     private String longitude;
     private String latitude;
+    private Integer isAnalysis;
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
+    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -137,5 +142,15 @@ public class EleShopJsonEntity {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    @Basic
+    @Column(name = "is_analysis", nullable = true)
+    public Integer getIsAnalysis() {
+        return isAnalysis;
+    }
+
+    public void setIsAnalysis(Integer isAnalysis) {
+        this.isAnalysis = isAnalysis;
     }
 }

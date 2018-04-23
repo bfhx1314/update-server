@@ -4,9 +4,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
-@Table(name = "find_coordinate_record", schema = "ele", catalog = "")
+@Table(name = "ele_find_coordinate_record", schema = "ele", catalog = "")
 public class FindCoordinateRecordEntity {
     private int id;
     private String longitude;
@@ -19,6 +20,17 @@ public class FindCoordinateRecordEntity {
     private String minlongitude;
     private String minlatitude;
     private BigDecimal avgdistance;
+    private Date createDate;
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     @Basic
     @Column(name = "avgdistance", nullable = true)
@@ -51,6 +63,7 @@ public class FindCoordinateRecordEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

@@ -1,7 +1,12 @@
 package com.limn.update.server.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.limn.tool.common.BaseToolParameter;
+import com.limn.tool.common.Common;
 import com.limn.tool.common.Print;
+import com.limn.tool.random.RandomData;
 import com.limn.update.server.bean.CoordinateVO;
+import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.bean.ele.*;
 import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.common.GetEleOrderInfo;
@@ -44,11 +49,25 @@ public class ElePullServiceImpl implements ElePullService {
     @Autowired
     FindCoordinateRecordDao findCoordinateRecordDao;
 
+    @Autowired
+    EleShopDao eleShopDao;
+
+    @Autowired
+    EleMenuDao eleMenuDao;
+
     private static Logger LOGGER = LogManager.getLogger(ElePullServiceImpl.class);
 
     @Override
-    @Transactional
     public FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update) {
+
+        int latitudeNum = 6 - latitude.length() + latitude.lastIndexOf(".") + 1;
+        int longitudeNum = 6 - longitude.length() + longitude.lastIndexOf(".") + 1;
+        if(latitudeNum>0){
+            latitude = latitude + RandomData.getInt(latitudeNum);
+        }
+        if(longitudeNum>0){
+            longitude = longitude + RandomData.getInt(longitudeNum);
+        }
 
         FindCoordinateRecordEntity fcre = new FindCoordinateRecordEntity();
         fcre.setLatitude(latitude);
@@ -71,12 +90,12 @@ public class ElePullServiceImpl implements ElePullService {
                 //添加距离
                 distance.add(BaseUtil.getDistance(latitude,longitude,shop.getLatitude(),shop.getLongitude()));
                 if(eleShopJsonDao.isExistShop(shop.getShopId())) {
-                    System.out.println("[已存在] shopId:" + shop.getShopId() + ",shopName:" + shop.getShopName());
+//                    System.out.println("[已存在] shopId:" + shop.getShopId() + ",shopName:" + shop.getShopName());
                     if(!update){
                         continue;
                     }
                 }
-                System.out.println("<未存在> shopId:" + shop.getShopId() + ",shopName:" + shop.getShopName());
+                System.out.println("<新增> shopId:" + shop.getShopId() + ",shopName:" + shop.getShopName());
                 saveShop(shop, findId);
             }
         }
@@ -96,16 +115,68 @@ public class ElePullServiceImpl implements ElePullService {
             fcre.setAvgdistance(new BigDecimal(BaseUtil.getAvgByList(distance)).setScale(2, BigDecimal.ROUND_HALF_DOWN));
         }
 
-        System.out.print("原：" + originalCount);
-        System.out.print("新：" + newCount);
-        System.out.println("新增：" + (newCount - originalCount));
-
-        findCoordinateRecordDao.save(fcre);
+        Long addShopNum = newCount - originalCount;
+        System.out.println("坐标：[" + longitude + ":" + latitude + "] 商店新增：[" + addShopNum + "] 总计：[" + newCount + "]");
+        fcre.setCreateDate(new Date());
+        findCoordinateRecordDao.saveAs(fcre);
+        int num = addShopNum.intValue()/20;
+        BaseToolParameter.getPrintThreadLocal().log("Wait : " + 60000 * num, 0);
+        Common.wait(60000 * num);
         return fcre;
     }
 
+    @Override
+    public ResponseVo analysisShop() {
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus("1");
+        int analysisNum = 0;
+        //每次拉取20条 循环解析
+        List<EleShopJsonEntity> eleShopJsonEntities = eleShopJsonDao.getNoAnalysisShopJson();
+        while(null != eleShopJsonEntities && eleShopJsonEntities.size() > 0){
+            for(EleShopJsonEntity eleShopJsonEntity : eleShopJsonEntities){
+                EleShopEntity eleShopEntity = JSONObject.parseObject(eleShopJsonEntity.getJson(),EleShopEntity.class);
+                eleShopEntity.setCreateDate(new Date());
+                eleShopEntity.setIsAnalysis(0);
+                eleShopDao.saveAs(eleShopEntity);
+                eleShopJsonEntity.setIsAnalysis(1);
+                eleShopJsonDao.updateAs(eleShopJsonEntity);
+                analysisNum++;
+            }
+            eleShopJsonEntities = eleShopJsonDao.getNoAnalysisShopJson();
 
-    private void saveShop(EleShopJsonBean shop, int findId){
+        }
+        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
+        return responseVo;
+    }
+
+    @Override
+    public ResponseVo analysisMenu() {
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus("1");
+        int analysisNum = 0;
+        //每次拉取20条 循环解析
+        List<EleMenuJsonEntity> eleMenuJsonEntitys = eleMenuJsonDao.getNoAnalysisShopJson();
+        while(null != eleMenuJsonEntitys && eleMenuJsonEntitys.size() > 0){
+            for(EleMenuJsonEntity eleMenuJsonEntity : eleMenuJsonEntitys){
+                EleMenuEntity eleShopEntity = JSONObject.parseObject(eleMenuJsonEntity.getJson(),EleMenuEntity.class);
+                eleShopEntity.setCreateDate(new Date());
+                eleShopEntity.setIsAnalysis(0);
+                eleShopEntity.setShopId(eleMenuJsonEntity.getShopId());
+                eleMenuDao.saveAs(eleShopEntity);
+                eleMenuJsonEntity.setIsAnalysis(1);
+                eleMenuJsonDao.updateAs(eleMenuJsonEntity);
+                analysisNum++;
+            }
+            eleMenuJsonEntitys = eleMenuJsonDao.getNoAnalysisShopJson();
+
+        }
+        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
+        return responseVo;
+    }
+
+
+    @Override
+    public void saveShop(EleShopJsonBean shop, int findId){
 
         try {
             EleShopJsonEntity eleShopJson = new EleShopJsonEntity();
@@ -114,7 +185,8 @@ public class ElePullServiceImpl implements ElePullService {
             eleShopJson.setCreateDate(new Date());
             eleShopJson.setValid("Y");
             eleShopJson.setVersion(1);
-            eleShopJsonDao.merge(eleShopJson);
+            eleShopJson.setIsAnalysis(0);
+            eleShopJsonDao.mergeAs(eleShopJson);
 
             //删除门店下所有分类菜单
             eleMenuJsonDao.deleteByShopId(shop.getShopId());
@@ -122,15 +194,19 @@ public class ElePullServiceImpl implements ElePullService {
 //            eleMenuSpecfoodDao.deleteByShopId(shop.getId());
 
             //分类菜单
+            Common.wait(1000);
             List<EleMenuJsonBean> menus = GetEleOrderInfo.getEleMenuById(shop.getShopId());
             for(EleMenuJsonBean menu : menus){
+
                 EleMenuJsonEntity eleMenuEntity = new EleMenuJsonEntity();
                 BeanUtils.copyProperties(eleMenuEntity,menu);
                 eleMenuEntity.setCreateDate(new Date());
                 eleMenuEntity.setShopId(shop.getShopId());
                 eleMenuEntity.setVersion(0);
                 eleMenuEntity.setValid("Y");
-                eleMenuJsonDao.saveOrUpdate(eleMenuEntity);
+                eleMenuEntity.setIsAnalysis(0);
+                eleMenuJsonDao.mergeAs(eleMenuEntity);
+
 
 //                //食物菜单
 //                List<EleFoodBean> foods = menu.getFoods();

@@ -1,6 +1,7 @@
 package com.limn.update.server.dao.impl;
 
 import com.limn.update.server.dao.BaseDao;
+import com.limn.update.server.entity.EleShopEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -30,6 +31,10 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 
     protected Session getSession() {
         return this.sessionFactory.getCurrentSession();
+    }
+
+    protected  Session createSession(){
+        return this.sessionFactory.openSession();
     }
 
 
@@ -64,9 +69,25 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
 
     }
 
+    @Override
+    public void mergeAs(Object entity) {
+        Session session = createSession();
+        session.beginTransaction();
+        session.merge(entity);
+        session.getTransaction().commit();
+        session.close();
+
+    }
+
+    @Override
+    public void saveAs(T entity){
+        Session session = createSession();
+        session.save(entity);
+        session.close();
+    }
 
 
-    public void update(Object entity) {
+    public void update(T entity) {
         Session newSeesion = getSession();
         newSeesion.update(entity);
 
@@ -76,5 +97,32 @@ public class BaseDaoImpl<T> implements BaseDao<T>{
     public void flush() {
         getSession().flush();
     }
+
+    @Override
+    public void updateAs(T entity) {
+        Session session = createSession();
+        session.beginTransaction();
+        session.update(entity);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public Object uniqueResult(String hql){
+        Session session = createSession();
+        Object object = session.createQuery(hql).uniqueResult();
+        session.close();
+        return object;
+    }
+
+    @Override
+    public List<Object> listResult(String hql){
+        Session session = createSession();
+        List<Object> object = session.createQuery(hql).list();
+        session.close();
+        return object;
+    }
+
+
 
 }

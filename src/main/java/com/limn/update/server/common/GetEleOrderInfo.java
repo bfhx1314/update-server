@@ -1,6 +1,7 @@
 package com.limn.update.server.common;
 
 import com.limn.tool.common.BaseToolParameter;
+import com.limn.tool.random.RandomData;
 import com.limn.update.server.bean.ele.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,7 +31,8 @@ public class GetEleOrderInfo {
         List<EleShopJsonBean> eleshos = new ArrayList<EleShopJsonBean>();
         classMap.put("activities", EleShopActivitie.class);
 
-        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw3sjukz16x&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
+
+        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw64ku5bdgd&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
 
         if(null == shopList || shopList.isEmpty()){
             BaseToolParameter.getPrintThreadLocal().log("店铺列表无数据返回 latitude : " + latitude + " longitude : " + longitude + " limit : " + limit + " offset : " + offset ,2);
@@ -87,6 +89,17 @@ public class GetEleOrderInfo {
     }
 
 
-
+    public static void main(String[] args) {
+        String a= "121.111";
+        System.out.println();
+        int b = 6-a.length() + a.lastIndexOf(".") + 1;
+        if(b>0){
+            a = a + RandomData.getInt(b);
+        }
+        for(int i = 0;i<100;i++){
+            System.out.println(RandomData.getInt(b));
+        }
+        System.out.println(a);
+    }
 }
 

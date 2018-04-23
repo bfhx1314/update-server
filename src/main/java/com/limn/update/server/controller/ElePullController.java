@@ -1,5 +1,6 @@
 package com.limn.update.server.controller;
 
+import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
 import com.limn.update.server.service.ElePullService;
@@ -61,14 +62,23 @@ public class ElePullController {
 		return data;
 	}
 
-	@RequestMapping("save")
+	@RequestMapping("analysis")
 	@ResponseBody
-	public Object save(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-
-
-
-		return null;
+	public Object analysis(HttpServletRequest request, HttpServletResponse response,String type) throws IOException {
+		ResponseVo responseVo = new ResponseVo();
+		if(BaseUtil.isEmpty(type)){
+			responseVo.setDetail("type不能为空");
+			responseVo.setStatus("2");
+			return responseVo;
+		}else if(type.equalsIgnoreCase("shop")){
+			responseVo = elePullService.analysisShop();
+		}else if(type.equalsIgnoreCase("menu")){
+			responseVo = elePullService.analysisMenu();
+		}else{
+			responseVo.setDetail("type类型错误");
+			return responseVo;
+		}
+		return responseVo;
 	}
 	
 }

@@ -71,7 +71,7 @@ public class FileServerVo extends ResponseVo implements Comparable<FileServerVo>
             if(BaseUtil.isEmpty(this.getLastModfiyTime()) || BaseUtil.isEmpty(o.getLastModfiyTime())){
                 return 1;
             }
-            if(DateFormat.getData("yyyy/MM/dd HH:mm:ss",this.getLastModfiyTime()).getTime() < DateFormat.getData("yyyy/MM/dd HH:mm:ss", o.getLastModfiyTime()).getTime()){
+            if(DateFormat.getDate("yyyy/MM/dd HH:mm:ss",this.getLastModfiyTime()).getTime() < DateFormat.getDate("yyyy/MM/dd HH:mm:ss", o.getLastModfiyTime()).getTime()){
                 return 1;
             }else{
                 return -1;

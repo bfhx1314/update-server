@@ -4,10 +4,14 @@ import com.limn.update.server.bean.CoordinateVO;
 import com.limn.update.server.dao.BaseDao;
 import com.limn.update.server.dao.EleShopDao;
 import com.limn.update.server.entity.EleShopEntity;
+import org.apache.poi.ss.formula.functions.T;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by limengnan on 2017/11/30.
@@ -23,39 +27,13 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
     }
 
     @Override
-    public Object findMaxID() {
-        return getSession().createQuery("select max(findid) from com.limn.update.server.entity.EleShopEntity").uniqueResult();
+    public List<EleShopEntity> getNoAnalysisShopJson() {
+        Session session = createSession();
+        Query query = session.createQuery("from com.limn.update.server.entity.EleShopEntity where isAnalysis = 0" );
+        query.setMaxResults(20);
+        List<EleShopEntity> eleShopJsonEntities = query.list();
+        session.close();
+        return eleShopJsonEntities;
     }
 
-    @Override
-    public long count() {
-        return (Long) getSession().createQuery("select count(DISTINCT id) from com.limn.update.server.entity.EleShopEntity").uniqueResult();
-    }
-
-    @Override
-    public CoordinateVO getCoordinateByID(int id) {
-        Query query = getSession().createQuery("select max(longitude),min(longitude),max(latitude),min(latitude)  from com.limn.update.server.entity.EleShopEntity where findid =" + id);
-        if(query.list().size() == 1 ) {
-            if(null != query.list().get(0)) {
-                Object[] objects = (Object[]) query.uniqueResult();
-                CoordinateVO coordinateVO = new CoordinateVO();
-                coordinateVO.setMaxlongitude(objects[0].toString());
-                coordinateVO.setMinlongitude(objects[1].toString());
-                coordinateVO.setMaxlatitude(objects[2].toString());
-                coordinateVO.setMinlatitude(objects[3].toString());
-                return coordinateVO;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isExistShop(int shopId) {
-        Query query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where id =" + shopId);
-        if(query.list().size() > 0){
-            getSession().refresh(query.list().get(0));
-            return true;
-        }
-        return false;
-    }
 }

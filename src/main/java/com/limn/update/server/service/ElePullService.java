@@ -1,5 +1,7 @@
 package com.limn.update.server.service;
 
+import com.limn.update.server.bean.ResponseVo;
+import com.limn.update.server.bean.ele.EleShopJsonBean;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
 
 /**
@@ -9,4 +11,8 @@ public interface ElePullService {
 
     FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update);
 
+    ResponseVo analysisShop();
+
+    ResponseVo analysisMenu();
+    void saveShop(EleShopJsonBean shop, int findId);
 }

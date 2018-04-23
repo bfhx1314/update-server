@@ -21,4 +21,11 @@ public interface BaseDao<T>{
     void update(T entity);
 
     void merge(T entity);
+    void mergeAs(Object entity);
+    void saveAs(T entity);
+
+    void updateAs(T entity);
+
+    Object uniqueResult(String hql);
+    List<Object> listResult(String hql);
 }

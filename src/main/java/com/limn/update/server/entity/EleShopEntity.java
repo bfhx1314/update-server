@@ -1,56 +1,118 @@
 package com.limn.update.server.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ele_shop", schema = "ele", catalog = "")
 public class EleShopEntity {
-    private Integer id;
+    private int id;
+    private Date createDate;
+    private Date updateTime;
+    private String name;
     private String address;
-    private Integer authentic_id;
+    @JSONField(name = "authentic_id")
+    private String authenticId;
     private String description;
     private String distance;
     private String favored;
-    private String float_delivery_fee;
-    private String float_minimum_order_amount;
-    private String is_new;
-    private String is_premium;
-    private String is_stock_empty;
-    private String is_valid;
+    @JSONField(name = "float_delivery_fee")
+    private String floatDeliveryFee;
+    @JSONField(name = "float_minimum_order_amount")
+    private String floatMinimumOrderAmount;
+    @JSONField(name = "is_new")
+    private String isNew;
+    @JSONField(name = "is_premium")
+    private String isPremium;
+    @JSONField(name = "is_stock_empty")
+    private String isStockEmpty;
+    @JSONField(name = "is_valid")
+    private String isValid;
     private String latitude;
-    private String list_quality_icon;
+    @JSONField(name = "list_quality_icon")
+    private String listQualityIcon;
     private String longitude;
-    private String max_applied_quantity_per_order;
-    private String name;
-    private String next_business_time;
-    private String only_use_poi;
-    private String order_lead_time;
+    @JSONField(name = "max_applied_quantity_per_order")
+    private String maxAppliedQuantityPerOrder;
+    @JSONField(name = "next_business_time")
+    private String nextBusinessTime;
+    @JSONField(name = "only_use_poi")
+    private String onlyUsePoi;
+    @JSONField(name = "order_lead_time")
+    private String orderLeadTime;
     private String phone;
     private String rating;
-    private String rating_count;
-    private String recent_order_num;
+    @JSONField(name = "rating_count")
+    private String ratingCount;
+    @JSONField(name = "recent_order_num")
+    private String recentOrderNum;
     private String status;
     private String type;
-    private String image_path;
-    private String promotion_info;
-    private String regular_customer_count;
-    private int shop_id;
-    private String json;
-    private int findid;
-    private Date createDate;
-    private Date updateTime;
+    @JSONField(name = "image_path")
+    private String imagePath;
+    @JSONField(name = "float_delivery_fee")
+    private String promotionInfo;
+    @JSONField(name = "regular_customer_count")
+    private String regularCustomerCount;
+    @JSONField(name = "has_story")
+    private String hasStory;
+    private Object activities;
+    @JSONField(name = "piecewise_agent_fee")
+    private Object piecewiseAgentFee;
+    private Object posters;
+    private Object recommend;
+    @JSONField(name = "recommend_reasons")
+    private Object recommendReasons;
+    private Object supports;
+    @JSONField(name = "support_tags")
+    private Object supportTags;
+    private Integer isAnalysis;
 
-    @Basic
-    @Column(name = "update_time", nullable = true)
-    public Date getUpdateTime() {
-        return updateTime;
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public void setPiecewiseAgentFee(String piecewiseAgentFee) {
+        this.piecewiseAgentFee = piecewiseAgentFee;
+    }
+
+    public void setPosters(String posters) {
+        this.posters = posters;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
+    }
+
+    public void setRecommendReasons(String recommendReasons) {
+        this.recommendReasons = recommendReasons;
+    }
+
+    public void setSupports(String supports) {
+        this.supports = supports;
+    }
+
+    public void setSupportTags(String supportTags) {
+        this.supportTags = supportTags;
+    }
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Basic
@@ -63,39 +125,28 @@ public class EleShopEntity {
         this.createDate = createDate;
     }
 
-
     @Basic
-    @Column(name = "findid", nullable = true)
-    public int getFindid() {
-        return findid;
+    @Column(name = "update_time", nullable = true)
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setFindid(int findid) {
-        this.findid = findid;
-    }
-
-    @Basic
-    @Column(name = "json", nullable = true)
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
-    }
-
-    @Id
-    @Column(name = "id", nullable = true)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Basic
-    @Column(name = "address", nullable = true, length = 50)
+    @Column(name = "name", nullable = true, length = 255)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Basic
+    @Column(name = "address", nullable = true, length = 255)
     public String getAddress() {
         return address;
     }
@@ -105,13 +156,13 @@ public class EleShopEntity {
     }
 
     @Basic
-    @Column(name = "authentic_id", nullable = true)
-    public Integer getAuthentic_id() {
-        return authentic_id;
+    @Column(name = "authentic_id", nullable = true, length = 255)
+    public String getAuthenticId() {
+        return authenticId;
     }
 
-    public void setAuthentic_id(Integer authentic_id) {
-        this.authentic_id = authentic_id;
+    public void setAuthenticId(String authenticId) {
+        this.authenticId = authenticId;
     }
 
     @Basic
@@ -146,62 +197,62 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "float_delivery_fee", nullable = true, length = 255)
-    public String getFloat_delivery_fee() {
-        return float_delivery_fee;
+    public String getFloatDeliveryFee() {
+        return floatDeliveryFee;
     }
 
-    public void setFloat_delivery_fee(String float_delivery_fee) {
-        this.float_delivery_fee = float_delivery_fee;
+    public void setFloatDeliveryFee(String floatDeliveryFee) {
+        this.floatDeliveryFee = floatDeliveryFee;
     }
 
     @Basic
     @Column(name = "float_minimum_order_amount", nullable = true, length = 255)
-    public String getFloat_minimum_order_amount() {
-        return float_minimum_order_amount;
+    public String getFloatMinimumOrderAmount() {
+        return floatMinimumOrderAmount;
     }
 
-    public void setFloat_minimum_order_amount(String float_minimum_order_amount) {
-        this.float_minimum_order_amount = float_minimum_order_amount;
+    public void setFloatMinimumOrderAmount(String floatMinimumOrderAmount) {
+        this.floatMinimumOrderAmount = floatMinimumOrderAmount;
     }
 
     @Basic
     @Column(name = "is_new", nullable = true, length = 255)
-    public String getIs_new() {
-        return is_new;
+    public String getIsNew() {
+        return isNew;
     }
 
-    public void setIs_new(String is_new) {
-        this.is_new = is_new;
+    public void setIsNew(String isNew) {
+        this.isNew = isNew;
     }
 
     @Basic
     @Column(name = "is_premium", nullable = true, length = 255)
-    public String getIs_premium() {
-        return is_premium;
+    public String getIsPremium() {
+        return isPremium;
     }
 
-    public void setIs_premium(String is_premium) {
-        this.is_premium = is_premium;
+    public void setIsPremium(String isPremium) {
+        this.isPremium = isPremium;
     }
 
     @Basic
     @Column(name = "is_stock_empty", nullable = true, length = 255)
-    public String getIs_stock_empty() {
-        return is_stock_empty;
+    public String getIsStockEmpty() {
+        return isStockEmpty;
     }
 
-    public void setIs_stock_empty(String is_stock_empty) {
-        this.is_stock_empty = is_stock_empty;
+    public void setIsStockEmpty(String isStockEmpty) {
+        this.isStockEmpty = isStockEmpty;
     }
 
     @Basic
     @Column(name = "is_valid", nullable = true, length = 255)
-    public String getIs_valid() {
-        return is_valid;
+    public String getIsValid() {
+        return isValid;
     }
 
-    public void setIs_valid(String is_valid) {
-        this.is_valid = is_valid;
+    public void setIsValid(String isValid) {
+        this.isValid = isValid;
     }
 
     @Basic
@@ -216,12 +267,12 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "list_quality_icon", nullable = true, length = 255)
-    public String getList_quality_icon() {
-        return list_quality_icon;
+    public String getListQualityIcon() {
+        return listQualityIcon;
     }
 
-    public void setList_quality_icon(String list_quality_icon) {
-        this.list_quality_icon = list_quality_icon;
+    public void setListQualityIcon(String listQualityIcon) {
+        this.listQualityIcon = listQualityIcon;
     }
 
     @Basic
@@ -236,52 +287,42 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "max_applied_quantity_per_order", nullable = true, length = 255)
-    public String getMax_applied_quantity_per_order() {
-        return max_applied_quantity_per_order;
+    public String getMaxAppliedQuantityPerOrder() {
+        return maxAppliedQuantityPerOrder;
     }
 
-    public void setMax_applied_quantity_per_order(String max_applied_quantity_per_order) {
-        this.max_applied_quantity_per_order = max_applied_quantity_per_order;
-    }
-
-    @Basic
-    @Column(name = "name", nullable = true, length = 255)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setMaxAppliedQuantityPerOrder(String maxAppliedQuantityPerOrder) {
+        this.maxAppliedQuantityPerOrder = maxAppliedQuantityPerOrder;
     }
 
     @Basic
     @Column(name = "next_business_time", nullable = true, length = 255)
-    public String getNext_business_time() {
-        return next_business_time;
+    public String getNextBusinessTime() {
+        return nextBusinessTime;
     }
 
-    public void setNext_business_time(String next_business_time) {
-        this.next_business_time = next_business_time;
+    public void setNextBusinessTime(String nextBusinessTime) {
+        this.nextBusinessTime = nextBusinessTime;
     }
 
     @Basic
     @Column(name = "only_use_poi", nullable = true, length = 255)
-    public String getOnly_use_poi() {
-        return only_use_poi;
+    public String getOnlyUsePoi() {
+        return onlyUsePoi;
     }
 
-    public void setOnly_use_poi(String only_use_poi) {
-        this.only_use_poi = only_use_poi;
+    public void setOnlyUsePoi(String onlyUsePoi) {
+        this.onlyUsePoi = onlyUsePoi;
     }
 
     @Basic
     @Column(name = "order_lead_time", nullable = true, length = 255)
-    public String getOrder_lead_time() {
-        return order_lead_time;
+    public String getOrderLeadTime() {
+        return orderLeadTime;
     }
 
-    public void setOrder_lead_time(String order_lead_time) {
-        this.order_lead_time = order_lead_time;
+    public void setOrderLeadTime(String orderLeadTime) {
+        this.orderLeadTime = orderLeadTime;
     }
 
     @Basic
@@ -306,22 +347,22 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "rating_count", nullable = true, length = 255)
-    public String getRating_count() {
-        return rating_count;
+    public String getRatingCount() {
+        return ratingCount;
     }
 
-    public void setRating_count(String rating_count) {
-        this.rating_count = rating_count;
+    public void setRatingCount(String ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     @Basic
     @Column(name = "recent_order_num", nullable = true, length = 255)
-    public String getRecent_order_num() {
-        return recent_order_num;
+    public String getRecentOrderNum() {
+        return recentOrderNum;
     }
 
-    public void setRecent_order_num(String recent_order_num) {
-        this.recent_order_num = recent_order_num;
+    public void setRecentOrderNum(String recentOrderNum) {
+        this.recentOrderNum = recentOrderNum;
     }
 
     @Basic
@@ -346,127 +387,173 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "image_path", nullable = true, length = 255)
-    public String getImage_path() {
-        return image_path;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage_path(String image_path) {
-        this.image_path = image_path;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Basic
     @Column(name = "promotion_info", nullable = true, length = 255)
-    public String getPromotion_info() {
-        return promotion_info;
+    public String getPromotionInfo() {
+        return promotionInfo;
     }
 
-    public void setPromotion_info(String promotion_info) {
-        this.promotion_info = promotion_info;
+    public void setPromotionInfo(String promotionInfo) {
+        this.promotionInfo = promotionInfo;
     }
 
     @Basic
     @Column(name = "regular_customer_count", nullable = true, length = 255)
-    public String getRegular_customer_count() {
-        return regular_customer_count;
+    public String getRegularCustomerCount() {
+        return regularCustomerCount;
     }
 
-    public void setRegular_customer_count(String regular_customer_count) {
-        this.regular_customer_count = regular_customer_count;
+    public void setRegularCustomerCount(String regularCustomerCount) {
+        this.regularCustomerCount = regularCustomerCount;
     }
 
     @Basic
-    @Column(name = "shop_id", nullable = false)
-    public int getShop_id() {
-        return shop_id;
+    @Column(name = "has_story", nullable = true, length = 255)
+    public String getHasStory() {
+        return hasStory;
     }
 
-    public void setShop_id(int shopId) {
-        this.shop_id = shopId;
+    public void setHasStory(String hasStory) {
+        this.hasStory = hasStory;
+    }
+
+    @Basic
+    @Column(name = "activities", nullable = true, length = -1)
+    public String getActivities() {
+        return activities.toString();
+    }
+
+    public void setActivities(String activities) {
+        this.activities = activities;
+    }
+
+    @Basic
+    @Column(name = "piecewise_agent_fee", nullable = true, length = -1)
+    public String getPiecewiseAgentFee() {
+        return piecewiseAgentFee.toString();
+    }
+
+    public void setPiecewiseAgentFee(Object piecewiseAgentFee) {
+        this.piecewiseAgentFee = piecewiseAgentFee;
+    }
+
+    @Basic
+    @Column(name = "posters", nullable = true, length = -1)
+    public String getPosters() {
+        return posters.toString();
+    }
+
+    public void setPosters(Object posters) {
+        this.posters = posters;
+    }
+
+    @Basic
+    @Column(name = "recommend", nullable = true, length = -1)
+    public String getRecommend() {
+        return recommend.toString();
+    }
+
+    public void setRecommend(Object recommend) {
+        this.recommend = recommend;
+    }
+
+    @Basic
+    @Column(name = "recommend_reasons", nullable = true, length = -1)
+    public String getRecommendReasons() {
+        return recommendReasons.toString();
+    }
+
+    public void setRecommendReasons(Object recommendReasons) {
+        this.recommendReasons = recommendReasons;
+    }
+
+    @Basic
+    @Column(name = "supports", nullable = true, length = -1)
+    public String getSupports() {
+        return supports.toString();
+    }
+
+    public void setSupports(Object supports) {
+        this.supports = supports;
+    }
+
+    @Basic
+    @Column(name = "support_tags", nullable = true, length = -1)
+    public String getSupportTags() {
+        return supportTags.toString();
+    }
+
+    public void setSupportTags(Object supportTags) {
+        this.supportTags = supportTags;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         EleShopEntity that = (EleShopEntity) o;
-
-        if (shop_id != that.shop_id) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (address != null ? !address.equals(that.address) : that.address != null) return false;
-        if (authentic_id != null ? !authentic_id.equals(that.authentic_id) : that.authentic_id != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (distance != null ? !distance.equals(that.distance) : that.distance != null) return false;
-        if (favored != null ? !favored.equals(that.favored) : that.favored != null) return false;
-        if (float_delivery_fee != null ? !float_delivery_fee.equals(that.float_delivery_fee) : that.float_delivery_fee != null)
-            return false;
-        if (float_minimum_order_amount != null ? !float_minimum_order_amount.equals(that.float_minimum_order_amount) : that.float_minimum_order_amount != null)
-            return false;
-        if (is_new != null ? !is_new.equals(that.is_new) : that.is_new != null) return false;
-        if (is_premium != null ? !is_premium.equals(that.is_premium) : that.is_premium != null) return false;
-        if (is_stock_empty != null ? !is_stock_empty.equals(that.is_stock_empty) : that.is_stock_empty != null)
-            return false;
-        if (is_valid != null ? !is_valid.equals(that.is_valid) : that.is_valid != null) return false;
-        if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
-        if (list_quality_icon != null ? !list_quality_icon.equals(that.list_quality_icon) : that.list_quality_icon != null)
-            return false;
-        if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
-        if (max_applied_quantity_per_order != null ? !max_applied_quantity_per_order.equals(that.max_applied_quantity_per_order) : that.max_applied_quantity_per_order != null)
-            return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (next_business_time != null ? !next_business_time.equals(that.next_business_time) : that.next_business_time != null)
-            return false;
-        if (only_use_poi != null ? !only_use_poi.equals(that.only_use_poi) : that.only_use_poi != null) return false;
-        if (order_lead_time != null ? !order_lead_time.equals(that.order_lead_time) : that.order_lead_time != null)
-            return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        if (rating != null ? !rating.equals(that.rating) : that.rating != null) return false;
-        if (rating_count != null ? !rating_count.equals(that.rating_count) : that.rating_count != null) return false;
-        if (recent_order_num != null ? !recent_order_num.equals(that.recent_order_num) : that.recent_order_num != null)
-            return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (image_path != null ? !image_path.equals(that.image_path) : that.image_path != null) return false;
-        if (promotion_info != null ? !promotion_info.equals(that.promotion_info) : that.promotion_info != null)
-            return false;
-        if (regular_customer_count != null ? !regular_customer_count.equals(that.regular_customer_count) : that.regular_customer_count != null)
-            return false;
-
-        return true;
+        return id == that.id &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(updateTime, that.updateTime) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(authenticId, that.authenticId) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(distance, that.distance) &&
+                Objects.equals(favored, that.favored) &&
+                Objects.equals(floatDeliveryFee, that.floatDeliveryFee) &&
+                Objects.equals(floatMinimumOrderAmount, that.floatMinimumOrderAmount) &&
+                Objects.equals(isNew, that.isNew) &&
+                Objects.equals(isPremium, that.isPremium) &&
+                Objects.equals(isStockEmpty, that.isStockEmpty) &&
+                Objects.equals(isValid, that.isValid) &&
+                Objects.equals(latitude, that.latitude) &&
+                Objects.equals(listQualityIcon, that.listQualityIcon) &&
+                Objects.equals(longitude, that.longitude) &&
+                Objects.equals(maxAppliedQuantityPerOrder, that.maxAppliedQuantityPerOrder) &&
+                Objects.equals(nextBusinessTime, that.nextBusinessTime) &&
+                Objects.equals(onlyUsePoi, that.onlyUsePoi) &&
+                Objects.equals(orderLeadTime, that.orderLeadTime) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(rating, that.rating) &&
+                Objects.equals(ratingCount, that.ratingCount) &&
+                Objects.equals(recentOrderNum, that.recentOrderNum) &&
+                Objects.equals(status, that.status) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(imagePath, that.imagePath) &&
+                Objects.equals(promotionInfo, that.promotionInfo) &&
+                Objects.equals(regularCustomerCount, that.regularCustomerCount) &&
+                Objects.equals(hasStory, that.hasStory) &&
+                Objects.equals(activities, that.activities) &&
+                Objects.equals(piecewiseAgentFee, that.piecewiseAgentFee) &&
+                Objects.equals(posters, that.posters) &&
+                Objects.equals(recommend, that.recommend) &&
+                Objects.equals(recommendReasons, that.recommendReasons) &&
+                Objects.equals(supports, that.supports) &&
+                Objects.equals(supportTags, that.supportTags);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (authentic_id != null ? authentic_id.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (distance != null ? distance.hashCode() : 0);
-        result = 31 * result + (favored != null ? favored.hashCode() : 0);
-        result = 31 * result + (float_delivery_fee != null ? float_delivery_fee.hashCode() : 0);
-        result = 31 * result + (float_minimum_order_amount != null ? float_minimum_order_amount.hashCode() : 0);
-        result = 31 * result + (is_new != null ? is_new.hashCode() : 0);
-        result = 31 * result + (is_premium != null ? is_premium.hashCode() : 0);
-        result = 31 * result + (is_stock_empty != null ? is_stock_empty.hashCode() : 0);
-        result = 31 * result + (is_valid != null ? is_valid.hashCode() : 0);
-        result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
-        result = 31 * result + (list_quality_icon != null ? list_quality_icon.hashCode() : 0);
-        result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
-        result = 31 * result + (max_applied_quantity_per_order != null ? max_applied_quantity_per_order.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (next_business_time != null ? next_business_time.hashCode() : 0);
-        result = 31 * result + (only_use_poi != null ? only_use_poi.hashCode() : 0);
-        result = 31 * result + (order_lead_time != null ? order_lead_time.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (rating != null ? rating.hashCode() : 0);
-        result = 31 * result + (rating_count != null ? rating_count.hashCode() : 0);
-        result = 31 * result + (recent_order_num != null ? recent_order_num.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (image_path != null ? image_path.hashCode() : 0);
-        result = 31 * result + (promotion_info != null ? promotion_info.hashCode() : 0);
-        result = 31 * result + (regular_customer_count != null ? regular_customer_count.hashCode() : 0);
-        result = 31 * result + shop_id;
-        return result;
+
+        return Objects.hash(id, createDate, updateTime,  name, address, authenticId, description, distance, favored, floatDeliveryFee, floatMinimumOrderAmount, isNew, isPremium, isStockEmpty, isValid, latitude, listQualityIcon, longitude, maxAppliedQuantityPerOrder, nextBusinessTime, onlyUsePoi, orderLeadTime, phone, rating, ratingCount, recentOrderNum, status, type, imagePath, promotionInfo, regularCustomerCount, hasStory, activities, piecewiseAgentFee, posters, recommend, recommendReasons, supports, supportTags);
+    }
+
+    @Basic
+    @Column(name = "is_analysis", nullable = true)
+    public Integer getIsAnalysis() {
+        return isAnalysis;
+    }
+
+    public void setIsAnalysis(Integer isAnalysis) {
+        this.isAnalysis = isAnalysis;
     }
 }

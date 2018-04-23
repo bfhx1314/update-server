@@ -38,12 +38,6 @@ public class EleMenuBean {
     }
 
     public String getDescription() {
-
-        if(RegExp.findCharacters(description,"注意（口味，另选必点哦）")){
-            System.out.println(description);
-        }
-
-
         return description;
     }
 
