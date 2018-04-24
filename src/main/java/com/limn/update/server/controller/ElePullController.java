@@ -72,8 +72,10 @@ public class ElePullController {
 			return responseVo;
 		}else if(type.equalsIgnoreCase("shop")){
 			responseVo = elePullService.analysisShop();
-		}else if(type.equalsIgnoreCase("menu")){
+		}else if(type.equalsIgnoreCase("menu")) {
 			responseVo = elePullService.analysisMenu();
+		}else if(type.equalsIgnoreCase("food")){
+			responseVo = elePullService.analysisFood();
 		}else{
 			responseVo.setDetail("type类型错误");
 			return responseVo;

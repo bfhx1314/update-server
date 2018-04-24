@@ -16,7 +16,7 @@ public class EleMenuEntity implements Serializable {
     private int id;
     private int shopId;
     @JSONField(name = "id")
-    private String menuId;
+    private int menuId;
     private String name;
     private String description;
     private String type;
@@ -64,11 +64,11 @@ public class EleMenuEntity implements Serializable {
 
     @Basic
     @Column(name = "menu_id", nullable = true, length = 255)
-    public String getMenuId() {
+    public int getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(String menuId) {
+    public void setMenuId(int menuId) {
         this.menuId = menuId;
     }
 
@@ -132,7 +132,7 @@ public class EleMenuEntity implements Serializable {
 
         if (id != that.id) return false;
         if (shopId != that.shopId) return false;
-        if (menuId != null ? !menuId.equals(that.menuId) : that.menuId != null) return false;
+        if (menuId != that.menuId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
@@ -145,7 +145,6 @@ public class EleMenuEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (menuId != null ? menuId.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);

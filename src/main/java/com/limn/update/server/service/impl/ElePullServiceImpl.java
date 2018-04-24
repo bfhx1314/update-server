@@ -55,6 +55,9 @@ public class ElePullServiceImpl implements ElePullService {
     @Autowired
     EleMenuDao eleMenuDao;
 
+    @Autowired
+    EleFoodDao eleFoodDao;
+
     private static Logger LOGGER = LogManager.getLogger(ElePullServiceImpl.class);
 
     @Override
@@ -174,8 +177,36 @@ public class ElePullServiceImpl implements ElePullService {
         return responseVo;
     }
 
+    @Override
+    public ResponseVo analysisFood() {
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus("1");
+        int analysisNum = 0;
+        //每次拉取20条 循环解析
+        List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
+        while(null != eleMenuEntitys && eleMenuEntitys.size() > 0){
+            for(EleMenuEntity eleMenuEntity : eleMenuEntitys){
+                List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
+                for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
+                    eleFoodEntity.setCreateDate(new Date());
+                    eleFoodEntity.setIsAnalysis(0);
+                    eleFoodEntity.setShopId(eleMenuEntity.getShopId());
+                    eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
+                    eleFoodDao.saveAs(eleFoodEntity);
+                }
+                eleMenuEntity.setIsAnalysis(1);
+                eleMenuDao.updateAs(eleMenuEntity);
+                analysisNum++;
+            }
+            eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
+        }
+        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
+        return responseVo;
+    }
+
 
     @Override
+    @Transactional
     public void saveShop(EleShopJsonBean shop, int findId){
 
         try {
@@ -228,7 +259,8 @@ public class ElePullServiceImpl implements ElePullService {
 //                        eleMenuSpecfoodDao.saveOrUpdate(eleMenuSpecfoodEntity);
 //                    }
 //                }
-//
+
+
             }
             //TODO 活动
         } catch (Exception e) {
