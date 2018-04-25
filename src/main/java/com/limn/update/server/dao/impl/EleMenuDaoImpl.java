@@ -4,6 +4,7 @@ import com.limn.update.server.dao.BaseDao;
 import com.limn.update.server.dao.EleMenuDao;
 import com.limn.update.server.entity.EleFoodEntity;
 import com.limn.update.server.entity.EleMenuEntity;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,11 @@ public class EleMenuDaoImpl extends BaseDaoImpl<EleMenuEntity> implements EleMen
 
 
     @Override
-    public List<EleMenuEntity> getNoAnalysisShopJson() {
+    public List<EleMenuEntity> getNoAnalysisShopJson(int start,int count) {
         Session session = createSession();
         Query query = session.createQuery("from com.limn.update.server.entity.EleMenuEntity where isAnalysis = 0" );
-        query.setMaxResults(20);
+        query.setFirstResult(start);
+        query.setMaxResults(count);
         List<EleMenuEntity> eleMenuEntities = query.list();
         session.close();
         return eleMenuEntities;

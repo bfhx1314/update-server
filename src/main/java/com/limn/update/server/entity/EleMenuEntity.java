@@ -16,7 +16,7 @@ public class EleMenuEntity implements Serializable {
     private int id;
     private int shopId;
     @JSONField(name = "id")
-    private int menuId;
+    private Long menuId;
     private String name;
     private String description;
     private String type;
@@ -64,11 +64,11 @@ public class EleMenuEntity implements Serializable {
 
     @Basic
     @Column(name = "menu_id", nullable = true, length = 255)
-    public int getMenuId() {
+    public Long getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(int menuId) {
+    public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
 

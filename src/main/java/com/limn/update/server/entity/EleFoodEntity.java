@@ -13,13 +13,13 @@ import java.util.Date;
 public class EleFoodEntity {
     private int id;
     private Integer shopId;
-    private Integer menuId;
+    private Long menuId;
     private Date createDate;
     @JSONField(name = "is_analysis")
     private Integer isAnalysis;
     private Object limitation;
     @JSONField(name = "virtual_food_id")
-    private Integer virtualFoodId;
+    private Long virtualFoodId;
     @JSONField(name = "month_sales")
     private Integer monthSales;
     @JSONField(name = "min_purchase")
@@ -36,7 +36,7 @@ public class EleFoodEntity {
     private Object specifications;
     private String tips;
     @JSONField(name = "category_id")
-    private Integer categoryId;
+    private Long categoryId;
     @JSONField(name = "display_times")
     private String displayTimes;
     private Object specfoods;
@@ -81,11 +81,11 @@ public class EleFoodEntity {
 
     @Basic
     @Column(name = "menu_id", nullable = true)
-    public Integer getMenuId() {
+    public Long getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(Integer menuId) {
+    public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
 
@@ -121,11 +121,11 @@ public class EleFoodEntity {
 
     @Basic
     @Column(name = "virtual_food_id", nullable = true)
-    public Integer getVirtualFoodId() {
+    public Long getVirtualFoodId() {
         return virtualFoodId;
     }
 
-    public void setVirtualFoodId(Integer virtualFoodId) {
+    public void setVirtualFoodId(Long virtualFoodId) {
         this.virtualFoodId = virtualFoodId;
     }
 
@@ -231,11 +231,11 @@ public class EleFoodEntity {
 
     @Basic
     @Column(name = "category_id", nullable = true)
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 

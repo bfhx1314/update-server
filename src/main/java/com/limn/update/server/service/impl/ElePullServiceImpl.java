@@ -3,6 +3,7 @@ package com.limn.update.server.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.limn.tool.common.BaseToolParameter;
 import com.limn.tool.common.Common;
+import com.limn.tool.common.DateFormat;
 import com.limn.tool.random.RandomData;
 import com.limn.update.server.bean.CoordinateVO;
 import com.limn.update.server.bean.ResponseVo;
@@ -182,17 +183,29 @@ public class ElePullServiceImpl implements ElePullService {
         int analysisNum = 0;
         //每次拉取20条 循环解析
         List<FutureTask<String>> count = new ArrayList<>();
-        List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
-        while(null != eleMenuEntitys && eleMenuEntitys.size() > 0){
-            for(EleMenuEntity entity:eleMenuEntitys){
-                FutureTask<String> futureTask = new FutureTask<>(new ThreadPoolTask(entity,this));
+        List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson(0,1000);
+
+        while(null != eleMenuEntitys && eleMenuEntitys.size()>0) {
+            long preLog = DateFormat.getCurrentTimeMillisByLong();
+            int menuSize = eleMenuEntitys.size();
+            int menuStart = 0;
+            int menuEnd;
+            int everyCount = 50;
+            while (menuStart < menuSize) {
+                if (menuStart + everyCount < menuSize) {
+                    menuEnd = menuStart + everyCount;
+                } else {
+                    menuEnd = menuSize;
+                }
+                FutureTask<String> futureTask = new FutureTask<>(new ThreadPoolTask(eleMenuEntitys.subList(menuStart, menuEnd), this));
                 threadPoolTaskExecutor.execute(futureTask);
                 count.add(futureTask);
+                menuStart+=everyCount;
             }
-            while(count.size()>0){
+            while (count.size() > 0) {
                 try {
-                    String res = count.get(0).get(1000,TimeUnit.MILLISECONDS);
-                    if(res.equalsIgnoreCase("Sucess")){
+                    String res = count.get(0).get(1000, TimeUnit.MILLISECONDS);
+                    if (res.equalsIgnoreCase("Sucess")) {
                         count.remove(0);
                     }
                 } catch (InterruptedException e) {
@@ -203,60 +216,33 @@ public class ElePullServiceImpl implements ElePullService {
 
                 }
             }
-            eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
+            eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson(0, 1000);
+            analysisNum+=menuSize;
+            long endLog = DateFormat.getCurrentTimeMillisByLong();
+
+            System.out.println("已解析1000条数据,用时:" + (endLog-preLog));
         }
-
-
-//        String result = null;
-//        try {
-//            result = futureTask.get(1000, TimeUnit.MILLISECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (TimeoutException e) {
-//            e.printStackTrace();
-//        } finally {
-//            System.out.println("task@xxx:result=" + result);
-//        }
-
-
-
-//        int analysisNum = 0;
-//        //每次拉取20条 循环解析
-//        List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
-//        while(null != eleMenuEntitys && eleMenuEntitys.size() > 0){
-//            for(EleMenuEntity eleMenuEntity : eleMenuEntitys){
-//                List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
-//                for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
-//                    eleFoodEntity.setCreateDate(new Date());
-//                    eleFoodEntity.setIsAnalysis(0);
-//                    eleFoodEntity.setShopId(eleMenuEntity.getShopId());
-//                    eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
-//                    eleFoodDao.saveAs(eleFoodEntity);
-//                }
-//                eleMenuEntity.setIsAnalysis(1);
-//                eleMenuDao.updateAs(eleMenuEntity);
-//                analysisNum++;
-//            }
-//            eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
-//        }
-//        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
+        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
         return responseVo;
     }
 
     @Override
-    public void analysisByFood(EleMenuEntity eleMenuEntity){
-        List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
-        for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
-            eleFoodEntity.setCreateDate(new Date());
-            eleFoodEntity.setIsAnalysis(0);
-            eleFoodEntity.setShopId(eleMenuEntity.getShopId());
-            eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
-            eleFoodDao.saveAs(eleFoodEntity);
+    public void analysisByFood(List<EleMenuEntity> eleMenuEntitys){
+        int count = 0;
+        for(EleMenuEntity eleMenuEntity:eleMenuEntitys) {
+            List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(), EleFoodEntity.class);
+            for (EleFoodEntity eleFoodEntity : eleFoodEntities) {
+                eleFoodEntity.setCreateDate(new Date());
+                eleFoodEntity.setIsAnalysis(0);
+                eleFoodEntity.setShopId(eleMenuEntity.getShopId());
+                eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
+                eleFoodDao.saveAs(eleFoodEntity);
+                count++;
+            }
+            eleMenuEntity.setIsAnalysis(1);
+            eleMenuDao.updateAs(eleMenuEntity);
         }
-        eleMenuEntity.setIsAnalysis(1);
-        eleMenuDao.updateAs(eleMenuEntity);
+        System.out.println("新增Food数据:" +count);
     }
 
 
@@ -328,11 +314,11 @@ public class ElePullServiceImpl implements ElePullService {
 
         private static final long serialVersionUID = 0;
 
-        private EleMenuEntity eleMenuEntitys;
+        private List<EleMenuEntity> eleMenuEntitys;
 
         ElePullService elePullService;
 
-        public ThreadPoolTask(EleMenuEntity tasks,ElePullService elePullService) {
+        public ThreadPoolTask(List<EleMenuEntity> tasks,ElePullService elePullService) {
             this.eleMenuEntitys = tasks;
             this.elePullService = elePullService;
         }

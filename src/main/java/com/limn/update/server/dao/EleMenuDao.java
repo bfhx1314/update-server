@@ -7,6 +7,6 @@ import java.util.List;
 public interface EleMenuDao  extends BaseDao<EleMenuEntity> {
 
     void deleteByShopId(int shopId);
-    List<EleMenuEntity> getNoAnalysisShopJson();
+    List<EleMenuEntity> getNoAnalysisShopJson(int start,int count);
 
 }
