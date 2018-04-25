@@ -3,7 +3,6 @@ package com.limn.update.server.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.limn.tool.common.BaseToolParameter;
 import com.limn.tool.common.Common;
-import com.limn.tool.common.Print;
 import com.limn.tool.random.RandomData;
 import com.limn.update.server.bean.CoordinateVO;
 import com.limn.update.server.bean.ResponseVo;
@@ -14,23 +13,19 @@ import com.limn.update.server.dao.*;
 import com.limn.update.server.entity.*;
 import com.limn.update.server.service.ElePullService;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Created by limengnan on 2017/11/30.
@@ -177,32 +172,94 @@ public class ElePullServiceImpl implements ElePullService {
         return responseVo;
     }
 
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
     @Override
     public ResponseVo analysisFood() {
         ResponseVo responseVo = new ResponseVo();
         responseVo.setStatus("1");
         int analysisNum = 0;
         //每次拉取20条 循环解析
+        List<FutureTask<String>> count = new ArrayList<>();
         List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
         while(null != eleMenuEntitys && eleMenuEntitys.size() > 0){
-            for(EleMenuEntity eleMenuEntity : eleMenuEntitys){
-                List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
-                for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
-                    eleFoodEntity.setCreateDate(new Date());
-                    eleFoodEntity.setIsAnalysis(0);
-                    eleFoodEntity.setShopId(eleMenuEntity.getShopId());
-                    eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
-                    eleFoodDao.saveAs(eleFoodEntity);
+            for(EleMenuEntity entity:eleMenuEntitys){
+                FutureTask<String> futureTask = new FutureTask<>(new ThreadPoolTask(entity,this));
+                threadPoolTaskExecutor.execute(futureTask);
+                count.add(futureTask);
+            }
+            while(count.size()>0){
+                try {
+                    String res = count.get(0).get(1000,TimeUnit.MILLISECONDS);
+                    if(res.equalsIgnoreCase("Sucess")){
+                        count.remove(0);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+
                 }
-                eleMenuEntity.setIsAnalysis(1);
-                eleMenuDao.updateAs(eleMenuEntity);
-                analysisNum++;
             }
             eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
         }
-        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
+
+
+//        String result = null;
+//        try {
+//            result = futureTask.get(1000, TimeUnit.MILLISECONDS);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (TimeoutException e) {
+//            e.printStackTrace();
+//        } finally {
+//            System.out.println("task@xxx:result=" + result);
+//        }
+
+
+
+//        int analysisNum = 0;
+//        //每次拉取20条 循环解析
+//        List<EleMenuEntity> eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
+//        while(null != eleMenuEntitys && eleMenuEntitys.size() > 0){
+//            for(EleMenuEntity eleMenuEntity : eleMenuEntitys){
+//                List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
+//                for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
+//                    eleFoodEntity.setCreateDate(new Date());
+//                    eleFoodEntity.setIsAnalysis(0);
+//                    eleFoodEntity.setShopId(eleMenuEntity.getShopId());
+//                    eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
+//                    eleFoodDao.saveAs(eleFoodEntity);
+//                }
+//                eleMenuEntity.setIsAnalysis(1);
+//                eleMenuDao.updateAs(eleMenuEntity);
+//                analysisNum++;
+//            }
+//            eleMenuEntitys = eleMenuDao.getNoAnalysisShopJson();
+//        }
+//        responseVo.setDetail("所有数据已解析完毕,本次解析:" + analysisNum + "条.");
         return responseVo;
     }
+
+    @Override
+    public void analysisByFood(EleMenuEntity eleMenuEntity){
+        List<EleFoodEntity> eleFoodEntities = JSONObject.parseArray(eleMenuEntity.getFoods(),EleFoodEntity.class);
+        for(EleFoodEntity eleFoodEntity : eleFoodEntities) {
+            eleFoodEntity.setCreateDate(new Date());
+            eleFoodEntity.setIsAnalysis(0);
+            eleFoodEntity.setShopId(eleMenuEntity.getShopId());
+            eleFoodEntity.setMenuId(eleMenuEntity.getMenuId());
+            eleFoodDao.saveAs(eleFoodEntity);
+        }
+        eleMenuEntity.setIsAnalysis(1);
+        eleMenuDao.updateAs(eleMenuEntity);
+    }
+
+
 
 
     @Override
@@ -259,18 +316,31 @@ public class ElePullServiceImpl implements ElePullService {
 //                        eleMenuSpecfoodDao.saveOrUpdate(eleMenuSpecfoodEntity);
 //                    }
 //                }
-
-
             }
             //TODO 活动
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
+    class ThreadPoolTask implements Callable<String>, Serializable {
 
+        private static final long serialVersionUID = 0;
 
+        private EleMenuEntity eleMenuEntitys;
+
+        ElePullService elePullService;
+
+        public ThreadPoolTask(EleMenuEntity tasks,ElePullService elePullService) {
+            this.eleMenuEntitys = tasks;
+            this.elePullService = elePullService;
+        }
+
+        @Override
+        public synchronized String call() throws Exception {
+            elePullService.analysisByFood(eleMenuEntitys);
+            return "Sucess";
+        }
+    }
 }

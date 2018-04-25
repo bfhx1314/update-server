@@ -4,11 +4,14 @@ import com.limn.update.server.bean.TaskRecordVo;
 import com.limn.update.server.dao.*;
 import com.limn.update.server.entity.SshhwwTaskEntity;
 import com.limn.update.server.entity.SshhwwTaskRecordEntity;
+import com.limn.update.server.entity.SshhwwTaskUuidEntity;
+import com.limn.update.server.enumeration.TaskEnum;
 import com.limn.update.server.enumeration.WXCMEnum;
 import com.limn.update.server.service.FileServerService;
 import com.limn.update.server.service.SshhwwService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -38,6 +41,9 @@ public class SshhwwServiceImpl implements SshhwwService {
     @Autowired
     SshhwwConfigDao sshhwwConfigDao;
 
+    @Autowired
+    SshhwwTaskUuidDao sshhwwTaskUuidDao;
+
     @Override
     public void uploadLua(MultipartFile file) {
         fileServerService.upLoad(file,WXCMEnum.UPDATEPATH.getCode(), WXCMEnum.LUA.getCode());
@@ -50,6 +56,7 @@ public class SshhwwServiceImpl implements SshhwwService {
     }
 
     @Override
+    @Transactional
     public TaskRecordVo getTask(String uuid, String type, String deviceName, String version) {
 
         TaskRecordVo taskRecordVo = new TaskRecordVo();
@@ -76,10 +83,15 @@ public class SshhwwServiceImpl implements SshhwwService {
         taskRecord.setValid("Y");
         taskRecord.setTaskId(sshhwwTaskEntity.getId());
         taskRecord.setUuid(uuid);
-        taskRecord.setValue("");
+        taskRecord.setValue(sshhwwTaskEntity.getValue());
         taskRecord.setDeviceName(deviceName);
         taskRecord.setCreateDate(new Date());
         sshhwwTaskRecordDao.save(taskRecord);
+
+        if(taskRecord.getValue().equalsIgnoreCase(TaskEnum.TAOBAOLIVE)){
+            SshhwwTaskUuidEntity sshhwwTaskUuidEntity = sshhwwTaskUuidDao.getTaskData(TaskEnum.TAOBAOLIVE,uuid);
+            taskRecordVo.setData(sshhwwTaskUuidEntity.getValue() == null ? "" : sshhwwTaskUuidEntity.getValue());
+        }
 
         taskRecordVo.setTaskRecordId(taskRecord.getId());
         taskRecordVo.setTaskRecordName(sshhwwTaskEntity.getValue());

@@ -24,7 +24,7 @@ public class SshhwwTaskRecordEntity {
 
 
     @Basic
-    @Column(name = "version", nullable = false)
+    @Column(name = "version")
     public String getVersion() {
         return version;
     }

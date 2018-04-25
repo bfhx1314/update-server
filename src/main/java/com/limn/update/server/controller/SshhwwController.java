@@ -119,7 +119,7 @@ public class SshhwwController {
 	}
 
 
-	@Transactional
+
 	@RequestMapping("task")
 	@ResponseBody
 	public Object task(HttpServletRequest request, HttpServletResponse response, String uuid, String type , String deviceName, String version){
