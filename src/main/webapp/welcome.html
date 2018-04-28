@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin:0;
+            font-family:"微软雅黑";
+        }
+        #shopInfo{
+            float: left;
+            width:80%;
+            height:100%;
+        }
+        #allmap{
+            width:100%;
+            height:100%;
+        }
+        #searchDiv{
+            float: left;
+            width:20%;
+            height:100%;
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gkKGClRB2XpvZC9aYa7tjtk2YOZmkSPI"></script>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <title>search</title>
+</head>
+<body>
+<div id="searchDiv"><input type="text" id="searchtext"/>
+    <input type="button" id="search" value="搜索"/>
+</div>
+<div id="shopInfo">
+    <div id="allmap"></div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    map = new BMap.Map("allmap");
+    map.centerAndZoom("上海", 12);
+
+    // 添加带有定位的导航控件
+    var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+    });
+    map.addControl(navigationControl);
+    var opts = {
+        width : 250,     // 信息窗口宽度
+        height: 120,     // 信息窗口高度
+        title : "商铺信息" , // 信息窗口标题
+        enableMessage:true//设置允许信息窗发送短息
+    };
+
+    function addClickHandler(content,marker){
+        marker.addEventListener("click",function(e){
+            openInfo(content,e)}
+        );
+    }
+    function openInfo(content,e){
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow,point); //开启信息窗口
+    }
+
+
+
+    $("#search").click(function(){
+        $.ajax({
+            type:'post',
+            url:'http://localhost:8080/update/ele/search.do?name=' + $("#searchtext")[0].value,
+            cache:false,
+            dataType:'json',
+            success:function(data){
+                map.clearOverlays();
+                for(var i=0;i<data['data'].length;i++){
+                    var marker = new BMap.Marker(new BMap.Point(data['data'][i]['longitude'],data['data'][i]['latitude']));  // 创建标注
+                    var content = data['data'][i]['name'] + "<br/>销量:" + data['data'][i]['recentOrderNum'] + "<br/>shopId:" + data['data'][i]['shopId'];
+                    map.addOverlay(marker);
+                    addClickHandler(content,marker);
+                }
+            }
+        });
+    });
+
+
+
+
+
+</script>
