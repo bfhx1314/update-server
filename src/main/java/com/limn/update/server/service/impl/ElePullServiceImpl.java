@@ -82,7 +82,7 @@ public class ElePullServiceImpl implements ElePullService {
 
         List<Double> distance = new ArrayList<>();
 
-        for(int i = 0 ; i <= 240 ; i = i + 24) {
+        for(int i = 0 ; i <= 480 ; i = i + 24) {
 
             List<EleShopJsonBean> shops = GetEleOrderInfo.getEleShopByCoordinate(latitude, longitude,  String.valueOf(i),String.valueOf(i+24));
             for (EleShopJsonBean shop : shops) {
@@ -125,6 +125,11 @@ public class ElePullServiceImpl implements ElePullService {
     }
 
     @Override
+    public List<EleShopEntity> search(String name){
+        return eleShopDao.getShopsByName(name);
+    }
+
+    @Override
     public ResponseVo analysisShop() {
         ResponseVo responseVo = new ResponseVo();
         responseVo.setStatus("1");
@@ -136,6 +141,7 @@ public class ElePullServiceImpl implements ElePullService {
                 EleShopEntity eleShopEntity = JSONObject.parseObject(eleShopJsonEntity.getJson(),EleShopEntity.class);
                 eleShopEntity.setCreateDate(new Date());
                 eleShopEntity.setIsAnalysis(0);
+                eleShopEntity.setShopId(eleShopJsonEntity.getShopId());
                 eleShopDao.saveAs(eleShopEntity);
                 eleShopJsonEntity.setIsAnalysis(1);
                 eleShopJsonDao.updateAs(eleShopJsonEntity);

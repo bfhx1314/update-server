@@ -82,5 +82,18 @@ public class ElePullController {
 		}
 		return responseVo;
 	}
-	
+
+	@RequestMapping("search")
+	@ResponseBody
+	public Object search(HttpServletRequest request, HttpServletResponse response,String name) throws IOException {
+		ResponseVo responseVo = new ResponseVo();
+		if(BaseUtil.isEmpty(name)) {
+			responseVo.setDetail("name不能为空");
+			responseVo.setStatus("2");
+			return responseVo;
+		}
+		responseVo.setData(elePullService.search(name));
+		responseVo.setStatus("1");
+		return responseVo;
+	}
 }

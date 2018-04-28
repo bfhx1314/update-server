@@ -3,6 +3,7 @@ package com.limn.update.server.service;
 import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.bean.ele.EleShopJsonBean;
 import com.limn.update.server.entity.EleMenuEntity;
+import com.limn.update.server.entity.EleShopEntity;
 import com.limn.update.server.entity.FindCoordinateRecordEntity;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface ElePullService {
     ResponseVo analysisFood();
     void saveShop(EleShopJsonBean shop, int findId);
     void analysisByFood(List<EleMenuEntity> eleMenuEntitys);
+    List<EleShopEntity> search(String name);
 }

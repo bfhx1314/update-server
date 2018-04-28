@@ -36,4 +36,12 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
         return eleShopJsonEntities;
     }
 
+    @Override
+    public List<EleShopEntity> getShopsByName(String name) {
+        Query query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where name like ?");
+        query.setParameter(0,"%"+name+"%");
+        List<EleShopEntity> shops = query.list();
+        return shops;
+    }
+
 }

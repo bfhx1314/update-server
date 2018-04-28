@@ -71,6 +71,7 @@ public class EleShopEntity {
     @JSONField(name = "support_tags")
     private Object supportTags;
     private Integer isAnalysis;
+    private Integer shopId;
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
@@ -555,5 +556,15 @@ public class EleShopEntity {
 
     public void setIsAnalysis(Integer isAnalysis) {
         this.isAnalysis = isAnalysis;
+    }
+
+    @Basic
+    @Column(name = "shop_id", nullable = true)
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 }
