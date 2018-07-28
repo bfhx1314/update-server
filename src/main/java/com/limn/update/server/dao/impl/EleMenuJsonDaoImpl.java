@@ -20,8 +20,8 @@ public class EleMenuJsonDaoImpl extends BaseDaoImpl<EleMenuJsonEntity> implement
     }
 
     @Override
-    public void deleteByShopId(int shopId) {
-        Query query = getSession().createQuery("delete from com.limn.update.server.entity.EleMenuJsonEntity where shopId = " + shopId);
+    public void deleteByShopId(int shopId,int version) {
+        Query query = getSession().createQuery("delete from com.limn.update.server.entity.EleMenuJsonEntity where shopId = " + shopId + " and version = " + version);
         query.executeUpdate();
     }
 
@@ -35,14 +35,23 @@ public class EleMenuJsonDaoImpl extends BaseDaoImpl<EleMenuJsonEntity> implement
 //        session.close();
 //    }
 
+//    @Override
+//    public List<EleMenuJsonEntity> getNoAnalysisMenuJson() {
+//        Session session = createSession();
+//        Query query = session.createQuery("from com.limn.update.server.entity.EleMenuJsonEntity where isAnalysis = 0" );
+//        query.setMaxResults(20);
+//        List<EleMenuJsonEntity> eleShopJsonEntities = query.list();
+//        session.close();
+//        return eleShopJsonEntities;
+//    }
+
     @Override
-    public List<EleMenuJsonEntity> getNoAnalysisShopJson() {
+    public List<EleMenuJsonEntity> getNoAnalysis(int maxCount) {
         Session session = createSession();
         Query query = session.createQuery("from com.limn.update.server.entity.EleMenuJsonEntity where isAnalysis = 0" );
-        query.setMaxResults(20);
+        query.setMaxResults(maxCount);
         List<EleMenuJsonEntity> eleShopJsonEntities = query.list();
         session.close();
         return eleShopJsonEntities;
     }
-
 }

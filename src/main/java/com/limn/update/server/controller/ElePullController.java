@@ -32,7 +32,7 @@ public class ElePullController {
 
 	@RequestMapping("saveShop")
 	@ResponseBody
-	public Object saveShop(HttpServletRequest request, HttpServletResponse response , String latitude , String longitude , String update) throws IOException {
+	public Object saveShop(String latitude , String longitude , String update, int version) throws IOException {
 
 		Map<String, Object> data = new HashMap<String, Object>();
 
@@ -51,7 +51,7 @@ public class ElePullController {
 		}
 
 		try {
-			FindCoordinateRecordEntity fcre = elePullService.saveShopByCoordinate(latitude, longitude,up);
+			FindCoordinateRecordEntity fcre = elePullService.saveShopByCoordinate(latitude, longitude,up,version);
 			data.put("data", "查询成功");
 			data.put("detail", fcre);
 		}catch (Exception e){
@@ -71,11 +71,11 @@ public class ElePullController {
 			responseVo.setStatus("2");
 			return responseVo;
 		}else if(type.equalsIgnoreCase("shop")){
-			responseVo = elePullService.analysisShop();
+			responseVo = elePullService.analysis(type);
 		}else if(type.equalsIgnoreCase("menu")) {
-			responseVo = elePullService.analysisMenu();
+			responseVo = elePullService.analysis(type);
 		}else if(type.equalsIgnoreCase("food")){
-			responseVo = elePullService.analysisFood();
+			responseVo = elePullService.analysis(type);
 		}else{
 			responseVo.setDetail("type类型错误");
 			return responseVo;

@@ -17,6 +17,8 @@ public class EleMenuEntity implements Serializable {
     private int shopId;
     @JSONField(name = "id")
     private Long menuId;
+    private Date analysisTime;
+    private int version;
     private String name;
     private String description;
     private String type;
@@ -51,6 +53,16 @@ public class EleMenuEntity implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "version", nullable = true, length = 8)
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Column(name = "shop_id", nullable = false, length = 255)
@@ -111,6 +123,16 @@ public class EleMenuEntity implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "analysis_time", nullable = true)
+    public Date getAnalysisTime() {
+        return analysisTime;
+    }
+
+    public void setAnalysisTime(Date analysisTime) {
+        this.analysisTime = analysisTime;
     }
 
     @Basic

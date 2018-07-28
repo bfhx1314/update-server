@@ -11,7 +11,9 @@ import java.util.Objects;
 @Table(name = "ele_shop", schema = "ele", catalog = "")
 public class EleShopEntity {
     private int id;
+    private int version;
     private Date createDate;
+    private Date analysisTime;
     private Date updateTime;
     private String name;
     private String address;
@@ -117,6 +119,16 @@ public class EleShopEntity {
     }
 
     @Basic
+    @Column(name = "version", nullable = true, length = 8)
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Basic
     @Column(name = "create_date", nullable = true)
     public Date getCreateDate() {
         return createDate;
@@ -124,6 +136,16 @@ public class EleShopEntity {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "analysis_time", nullable = true)
+    public Date getAnalysisTime() {
+        return analysisTime;
+    }
+
+    public void setAnalysisTime(Date analysisTime) {
+        this.analysisTime = analysisTime;
     }
 
     @Basic

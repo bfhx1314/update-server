@@ -30,17 +30,26 @@ public class EleMenuDaoImpl extends BaseDaoImpl<EleMenuEntity> implements EleMen
 
 
 
+//    @Override
+//    public List<EleMenuEntity> getNoAnalysisMemuJson(int start,int count) {
+//        Session session = createSession();
+//        Query query = session.createQuery("from com.limn.update.server.entity.EleMenuEntity where isAnalysis = 0" );
+//        query.setFirstResult(start);
+//        query.setMaxResults(count);
+//        List<EleMenuEntity> eleMenuEntities = query.list();
+//        session.close();
+//        return eleMenuEntities;
+//    }
+
+
     @Override
-    public List<EleMenuEntity> getNoAnalysisShopJson(int start,int count) {
+    public List<EleMenuEntity> getNoAnalysis(int maxCount) {
         Session session = createSession();
         Query query = session.createQuery("from com.limn.update.server.entity.EleMenuEntity where isAnalysis = 0" );
-        query.setFirstResult(start);
-        query.setMaxResults(count);
+        query.setFirstResult(0);
+        query.setMaxResults(maxCount);
         List<EleMenuEntity> eleMenuEntities = query.list();
         session.close();
         return eleMenuEntities;
     }
-
-
-
 }

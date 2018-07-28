@@ -7,8 +7,8 @@ import java.util.List;
 /**
  * Created by limengnan on 2018/4/20.
  */
-public interface EleMenuJsonDao extends BaseDao<EleMenuJsonEntity>{
+public interface EleMenuJsonDao extends EleAnalysisDao<EleMenuJsonEntity>{
 
-    void deleteByShopId(int shopId);
-    List<EleMenuJsonEntity> getNoAnalysisShopJson();
+    void deleteByShopId(int shopId , int version);
+//    List<EleMenuJsonEntity> getNoAnalysisMenuJson();
 }

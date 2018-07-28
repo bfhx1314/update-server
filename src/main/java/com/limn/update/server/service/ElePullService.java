@@ -2,9 +2,8 @@ package com.limn.update.server.service;
 
 import com.limn.update.server.bean.ResponseVo;
 import com.limn.update.server.bean.ele.EleShopJsonBean;
-import com.limn.update.server.entity.EleMenuEntity;
-import com.limn.update.server.entity.EleShopEntity;
-import com.limn.update.server.entity.FindCoordinateRecordEntity;
+import com.limn.update.server.dao.EleAnalysisDao;
+import com.limn.update.server.entity.*;
 
 import java.util.List;
 
@@ -13,13 +12,11 @@ import java.util.List;
  */
 public interface ElePullService {
 
-    FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update);
-
-    ResponseVo analysisShop();
-
-    ResponseVo analysisMenu();
-    ResponseVo analysisFood();
-    void saveShop(EleShopJsonBean shop, int findId);
+    FindCoordinateRecordEntity saveShopByCoordinate(String latitude, String longitude,boolean update, int version);
+    void analysisByShop(List<EleShopJsonEntity> eleShopJsonEntities);
+    void analysisByMenu(List<EleMenuJsonEntity> eleShopJsonEntities);
     void analysisByFood(List<EleMenuEntity> eleMenuEntitys);
+    void saveShop(EleShopJsonBean shop, int findId, int version);
     List<EleShopEntity> search(String name);
+    ResponseVo analysis(String type);
 }

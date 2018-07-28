@@ -14,6 +14,8 @@ public class EleFoodEntity {
     private int id;
     private Integer shopId;
     private Long menuId;
+    private Date analysisTime;
+    private int version;
     private Date createDate;
     @JSONField(name = "is_analysis")
     private Integer isAnalysis;
@@ -70,6 +72,16 @@ public class EleFoodEntity {
     }
 
     @Basic
+    @Column(name = "version", nullable = true)
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Basic
     @Column(name = "shop_id", nullable = true)
     public Integer getShopId() {
         return shopId;
@@ -98,7 +110,15 @@ public class EleFoodEntity {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
+    @Basic
+    @Column(name = "analysis_time", nullable = true)
+    public Date getAnalysisTime() {
+        return analysisTime;
+    }
 
+    public void setAnalysisTime(Date analysisTime) {
+        this.analysisTime = analysisTime;
+    }
     @Basic
     @Column(name = "is_analysis", nullable = true)
     public Integer getIsAnalysis() {
