@@ -165,24 +165,6 @@ CREATE TABLE `ele_shop_activitie` (
   PRIMARY KEY (`activitie_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=562 DEFAULT CHARSET=utf8mb4 COMMENT='商铺活动';
 
--- ----------------------------
--- Table structure for find_coordinate_record
--- ----------------------------
-DROP TABLE IF EXISTS `find_coordinate_record`;
-CREATE TABLE `find_coordinate_record` (
-  `id` int(32) NOT NULL AUTO_INCREMENT,
-  `longitude` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `latitude` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
-  `addcount` int(32) DEFAULT '0',
-  `currentcount` int(32) DEFAULT '0',
-  `maxlongitude` varchar(50) COLLATE utf8_danish_ci DEFAULT '',
-  `maxlatitude` varchar(50) COLLATE utf8_danish_ci DEFAULT '',
-  `findid` int(32) NOT NULL,
-  `minlongitude` varchar(50) COLLATE utf8_danish_ci DEFAULT NULL,
-  `minlatitude` varchar(50) COLLATE utf8_danish_ci DEFAULT NULL,
-  `avgdistance` decimal(8,2) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for qtt_imei_record
@@ -315,3 +297,175 @@ CREATE TABLE `sshhww_config` (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+
+
+/**
+ELE 脚本
+ */
+CREATE TABLE `ele_shop_json` (
+  `id` int(24) NOT NULL AUTO_INCREMENT,
+  `shop_id` int(11) NOT NULL,
+  `create_date` datetime NOT NULL,
+  `version` int(8) NOT NULL,
+  `valid` varchar(1) NOT NULL,
+  `json` longtext NOT NULL,
+  `find_id` int(8) NOT NULL,
+  `longitude` varchar(255) NOT NULL,
+  `latitude` varchar(255) NOT NULL,
+  `is_analysis` int(8) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_index` (`id`) USING BTREE,
+  KEY `version_index` (`version`),
+  KEY `shop_id_index` (`shop_id`),
+  KEY `is_analysis_index` (`is_analysis`)
+) ENGINE=InnoDB AUTO_INCREMENT=71444 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ele_menu_json` (
+  `id` int(24) NOT NULL AUTO_INCREMENT,
+  `is_analysis` int(8) NOT NULL,
+  `menu_id` int(24) NOT NULL,
+  `create_date` datetime NOT NULL,
+  `version` int(8) NOT NULL,
+  `valid` varchar(1) NOT NULL,
+  `json` longtext NOT NULL,
+  `find_id` int(8) NOT NULL,
+  `shop_id` int(24) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_index_id` (`id`) USING BTREE,
+  KEY `id_index` (`shop_id`) USING BTREE,
+  KEY `type_index` (`is_analysis`),
+  KEY `version_index` (`version`)
+) ENGINE=InnoDB AUTO_INCREMENT=864458 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ele_shop` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `create_date` datetime DEFAULT NULL,
+  `analysis_time` datetime DEFAULT NULL,
+  `version` int(8) DEFAULT NULL,
+  `shop_id` int(20) DEFAULT NULL,
+  `is_analysis` int(8) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `name` varchar(255) DEFAULT '',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `authentic_id` varchar(255) DEFAULT '0',
+  `description` varchar(255) DEFAULT '',
+  `distance` varchar(255) DEFAULT '',
+  `favored` varchar(255) DEFAULT '',
+  `float_delivery_fee` varchar(255) DEFAULT '' COMMENT '配送费',
+  `float_minimum_order_amount` varchar(255) DEFAULT '' COMMENT '起送价格',
+  `is_new` varchar(255) DEFAULT '' COMMENT '是否是新店',
+  `is_premium` varchar(255) DEFAULT '',
+  `is_stock_empty` varchar(255) DEFAULT '',
+  `is_valid` varchar(255) DEFAULT '',
+  `latitude` varchar(255) DEFAULT '',
+  `list_quality_icon` varchar(255) DEFAULT '',
+  `longitude` varchar(255) DEFAULT '',
+  `max_applied_quantity_per_order` varchar(255) DEFAULT '',
+  `next_business_time` varchar(255) DEFAULT '',
+  `only_use_poi` varchar(255) DEFAULT '',
+  `order_lead_time` varchar(255) DEFAULT '',
+  `phone` varchar(255) DEFAULT '',
+  `rating` varchar(255) DEFAULT '',
+  `rating_count` varchar(255) DEFAULT '',
+  `recent_order_num` varchar(255) DEFAULT '',
+  `status` varchar(255) DEFAULT '',
+  `type` varchar(255) DEFAULT '',
+  `image_path` varchar(255) DEFAULT '',
+  `promotion_info` varchar(255) DEFAULT '',
+  `regular_customer_count` varchar(255) DEFAULT '',
+  `has_story` varchar(255) DEFAULT NULL,
+  `activities` longtext CHARACTER SET utf8mb4,
+  `piecewise_agent_fee` longtext,
+  `posters` longtext,
+  `recommend` longtext,
+  `recommend_reasons` longtext,
+  `supports` longtext,
+  `support_tags` longtext,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `id_index` (`id`),
+  KEY `version_index` (`version`),
+  KEY `is_analysis_index` (`is_analysis`),
+  KEY `shop_id_index` (`shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=161910387 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE `ele_menu` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `analysis_time` datetime DEFAULT NULL,
+  `shop_id` int(24) DEFAULT NULL,
+  `version` int(8) DEFAULT NULL,
+  `menu_id` varchar(255) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `grey_icon_url` varchar(255) DEFAULT NULL,
+  `icon_url` varchar(255) DEFAULT NULL,
+  `is_activity` varchar(255) DEFAULT NULL,
+  `is_selected` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  `attribute` varchar(255) DEFAULT NULL,
+  `foods` longtext,
+  `is_analysis` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `id_index` (`id`) USING BTREE,
+  KEY `analysis_index` (`is_analysis`) USING BTREE,
+  KEY `version_index` (`version`),
+  KEY `shop_id_index` (`shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1238599704 DEFAULT CHARSET=utf8mb4 COMMENT='菜单列表';
+
+CREATE TABLE `ele_food` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `shop_id` int(24) DEFAULT NULL,
+  `analysis_time` datetime DEFAULT NULL,
+  `version` int(8) DEFAULT NULL,
+  `menu_id` bigint(50) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `is_analysis` int(8) DEFAULT NULL,
+  `limitation` longtext,
+  `virtual_food_id` bigint(50) DEFAULT NULL,
+  `month_sales` int(8) DEFAULT NULL,
+  `min_purchase` int(8) DEFAULT NULL,
+  `satisfy_count` int(8) DEFAULT NULL,
+  `activity` longtext,
+  `restaurant_id` int(24) DEFAULT NULL,
+  `server_utc` int(24) DEFAULT NULL,
+  `rating` int(8) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `specifications` longtext,
+  `tips` varchar(255) DEFAULT NULL,
+  `category_id` bigint(50) DEFAULT NULL,
+  `display_times` longtext,
+  `specfoods` longtext,
+  `item_id` varchar(255) DEFAULT NULL,
+  `satisfy_rate` int(8) DEFAULT NULL,
+  `attrs` longtext,
+  `rating_count` int(8) DEFAULT NULL,
+  `is_essential` varchar(50) DEFAULT NULL,
+  `pinyin_name` varchar(500) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `attributes` longtext,
+  `is_featured` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_index` (`id`),
+  KEY `shop_id_index` (`shop_id`),
+  KEY `version_index` (`version`)
+) ENGINE=InnoDB AUTO_INCREMENT=7095299 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for find_coordinate_record
+-- ----------------------------
+DROP TABLE IF EXISTS `find_coordinate_record`;
+CREATE TABLE `find_coordinate_record` (
+  `id` int(32) NOT NULL AUTO_INCREMENT,
+  `longitude` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `latitude` varchar(50) COLLATE utf8_danish_ci NOT NULL DEFAULT '',
+  `addcount` int(32) DEFAULT '0',
+  `currentcount` int(32) DEFAULT '0',
+  `maxlongitude` varchar(50) COLLATE utf8_danish_ci DEFAULT '',
+  `maxlatitude` varchar(50) COLLATE utf8_danish_ci DEFAULT '',
+  `findid` int(32) NOT NULL,
+  `minlongitude` varchar(50) COLLATE utf8_danish_ci DEFAULT NULL,
+  `minlatitude` varchar(50) COLLATE utf8_danish_ci DEFAULT NULL,
+  `avgdistance` decimal(8,2) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_danish_ci ROW_FORMAT=DYNAMIC;
