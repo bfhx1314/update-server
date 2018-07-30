@@ -3,40 +3,46 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-        body, html {
-            width: 100%;
-            height: 100%;
-            margin:0;
-            font-family:"微软雅黑";
-        }
-        #shopInfo{
-            float: left;
-            width:80%;
-            height:100%;
-        }
-        #allmap{
-            width:100%;
-            height:100%;
-        }
-        #searchDiv{
-            float: left;
-            width:20%;
-            height:100%;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <!--<![endif]-->
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="css/blog-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="css/blog.css">
+    <!--<![endif]-->
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gkKGClRB2XpvZC9aYa7tjtk2YOZmkSPI"></script>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
     <title>search</title>
 </head>
 <body>
-<div id="searchDiv"><input type="text" id="searchtext"/>
-    <input type="button" id="search" value="搜索"/>
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-17-24">
+        <div id="allmap" style="height: 100%"/></div>
+    </div>
+    <div class="content pure-u-1 pure-u-md-7-24">
+        <form class="pure-form pure-form-stacked" onsubmit="return false">
+            <fieldset>
+                    <label>搜索内容</label>
+                    <input id="searchtext" type="text">
+                    <label>销量大于</label>
+                    <input type="text" id="sales"/>
+                    <label>搜索版本</label>
+                    <select id="version" name="version">
+                        <option value="20180420">20180420</option>
+                        <option value="20180726" selected>20180726</option>
+                    </select>
+                    <button id="search" class="pure-button pure-button-primary">搜索</button>
+            </fieldset>
+        </form>
+        <div id="shopList"></div>
+    </div>
 </div>
-<div id="shopInfo">
-    <div id="allmap"></div>
-</div>
-
 </body>
 </html>
 <script type="text/javascript">
@@ -73,28 +79,59 @@
         map.openInfoWindow(infoWindow,point); //开启信息窗口
     }
 
+    function openCusInfo(content,lng,lat){
+        var point = new BMap.Point(lng, lat);
+        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow,point); //开启信息窗口
+    }
 
+    function fmtDate(obj){
+        var date =  new Date(obj);
+        var y = 1900+date.getYear();
+        var m = "0"+(date.getMonth()+1);
+        var d = "0"+date.getDate();
+        return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+    }
+
+    function appendText(shopName,shopSales,shopAddress,shopId,shopUrl,lng,lat,content)
+    {
+        var txt1="<a onclick='openCusInfo(\"" + content + "\",\"" + lng + "\" , \"" + lat + "\")'>" +
+                "<span>"+shopName+"</span><br/>" +
+                "<span>销量:"+shopSales+"</span><br/>" +
+        "<span>地址:"+shopAddress+"</span><br/>" +
+        "<span>ID:"+shopId+"</span><br/>" +
+        "<span>收录时间:"+fmtDate(shopUrl)+"</span><br/>" +
+
+        "</a>" +
+                "<a href='https://www.ele.me/shop/" + shopId + "'>~~跳转至店铺~~</a>" +
+                "<br/><br/>";
+        $("#shopList").append(txt1);         // 追加新元素
+    }
 
     $("#search").click(function(){
         $.ajax({
             type:'post',
-            url:'http://localhost:8080/update/ele/search.do?name=' + $("#searchtext")[0].value,
+//            url:'http://localhost:8080/update/ele/search.do?name=' + $("#searchtext")[0].value + '&version=' + $("#version")[0].value + '&sales=' +  $("#sales")[0].value,
+            url:'http://120.26.205.248:8080/update/ele/search.do?name=' + $("#searchtext")[0].value + '&version=' + $("#version")[0].value + '&sales=' +  $("#sales")[0].value,
+
             cache:false,
             dataType:'json',
             success:function(data){
+                if(data['status'] == '2'){
+                    alert(data['detail']);
+                    return;
+                }
                 map.clearOverlays();
+                $("#shopList").empty();
                 for(var i=0;i<data['data'].length;i++){
                     var marker = new BMap.Marker(new BMap.Point(data['data'][i]['longitude'],data['data'][i]['latitude']));  // 创建标注
                     var content = data['data'][i]['name'] + "<br/>销量:" + data['data'][i]['recentOrderNum'] + "<br/>shopId:" + data['data'][i]['shopId'];
                     map.addOverlay(marker);
                     addClickHandler(content,marker);
+                    appendText(data['data'][i]['name'],data['data'][i]['recentOrderNum'],data['data'][i]['address'],data['data'][i]['shopId'],data['data'][i]['analysisTime'],data['data'][i]['longitude'],data['data'][i]['latitude'],content);
+
                 }
             }
         });
     });
-
-
-
-
-
 </script>

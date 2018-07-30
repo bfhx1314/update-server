@@ -1,6 +1,7 @@
 package com.limn.update.server.dao.impl;
 
 import com.limn.update.server.bean.CoordinateVO;
+import com.limn.update.server.common.BaseUtil;
 import com.limn.update.server.dao.BaseDao;
 import com.limn.update.server.dao.EleShopDao;
 import com.limn.update.server.entity.EleShopEntity;
@@ -37,9 +38,18 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
     }
 
     @Override
-    public List<EleShopEntity> getShopsByName(String name) {
-        Query query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where name like ?");
-        query.setParameter(0,"%"+name+"%");
+    public List<EleShopEntity> getShopsByName(String name,int version,int sales) {
+        Query query;
+        if(!BaseUtil.isEmpty(name)){
+            query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where name like ? and version = ? and CAST(recentOrderNum as integer ) > ?");
+            query.setParameter(0,"%"+name+"%");
+            query.setParameter(1,version);
+            query.setParameter(2,sales);
+        }else{
+            query = getSession().createQuery("from com.limn.update.server.entity.EleShopEntity where version = ? and CAST(recentOrderNum as integer ) > ?");
+            query.setParameter(0,version);
+            query.setParameter(1,sales);
+        }
         List<EleShopEntity> shops = query.list();
         return shops;
     }
