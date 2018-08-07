@@ -12,5 +12,5 @@ import java.util.List;
 public interface EleShopDao extends BaseDao<EleShopEntity> {
     List<EleShopEntity> getNoAnalysisShopJson();
 
-    List<EleShopEntity> getShopsByName(String name);
+    List<EleShopEntity> getShopsByName(String name,int version,int sales);
 }

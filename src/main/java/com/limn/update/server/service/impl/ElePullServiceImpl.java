@@ -23,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -125,8 +123,20 @@ public class ElePullServiceImpl implements ElePullService {
     }
 
     @Override
-    public List<EleShopEntity> search(String name){
-        return eleShopDao.getShopsByName(name);
+    public List<EleShopEntity> search(String name,int version,int sales){
+        List<EleShopEntity>  lists = eleShopDao.getShopsByName(name,version,sales);
+        Collections.sort(lists, new Comparator<EleShopEntity>() {
+            @Override
+            public int compare(EleShopEntity o1, EleShopEntity o2) {
+                int i = Integer.valueOf(o2.getRecentOrderNum()) - Integer.valueOf(o1.getRecentOrderNum());
+                if(i == 0){
+                    return Integer.valueOf(o2.getRecentOrderNum()) - Integer.valueOf(o1.getRecentOrderNum());
+                }
+                return i;
+            }
+
+        });
+        return lists;
     }
 
     @Override

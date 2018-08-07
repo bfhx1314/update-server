@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -85,14 +86,23 @@ public class ElePullController {
 
 	@RequestMapping("search")
 	@ResponseBody
-	public Object search(HttpServletRequest request, HttpServletResponse response,String name) throws IOException {
+	public Object search(String name,int version,String sales) throws IOException {
 		ResponseVo responseVo = new ResponseVo();
-		if(BaseUtil.isEmpty(name)) {
-			responseVo.setDetail("name不能为空");
+		if(BaseUtil.isEmpty(name) && BaseUtil.isEmpty(sales)) {
+			responseVo.setDetail("名称和销量不能都为空");
 			responseVo.setStatus("2");
 			return responseVo;
 		}
-		responseVo.setData(elePullService.search(name));
+		int count = 0;
+		if(!BaseUtil.isEmpty(sales)){
+			try {
+				count = Integer.valueOf(sales);
+			}catch (Exception e){
+				responseVo.setStatus("2");
+				return responseVo;
+			}
+		}
+		responseVo.setData(elePullService.search(name,version,count));
 		responseVo.setStatus("1");
 		return responseVo;
 	}
