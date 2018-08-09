@@ -1,8 +1,8 @@
 package com.limn.update.server.dao.impl;
 
 import com.limn.update.server.dao.BaseDao;
-import com.limn.update.server.dao.EleFoodDao;
-import com.limn.update.server.entity.EleFoodEntity;
+import com.limn.update.server.dao.EleSpecfoodDao;
+import com.limn.update.server.entity.EleSpecfoodEntity;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,24 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by limengnan on 2018/4/23.
- */
+
 @Repository
 @Transactional
-public class EleFoodDaoImpl extends BaseDaoImpl<EleFoodEntity> implements EleFoodDao {
+public class EleSpecfoodDaoImpl extends BaseDaoImpl<EleSpecfoodEntity> implements EleSpecfoodDao {
     @Autowired
-    public void setDao(BaseDao<EleFoodEntity> dao) {
+    public void setDao(BaseDao<EleSpecfoodEntity> dao) {
         super.setDao(dao);
     }
 
     @Override
-    public List<EleFoodEntity> getNoAnalysis(int maxCount) {
+    public List<EleSpecfoodEntity> getNoAnalysis(int maxCount) {
         Session session = createSession();
-        Query query = session.createQuery("from com.limn.update.server.entity.EleFoodEntity where isAnalysis = 0" );
+        Query query = session.createQuery("from com.limn.update.server.entity.EleSpecfoodEntity where isAnalysis = 0" );
         query.setMaxResults(maxCount);
-        List<EleFoodEntity> eleFoodEntities = query.list();
+        List<EleSpecfoodEntity> eleShopJsonEntities = query.list();
         session.close();
-        return eleFoodEntities;
+        return eleShopJsonEntities;
     }
 }

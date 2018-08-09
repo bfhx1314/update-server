@@ -7,6 +7,5 @@ import java.util.List;
 public interface EleMenuDao  extends EleAnalysisDao<EleMenuEntity> {
 
     void deleteByShopId(int shopId);
-//    List<EleMenuEntity> getNoAnalysisMemuJson(int start,int count);
 
 }

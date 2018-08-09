@@ -9,8 +9,7 @@ import java.util.List;
  */
 
 
-public interface EleShopDao extends BaseDao<EleShopEntity> {
-    List<EleShopEntity> getNoAnalysisShopJson();
+public interface EleShopDao extends EleAnalysisDao<EleShopEntity> {
 
     List<EleShopEntity> getShopsByName(String name,int version,int sales);
 }

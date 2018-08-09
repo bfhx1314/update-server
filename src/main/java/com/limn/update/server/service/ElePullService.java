@@ -16,6 +16,7 @@ public interface ElePullService {
     void analysisByShop(List<EleShopJsonEntity> eleShopJsonEntities);
     void analysisByMenu(List<EleMenuJsonEntity> eleShopJsonEntities);
     void analysisByFood(List<EleMenuEntity> eleMenuEntitys);
+    void analysisBySpecFood(List<EleFoodEntity> eleFoodEntities);
     void saveShop(EleShopJsonBean shop, int findId, int version);
     List<EleShopEntity> search(String name,int version,int sales);
     ResponseVo analysis(String type);

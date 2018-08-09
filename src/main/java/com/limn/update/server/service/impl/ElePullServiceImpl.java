@@ -1,5 +1,6 @@
 package com.limn.update.server.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.limn.tool.common.BaseToolParameter;
 import com.limn.tool.common.Common;
@@ -51,6 +52,9 @@ public class ElePullServiceImpl implements ElePullService {
 
     @Autowired
     EleFoodDao eleFoodDao;
+
+    @Autowired
+    EleSpecfoodDao eleSpecfoodDao;
 
     private static Logger LOGGER = LogManager.getLogger(ElePullServiceImpl.class);
 
@@ -214,6 +218,23 @@ public class ElePullServiceImpl implements ElePullService {
         }
         System.out.println("新增Food数据:" +count);
     }
+
+    @Override
+    public void analysisBySpecFood(List<EleFoodEntity> eleFoodEntities) {
+        for(EleFoodEntity eleFoodEntity : eleFoodEntities){
+            EleSpecfoodEntity eleSpecfoodEntity = JSONArray.parseArray(eleFoodEntity.getSpecfoods(),EleSpecfoodEntity.class).get(0);
+            eleFoodEntity.setIsAnalysis(1);
+            eleFoodDao.updateAs(eleFoodEntity);
+
+            eleSpecfoodEntity.setCreateDate(new Date());
+            eleSpecfoodEntity.setShopId(eleFoodEntity.getShopId());
+            eleSpecfoodEntity.setEleFoodId(eleFoodEntity.getId());
+            eleSpecfoodEntity.setVersion(eleFoodEntity.getVersion());
+            eleSpecfoodDao.save(eleSpecfoodEntity);
+
+        }
+    }
+
     @Override
     public void analysisByMenu(List<EleMenuJsonEntity> eleMenuJsonEntitys) {
         for(EleMenuJsonEntity eleMenuJsonEntity : eleMenuJsonEntitys){
@@ -240,6 +261,8 @@ public class ElePullServiceImpl implements ElePullService {
             eleEntity = eleMenuJsonDao.getNoAnalysis(1000);
         }else if(type.equalsIgnoreCase("food")){
             eleEntity = eleMenuDao.getNoAnalysis(1000);
+        }else if(type.equalsIgnoreCase("specfood")){
+            eleEntity = eleFoodDao.getNoAnalysis(1000);
         }
 
         int analysisNum = 0;
@@ -282,6 +305,8 @@ public class ElePullServiceImpl implements ElePullService {
                 eleEntity = eleMenuJsonDao.getNoAnalysis(1000);
             }else if(type.equalsIgnoreCase("food")){
                 eleEntity = eleMenuDao.getNoAnalysis(1000);
+            }else if(type.equalsIgnoreCase("specfood")){
+                eleEntity = eleFoodDao.getNoAnalysis(1000);
             }
 
             analysisNum+=menuSize;
@@ -314,6 +339,8 @@ public class ElePullServiceImpl implements ElePullService {
                 elePullService.analysisByMenu((List<EleMenuJsonEntity>) eleEntities);
             }else if(eleEntities.get(0) instanceof EleMenuEntity){
                 elePullService.analysisByFood((List<EleMenuEntity>) eleEntities);
+            }else if(eleEntities.get(0) instanceof EleFoodEntity){
+                elePullService.analysisBySpecFood((List<EleFoodEntity>) eleEntities);
             }
             return "Sucess";
         }

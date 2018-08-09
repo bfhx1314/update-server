@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Created by limengnan on 2018/4/23.
  */
-public interface EleFoodDao  extends BaseDao<EleFoodEntity> {
+public interface EleFoodDao  extends EleAnalysisDao<EleFoodEntity> {
 
-    List<EleFoodEntity> getNoAnalysisShopJson();
 }

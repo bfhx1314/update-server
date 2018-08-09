@@ -28,16 +28,6 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
     }
 
     @Override
-    public List<EleShopEntity> getNoAnalysisShopJson() {
-        Session session = createSession();
-        Query query = session.createQuery("from com.limn.update.server.entity.EleShopEntity where isAnalysis = 0" );
-        query.setMaxResults(20);
-        List<EleShopEntity> eleShopJsonEntities = query.list();
-        session.close();
-        return eleShopJsonEntities;
-    }
-
-    @Override
     public List<EleShopEntity> getShopsByName(String name,int version,int sales) {
         Query query;
         if(!BaseUtil.isEmpty(name)){
@@ -54,4 +44,13 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
         return shops;
     }
 
+    @Override
+    public List<EleShopEntity> getNoAnalysis(int maxCount) {
+        Session session = createSession();
+        Query query = session.createQuery("from com.limn.update.server.entity.EleShopEntity where isAnalysis = 0" );
+        query.setMaxResults(20);
+        List<EleShopEntity> eleShopJsonEntities = query.list();
+        session.close();
+        return eleShopJsonEntities;
+    }
 }
