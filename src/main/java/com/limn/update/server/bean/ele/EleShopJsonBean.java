@@ -5,7 +5,7 @@ package com.limn.update.server.bean.ele;
  */
 public class EleShopJsonBean {
 
-    int shopId;
+    String shopId;
     String longitude;
     String latitude;
     String json;
@@ -28,11 +28,11 @@ public class EleShopJsonBean {
         this.json = json;
     }
 
-    public int getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

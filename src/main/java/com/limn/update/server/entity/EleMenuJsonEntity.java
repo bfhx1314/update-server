@@ -17,7 +17,7 @@ public class EleMenuJsonEntity {
     private String valid;
     private String json;
     private int findId;
-    private int shopId;
+    private String shopId;
     private Integer isAnalysis;
 
     public void setCreateDate(Timestamp createDate) {
@@ -125,11 +125,11 @@ public class EleMenuJsonEntity {
 
     @Basic
     @Column(name = "shop_id", nullable = false)
-    public int getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

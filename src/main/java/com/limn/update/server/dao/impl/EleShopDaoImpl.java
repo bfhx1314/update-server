@@ -48,7 +48,7 @@ public class EleShopDaoImpl extends BaseDaoImpl<EleShopEntity> implements EleSho
     public List<EleShopEntity> getNoAnalysis(int maxCount) {
         Session session = createSession();
         Query query = session.createQuery("from com.limn.update.server.entity.EleShopEntity where isAnalysis = 0" );
-        query.setMaxResults(20);
+        query.setMaxResults(maxCount);
         List<EleShopEntity> eleShopJsonEntities = query.list();
         session.close();
         return eleShopJsonEntities;

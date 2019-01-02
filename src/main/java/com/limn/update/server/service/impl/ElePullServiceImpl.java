@@ -56,6 +56,9 @@ public class ElePullServiceImpl implements ElePullService {
     @Autowired
     EleSpecfoodDao eleSpecfoodDao;
 
+    @Autowired
+    EleShopActivitieDao eleShopActivitieDao;
+
     private static Logger LOGGER = LogManager.getLogger(ElePullServiceImpl.class);
 
     @Override
@@ -236,6 +239,22 @@ public class ElePullServiceImpl implements ElePullService {
     }
 
     @Override
+    public void analysisByActivitie(List<EleShopEntity> eleShopEntities) {
+        for(EleShopEntity eleShopEntity : eleShopEntities){
+            List<EleShopActivitieEntity> eleShopActivitieEntitys = JSONArray.parseArray(eleShopEntity.getActivities(),EleShopActivitieEntity.class);
+            for(EleShopActivitieEntity eleShopActivitieEntity : eleShopActivitieEntitys){
+                eleShopActivitieEntity.setShopId(eleShopEntity.getShopId());
+                eleShopActivitieEntity.setVersion(eleShopEntity.getVersion());
+                eleShopActivitieEntity.setCreateDate(new Date());
+                eleShopActivitieDao.save(eleShopActivitieEntity);
+            }
+
+            eleShopEntity.setIsAnalysis(1);
+            eleShopDao.updateAs(eleShopEntity);
+        }
+    }
+
+    @Override
     public void analysisByMenu(List<EleMenuJsonEntity> eleMenuJsonEntitys) {
         for(EleMenuJsonEntity eleMenuJsonEntity : eleMenuJsonEntitys){
             EleMenuEntity eleMenuEntity = JSONObject.parseObject(eleMenuJsonEntity.getJson(),EleMenuEntity.class);
@@ -263,6 +282,11 @@ public class ElePullServiceImpl implements ElePullService {
             eleEntity = eleMenuDao.getNoAnalysis(1000);
         }else if(type.equalsIgnoreCase("specfood")){
             eleEntity = eleFoodDao.getNoAnalysis(1000);
+        }else if(type.equalsIgnoreCase("activitie")){
+            eleEntity = eleShopDao.getNoAnalysis(1000);
+        }else{
+            responseVo.setDetail("解析类型错误");
+            return responseVo;
         }
 
         int analysisNum = 0;
@@ -307,6 +331,8 @@ public class ElePullServiceImpl implements ElePullService {
                 eleEntity = eleMenuDao.getNoAnalysis(1000);
             }else if(type.equalsIgnoreCase("specfood")){
                 eleEntity = eleFoodDao.getNoAnalysis(1000);
+            }else if(type.equalsIgnoreCase("activitie")){
+                eleEntity = eleShopDao.getNoAnalysis(1000);
             }
 
             analysisNum+=menuSize;
@@ -341,6 +367,8 @@ public class ElePullServiceImpl implements ElePullService {
                 elePullService.analysisByFood((List<EleMenuEntity>) eleEntities);
             }else if(eleEntities.get(0) instanceof EleFoodEntity){
                 elePullService.analysisBySpecFood((List<EleFoodEntity>) eleEntities);
+            }else if(eleEntities.get(0) instanceof EleShopEntity){
+                elePullService.analysisByActivitie((List<EleShopEntity>) eleEntities);
             }
             return "Sucess";
         }

@@ -71,13 +71,9 @@ public class ElePullController {
 			responseVo.setDetail("type不能为空");
 			responseVo.setStatus("2");
 			return responseVo;
-		}else if(type.equalsIgnoreCase("shop")){
-			responseVo = elePullService.analysis(type);
-		}else if(type.equalsIgnoreCase("menu")) {
-			responseVo = elePullService.analysis(type);
-		}else if(type.equalsIgnoreCase("food")) {
-			responseVo = elePullService.analysis(type);
-		}else if(type.equalsIgnoreCase("specfood")){
+		}else if(type.equalsIgnoreCase("shop") || type.equalsIgnoreCase("activitie")
+				||type.equalsIgnoreCase("menu") ||type.equalsIgnoreCase("food")
+				||type.equalsIgnoreCase("specfood")){
 			responseVo = elePullService.analysis(type);
 		}else{
 			responseVo.setDetail("type类型错误");

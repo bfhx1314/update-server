@@ -12,7 +12,7 @@ public interface EleShopJsonDao extends EleAnalysisDao<EleShopJsonEntity>{
     Object findMaxID();
     long count();
     CoordinateVO getCoordinateByID(int id);
-    boolean isExistShop(int shopId,int version);
+    boolean isExistShop(String shopId,int version);
 //    List<EleShopJsonEntity> getNoAnalysisShopJson();
 //    void saveIsAnalysised(EleShopJsonEntity eleShopJsonEntity);
 }

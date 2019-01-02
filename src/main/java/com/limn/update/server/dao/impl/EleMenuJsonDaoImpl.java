@@ -20,8 +20,8 @@ public class EleMenuJsonDaoImpl extends BaseDaoImpl<EleMenuJsonEntity> implement
     }
 
     @Override
-    public void deleteByShopId(int shopId,int version) {
-        Query query = getSession().createQuery("delete from com.limn.update.server.entity.EleMenuJsonEntity where shopId = " + shopId + " and version = " + version);
+    public void deleteByShopId(String shopId,int version) {
+        Query query = getSession().createQuery("delete from com.limn.update.server.entity.EleMenuJsonEntity where shopId = '" + shopId + "' and version = " + version);
         query.executeUpdate();
     }
 

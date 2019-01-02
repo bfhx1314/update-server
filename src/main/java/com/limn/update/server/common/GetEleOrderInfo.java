@@ -32,7 +32,9 @@ public class GetEleOrderInfo {
         classMap.put("activities", EleShopActivitie.class);
 
 
-        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras[]=activities&geohash=wtw64ku5bdgd&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
+        String shopList = BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/restaurants?extras%5B%5D=activities&geohash=wtw6j0r9bz5&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
+
+        System.out.println("https://www.ele.me/restapi/shopping/restaurants?extras%5B%5D=activities&geohash=wtw6j0r9bz5&latitude=" + latitude+ "&limit=" + limit + "&longitude=" + longitude + "&offset=" + offset + "&terminal=web");
 
         if(null == shopList || shopList.isEmpty()){
             BaseToolParameter.getPrintThreadLocal().log("店铺列表无数据返回 latitude : " + latitude + " longitude : " + longitude + " limit : " + limit + " offset : " + offset ,2);
@@ -46,7 +48,7 @@ public class GetEleOrderInfo {
             JSONObject json = (JSONObject)shops.get(i);
             EleShopJsonBean shop = new EleShopJsonBean();
             shop.setJson(json.toString());
-            shop.setShopId(json.getInt("id"));
+            shop.setShopId(json.getString("id"));
             shop.setLatitude(json.getString("latitude"));
             shop.setLongitude(json.getString("longitude"));
             shop.setShopName(json.getString("name"));
@@ -58,7 +60,7 @@ public class GetEleOrderInfo {
 
 
 
-    public static List<EleMenuJsonBean> getEleMenuById(int restaurant_id){
+    public static List<EleMenuJsonBean> getEleMenuById(String restaurant_id){
         List<EleMenuJsonBean> eleMenus = new ArrayList<EleMenuJsonBean>();
 
         String menusList = BaseUtil.filterEmoji(BaseHttpConnection.doGetSSL("https://www.ele.me/restapi/shopping/v2/menu?restaurant_id=" + restaurant_id));

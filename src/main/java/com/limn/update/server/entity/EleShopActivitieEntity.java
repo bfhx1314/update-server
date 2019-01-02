@@ -1,27 +1,69 @@
 package com.limn.update.server.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Objects;
 
-/**
- * Created by limengnan on 2017/11/16.
- */
 @Entity
 @Table(name = "ele_shop_activitie", schema = "ele", catalog = "")
 public class EleShopActivitieEntity {
+    private int activitieId;
+    private String shopId;
+    private Integer version;
+    private Date createDate;
     private String attribute;
     private String description;
-    private String icon_color;
-    private String icon_name;
+    private String iconColor;
+    private String iconName;
     private String id;
-    private String is_exclusive_with_food_activity;
+    private String isExclusiveWithFoodActivity;
     private String name;
     private String tips;
     private String type;
-    private String shopId;
-    private int activitie_id;
+
+    @Id
+    @Column(name = "activitie_id", nullable = false)
+    public int getActivitieId() {
+        return activitieId;
+    }
+
+    public void setActivitieId(int activitieId) {
+        this.activitieId = activitieId;
+    }
 
     @Basic
-    @Column(name = "attribute", nullable = true, length = 255)
+    @Column(name = "shop_id", nullable = true, length = 255)
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
+    @Basic
+    @Column(name = "version", nullable = true)
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    @Basic
+    @Column(name = "create_date", nullable = true)
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "attribute", nullable = true, length = 2000)
     public String getAttribute() {
         return attribute;
     }
@@ -42,26 +84,26 @@ public class EleShopActivitieEntity {
 
     @Basic
     @Column(name = "icon_color", nullable = true, length = 255)
-    public String getIcon_color() {
-        return icon_color;
+    public String getIconColor() {
+        return iconColor;
     }
 
-    public void setIcon_color(String icon_color) {
-        this.icon_color = icon_color;
+    public void setIconColor(String iconColor) {
+        this.iconColor = iconColor;
     }
 
     @Basic
     @Column(name = "icon_name", nullable = true, length = 255)
-    public String getIcon_name() {
-        return icon_name;
+    public String getIconName() {
+        return iconName;
     }
 
-    public void setIcon_name(String icon_name) {
-        this.icon_name = icon_name;
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     @Basic
-    @Column(name = "id", nullable = true, length = 255)
+    @Column(name = "id", nullable = true)
     public String getId() {
         return id;
     }
@@ -72,12 +114,12 @@ public class EleShopActivitieEntity {
 
     @Basic
     @Column(name = "is_exclusive_with_food_activity", nullable = true, length = 255)
-    public String getIs_exclusive_with_food_activity() {
-        return is_exclusive_with_food_activity;
+    public String getIsExclusiveWithFoodActivity() {
+        return isExclusiveWithFoodActivity;
     }
 
-    public void setIs_exclusive_with_food_activity(String is_exclusive_with_food_activity) {
-        this.is_exclusive_with_food_activity = is_exclusive_with_food_activity;
+    public void setIsExclusiveWithFoodActivity(String isExclusiveWithFoodActivity) {
+        this.isExclusiveWithFoodActivity = isExclusiveWithFoodActivity;
     }
 
     @Basic
@@ -101,7 +143,7 @@ public class EleShopActivitieEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = true, length = 255)
+    @Column(name = "type", nullable = true)
     public String getType() {
         return type;
     }
@@ -110,63 +152,29 @@ public class EleShopActivitieEntity {
         this.type = type;
     }
 
-    @Basic
-    @Column(name = "shop_id", nullable = true)
-    public String getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(String shopId) {
-        this.shopId = shopId;
-    }
-
-    @Id
-    @Column(name = "activitie_id", nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    public int getActivitie_id() {
-        return activitie_id;
-    }
-
-    public void setActivitie_id(int activitie_id) {
-        this.activitie_id = activitie_id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         EleShopActivitieEntity that = (EleShopActivitieEntity) o;
-
-        if (activitie_id != that.activitie_id) return false;
-        if (attribute != null ? !attribute.equals(that.attribute) : that.attribute != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (icon_color != null ? !icon_color.equals(that.icon_color) : that.icon_color != null) return false;
-        if (icon_name != null ? !icon_name.equals(that.icon_name) : that.icon_name != null) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (is_exclusive_with_food_activity != null ? !is_exclusive_with_food_activity.equals(that.is_exclusive_with_food_activity) : that.is_exclusive_with_food_activity != null)
-            return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (tips != null ? !tips.equals(that.tips) : that.tips != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (shopId != null ? !shopId.equals(that.shopId) : that.shopId != null) return false;
-
-        return true;
+        return activitieId == that.activitieId &&
+                Objects.equals(shopId, that.shopId) &&
+                Objects.equals(version, that.version) &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(attribute, that.attribute) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(iconColor, that.iconColor) &&
+                Objects.equals(iconName, that.iconName) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(isExclusiveWithFoodActivity, that.isExclusiveWithFoodActivity) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(tips, that.tips) &&
+                Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        int result = attribute != null ? attribute.hashCode() : 0;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (icon_color != null ? icon_color.hashCode() : 0);
-        result = 31 * result + (icon_name != null ? icon_name.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (is_exclusive_with_food_activity != null ? is_exclusive_with_food_activity.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (tips != null ? tips.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (shopId != null ? shopId.hashCode() : 0);
-        result = 31 * result + activitie_id;
-        return result;
+
+        return Objects.hash(activitieId, shopId, version, createDate, attribute, description, iconColor, iconName, id, isExclusiveWithFoodActivity, name, tips, type);
     }
 }

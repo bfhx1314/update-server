@@ -47,8 +47,8 @@ public class EleShopJsonDaoImpl extends BaseDaoImpl<EleShopJsonEntity> implement
         return null;
     }
     @Override
-    public boolean isExistShop(int shopId,int version) {
-        List<Object> lists = listResult("from com.limn.update.server.entity.EleShopJsonEntity where shopId =" + shopId + " and version =" + version);
+    public boolean isExistShop(String shopId,int version) {
+        List<Object> lists = listResult("from com.limn.update.server.entity.EleShopJsonEntity where shopId ='" + shopId + "' and version =" + version);
         if(lists.size() > 0){
             getSession().refresh(lists.get(0));
             return true;

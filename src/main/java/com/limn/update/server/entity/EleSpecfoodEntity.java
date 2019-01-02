@@ -31,7 +31,7 @@ public class EleSpecfoodEntity {
     private String stock;
     private String virtualFoodId;
     private String weight;
-    private Integer shopId;
+    private String shopId;
     private Date createDate;
 
     @Id
@@ -266,11 +266,11 @@ public class EleSpecfoodEntity {
 
     @Basic
     @Column(name = "shop_id", nullable = true)
-    public Integer getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

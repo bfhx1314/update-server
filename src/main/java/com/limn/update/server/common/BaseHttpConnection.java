@@ -77,14 +77,13 @@ public class BaseHttpConnection {
             httpget.setConfig(requestConfig);
 
 //            httpget.addHeader("cookie","SID=BJtpinU4w9oHWRy1y8W9gXi64aJer5rzCrQg;USERID=1294125794;_utrace=498bbfca29f26bc475d6b6e6fefbbb8f_2017-10-30; firstEnterUrlInSession=https%3A//www.ele.me/shop/81782; perf_ssid=hfsxu21x43l3pzdw4wmi2w74tvxxtpba_2017-11-08; ubt_ssid=uifjmxnuc23j45zs2hcr1vdapuvmx_2017-10-30; pageReferrInSession=https%3A//www.ele.me/place/wtw3s7d3x6w%3Flatitude%3D31.22067%26longitude%3D121.47924");
-            httpget.addHeader("cookie","SID=ii14PRnKhajAXfOboRbgmh9WoI0geWD5CQxw;USERID=1525592138;_utrace=911d2ecf67dbd14cd7a9f80c51edb623_2018-04-22; ubt_ssid=cywzs7puju22ybmq5kr3mzuxlzj7t9bp_2018-04-22; track_id=1524365251|447b54a8e472ca2f99e059e928dd756dea9f0fc94ff9316523|f157c4ee0f7fb059fe2abc9213a10061");
+            httpget.addHeader("cookie","SID=zCsC7QVYB5tDvgdD7t0XOQuD9VH0dU2Nppvw;USERID=3532645026;_utrace=911d2ecf67dbd14cd7a9f80c51edb623_2018-04-22; ubt_ssid=cywzs7puju22ybmq5kr3mzuxlzj7t9bp_2018-04-22; track_id=1524365251|447b54a8e472ca2f99e059e928dd756dea9f0fc94ff9316523|f157c4ee0f7fb059fe2abc9213a10061");
             httpget.addHeader("accept","application/json, text/plain, */*");
             httpget.addHeader("accept-encoding","gzip, deflate, br");
             httpget.addHeader("accept-language","zh-CN,zh;q=0.9,en;q=0.8");
             httpget.addHeader("referer","https://www.ele.me/shop/475763");
             httpget.addHeader("accept","application/json, text/plain, */*");
             httpget.addHeader("user-agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36");
-            httpget.addHeader("x-shard","shopid=475763;loc=121.44898,31.32054");
             response = httpClient.execute(httpget);
 
             int statusCode = response.getStatusLine().getStatusCode();

@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "ele_menu", schema = "ele", catalog = "")
 public class EleMenuEntity implements Serializable {
     private int id;
-    private int shopId;
+    private String shopId;
     @JSONField(name = "id")
     private Long menuId;
     private Date analysisTime;
@@ -66,11 +66,11 @@ public class EleMenuEntity implements Serializable {
     }
 
     @Column(name = "shop_id", nullable = false, length = 255)
-    public int getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

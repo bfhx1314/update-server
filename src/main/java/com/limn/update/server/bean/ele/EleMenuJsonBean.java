@@ -4,7 +4,7 @@ package com.limn.update.server.bean.ele;
  * Created by limengnan on 2018/4/20.
  */
 public class EleMenuJsonBean {
-    int shopId;
+    String shopId;
     String json;
     int menuId;
 
@@ -16,11 +16,11 @@ public class EleMenuJsonBean {
         this.menuId = menuId;
     }
 
-    public int getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

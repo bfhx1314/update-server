@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "ele_food", schema = "ele", catalog = "")
 public class EleFoodEntity {
     private int id;
-    private Integer shopId;
+    private String shopId;
     private Long menuId;
     private Date analysisTime;
     private int version;
@@ -83,11 +83,11 @@ public class EleFoodEntity {
 
     @Basic
     @Column(name = "shop_id", nullable = true)
-    public Integer getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 

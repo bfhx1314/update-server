@@ -11,7 +11,7 @@ import java.util.Date;
 @Table(name = "ele_shop_json", schema = "ele", catalog = "")
 public class EleShopJsonEntity {
     private int id;
-    private int shopId;
+    private String shopId;
     private Date createDate;
     private int version;
     private String valid;
@@ -38,11 +38,11 @@ public class EleShopJsonEntity {
 
     @Basic
     @Column(name = "shop_id", nullable = false)
-    public int getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 
@@ -106,7 +106,7 @@ public class EleShopJsonEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + shopId;
+        result = 31 * result + (shopId != null ? shopId.hashCode() : 0);;
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + version;
         result = 31 * result + (valid != null ? valid.hashCode() : 0);

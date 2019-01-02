@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface EleMenuJsonDao extends EleAnalysisDao<EleMenuJsonEntity>{
 
-    void deleteByShopId(int shopId , int version);
+    void deleteByShopId(String shopId , int version);
 //    List<EleMenuJsonEntity> getNoAnalysisMenuJson();
 }

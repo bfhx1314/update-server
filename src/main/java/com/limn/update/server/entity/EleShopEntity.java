@@ -73,7 +73,7 @@ public class EleShopEntity {
     @JSONField(name = "support_tags")
     private Object supportTags;
     private Integer isAnalysis;
-    private Integer shopId;
+    private String shopId;
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
@@ -582,11 +582,11 @@ public class EleShopEntity {
 
     @Basic
     @Column(name = "shop_id", nullable = true)
-    public Integer getShopId() {
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 }
